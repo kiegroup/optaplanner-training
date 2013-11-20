@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.optaplanner</groupId>
+    <artifactId>optaplanner-training</artifactId>
+    <version>6.1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>optaplanner-training-generator</artifactId>
+  <packaging>pom</packaging>
+
+  <name>OptaPlanner training</name>
+  <description>
+    OptaPlanner solves planning problems.
+    This lightweight, embeddable planning engine implements powerful and scalable algorithms
+    to optimize business resource scheduling and planning.
+
+    This module generates and overwrites the training labs.
+  </description>
+
+  <properties>
+    <input.examples.directory>${project.basedir}/../../optaplanner/optaplanner-examples</input.examples.directory>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <property name="output.directory" value="../optaplanner-training-lab101"/>
+                <echo>Building ${output.directory}</echo>
+                <delete>
+                  <fileset dir="${output.directory}" defaultexcludes="false">
+                    <include name="pom.xml"/>
+                    <include name=".gitignore"/>
+                    <include name="data/cloudbalancing/unsolved/"/>
+                    <include name="src/main/java/org/optaplanner/examples/cloudbalancing/app/CloudBalancingApp.java"/>
+                    <include name="src/main/java/org/optaplanner/examples/cloudbalancing/domain/"/>
+                    <include name="src/main/java/org/optaplanner/examples/cloudbalancing/persistence/CloudBalancingDao.java"/>
+                    <include name="src/main/resources/org/optaplanner/examples/cloudbalancing/solver/"/>
+                    <include name="src/main/resources/org/optaplanner/examples/cloudbalancing/swingui/"/>
+                  </fileset>
+                </delete>
+                <copy todir="${output.directory}" overwrite="true">
+                  <fileset dir="${input.examples.directory}" defaultexcludes="false">
+                    <include name="pom.xml"/>
+                    <include name=".gitignore"/>
+                    <include name="data/cloudbalancing/unsolved/"/>
+                    <include name="src/main/java/org/optaplanner/examples/cloudbalancing/app/CloudBalancingApp.java"/>
+                    <include name="src/main/java/org/optaplanner/examples/cloudbalancing/domain/"/>
+                    <include name="src/main/java/org/optaplanner/examples/cloudbalancing/persistence/CloudBalancingDao.java"/>
+                    <include name="src/main/resources/org/optaplanner/examples/cloudbalancing/solver/"/>
+                    <include name="src/main/resources/org/optaplanner/examples/cloudbalancing/swingui/"/>
+                  </fileset>
+                </copy>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <!-- Internal dependencies -->
+    <dependency>
+      <groupId>org.optaplanner</groupId>
+      <artifactId>optaplanner-examples</artifactId>
+    </dependency>
+  </dependencies>
+
+</project>
+
