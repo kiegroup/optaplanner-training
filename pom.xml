@@ -21,5 +21,9 @@
     This module contains the training labs.
   </description>
 
+  <modules>
+    <module>optaplanner-training-lab101</module>
+  </modules>
+
 </project>
 
