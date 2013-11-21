@@ -21,9 +21,32 @@
     This module contains the training labs.
   </description>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.optaplanner</groupId>
+        <artifactId>optaplanner-training-docs</artifactId>
+        <type>pom</type>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.optaplanner</groupId>
+        <artifactId>optaplanner-training-lab101</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.optaplanner</groupId>
+        <artifactId>optaplanner-training-assembly</artifactId>
+        <type>pom</type>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <modules>
     <module>optaplanner-training-docs</module>
     <module>optaplanner-training-lab101</module>
+    <module>optaplanner-training-assembly</module>
   </modules>
 
 </project>
