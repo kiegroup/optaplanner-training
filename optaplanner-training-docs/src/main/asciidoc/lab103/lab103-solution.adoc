@@ -18,3 +18,5 @@ rule "distributeNetworkBandwidthFairly"
         scoreHolder.addSoftConstraintMatch(kcontext, - ($total.intValue() * $total.intValue()));
 end
 ----
+
+Remove the rules +requiredNetworkBandwidthTotal+ and +computerCost+.
