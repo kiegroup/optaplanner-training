@@ -1,7 +1,6 @@
 = OptaPlanner training
-:awestruct-layout: base
 :showtitle:
-
+:docinfo:
 
 == Introduction
 
@@ -31,3 +30,8 @@ Each business has specific constraints. In this part we will learn to cater for 
 by adjusting the score function accordingly.
 
 include::lab101/lab101.adoc[]
+
+== Solutions part 1: Playing with the score function
+
+include::lab101/lab101-solution.adoc[]
+

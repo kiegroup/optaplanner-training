@@ -38,20 +38,4 @@ image::lab101_cloudBalancing_4computers-12processes.png[]
 * Read up about http://docs.jboss.org/drools/release/latest/optaplanner-docs/html_single/index.html#scoreTrap[score traps],
 especially if +100computer-300processes.xml+ does not become feasible.
 
-==== Solution
-
-Add this in the file +cloudBalancingScoreRules.drl+:
-
-[source,drl]
-----
-rule "atMost4ProcessesPerComputer"
-  when
-    $computer : CloudComputer()
-    $count : Number(intValue > 4) from accumulate(
-    $c : CloudProcess(computer == $computer),
-      count($c)
-    )
-  then
-    scoreHolder.addHardConstraintMatch(kcontext, 4 - $count.intValue());
-end
-----
+<<solution_lab101>>

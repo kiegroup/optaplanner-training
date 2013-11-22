@@ -1,0 +1,18 @@
+[[solution_lab101]]
+=== Solution Lab 101: No more than 4 processes per computer
+
+Add this in the file +cloudBalancingScoreRules.drl+:
+
+[source,drl]
+----
+rule "atMost4ProcessesPerComputer"
+  when
+    $computer : CloudComputer()
+    $count : Number(intValue > 4) from accumulate(
+    $c : CloudProcess(computer == $computer),
+      count($c)
+    )
+  then
+    scoreHolder.addHardConstraintMatch(kcontext, 4 - $count.intValue());
+end
+----

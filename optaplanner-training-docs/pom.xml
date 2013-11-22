@@ -33,10 +33,14 @@
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/generated-docs/images</outputDirectory>
+              <outputDirectory>${project.build.directory}/generated-docs</outputDirectory>
               <resources>
                 <resource>
-                  <directory>src/main/asciidoc/images</directory>
+                  <directory>src/main/asciidoc</directory>
+                  <includes>
+                    <include>images/</include>
+                    <include>javascripts/</include>
+                  </includes>
                 </resource>
               </resources>
             </configuration>
