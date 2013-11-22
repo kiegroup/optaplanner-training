@@ -60,7 +60,7 @@
           </execution>
         </executions>
         <configuration>
-          <backend>html</backend>
+          <backend>html5</backend>
           <doctype>book</doctype>
           <!--<embedAssets>true</embedAssets>-->
           <attributes>

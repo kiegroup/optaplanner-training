@@ -21,7 +21,7 @@ image::cloudBalancing_4computers-12processes.png[]
 
 ==== Assignment
 
-. Add a new hard constraint that no computer should have more than 4 processes assigned to it.
+. Add a new hard constraint: no computer should have more than 4 processes assigned to it.
 
 ==== Success criteria
 

@@ -31,7 +31,11 @@ by adjusting the score function accordingly.
 
 include::lab101/lab101.adoc[]
 
+include::lab103/lab103.adoc[]
+
 == Solutions part 1: Playing with the score function
 
 include::lab101/lab101-solution.adoc[]
+
+include::lab103/lab103-solution.adoc[]
 

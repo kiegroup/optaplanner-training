@@ -1,0 +1,20 @@
+[[solution_lab103]]
+=== Solution Lab 103: Distribute network bandwidth fairly
+
+Add this in the file +cloudBalancingScoreRules.drl+:
+
+[source,drl]
+----
+rule "distributeNetworkBandwidthFairly"
+    when
+        $computer : CloudComputer()
+        $total : Number() from accumulate(
+            CloudProcess(
+                computer == $computer,
+                $requiredNetworkBandwidth : requiredNetworkBandwidth),
+            sum($requiredNetworkBandwidth)
+        )
+    then
+        scoreHolder.addSoftConstraintMatch(kcontext, - ($total.intValue() * $total.intValue()));
+end
+----
