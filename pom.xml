@@ -11,6 +11,7 @@
 
   <artifactId>optaplanner-training</artifactId>
   <packaging>pom</packaging>
+  <version>6.0.0.Final-training-1</version>
 
   <name>OptaPlanner training</name>
   <description>
@@ -46,6 +47,11 @@
   <modules>
     <module>optaplanner-training-docs</module>
     <module>optaplanner-training-lab101</module>
+    <module>optaplanner-training-lab101-solution</module>
+    <module>optaplanner-training-lab102</module>
+    <module>optaplanner-training-lab102-solution</module>
+    <module>optaplanner-training-lab103</module>
+    <module>optaplanner-training-lab103-solution</module>
     <module>optaplanner-training-assembly</module>
   </modules>
 
