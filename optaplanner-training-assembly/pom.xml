@@ -39,6 +39,7 @@
             <descriptor>src/main/assembly/assembly-optaplanner-training.xml</descriptor>
           </descriptors>
           <appendAssemblyId>false</appendAssemblyId>
+          <finalName>optaplanner-training-${project.version}</finalName>
         </configuration>
       </plugin>
     </plugins>
