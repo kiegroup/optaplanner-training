@@ -60,9 +60,9 @@
           </execution>
         </executions>
         <configuration>
+          <sourceDocumentName>src/main/asciidoc/training.adoc</sourceDocumentName>
           <backend>html5</backend>
           <doctype>book</doctype>
-          <!--<embedAssets>true</embedAssets>-->
           <attributes>
             <toc>true</toc>
           </attributes>

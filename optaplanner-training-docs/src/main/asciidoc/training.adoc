@@ -15,6 +15,7 @@ Count how many labs you can complete correctly without cheating :)
 === Preparation
 
 . Open the http://docs.jboss.org/drools/release/latest/optaplanner-docs/html_single/index.html[the reference manual] in your browser.
+.. Read the chapter _Introduction_.
 .. Read the chapter _Quick start_.
 .. Read the table of contents (TOC). Grok the structure of the reference manual.
 . Unzip the +optaplanner-training-\*.zip+. This is a different zip than +optaplanner-distribution-\*.zip+.

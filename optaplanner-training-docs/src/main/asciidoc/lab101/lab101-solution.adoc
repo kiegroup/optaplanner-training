@@ -1,8 +1,10 @@
 [[solution_lab101]]
 === Solution Lab 101: No more than 4 processes per computer
 
-Add this in the file +cloudBalancingScoreRules.drl+:
+==== Implementation
 
+. Add this rule in the file +cloudBalancingScoreRules.drl+:
++
 [source,drl]
 ----
 rule "atMost4ProcessesPerComputer"
@@ -14,5 +16,23 @@ rule "atMost4ProcessesPerComputer"
     )
   then
     scoreHolder.addHardConstraintMatch(kcontext, 4 - $count.intValue());
+end
+----
+
+==== Pitfalls
+
+A computer that has 6 processes is worse than a computer that has 5 processes.
+The score function should reflect that, even if the customer's business annalist does not want to think
+about any solution for which a computer has more than 4 computers (because it's an infeasible solution).
+
+This code might trigger a http://docs.jboss.org/drools/release/latest/optaplanner-docs/html_single/index.html#scoreTrap[score trap]:
+
+[source,drl]
+----
+rule "atMost4ProcessesPerComputer"
+  when
+    ...
+  then
+    scoreHolder.addHardConstraintMatch(kcontext, -1); // BAD: score trap
 end
 ----

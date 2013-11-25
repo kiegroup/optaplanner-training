@@ -1,8 +1,12 @@
 [[solution_lab103]]
 === Solution Lab 103: Distribute network bandwidth fairly
 
-Add this in the file +cloudBalancingScoreRules.drl+:
+==== Implementation
 
+. In the file +cloudBalancingScoreRules.drl+, remove the rules +requiredNetworkBandwidthTotal+ and +computerCost+.
+
+. Add this rule in the file +cloudBalancingScoreRules.drl+:
++
 [source,drl]
 ----
 rule "distributeNetworkBandwidthFairly"
@@ -18,5 +22,3 @@ rule "distributeNetworkBandwidthFairly"
         scoreHolder.addSoftConstraintMatch(kcontext, - ($total.intValue() * $total.intValue()));
 end
 ----
-
-Remove the rules +requiredNetworkBandwidthTotal+ and +computerCost+.

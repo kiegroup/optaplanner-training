@@ -33,7 +33,7 @@ image::cloudBalancing_4computers-12processes.png[]
 . _Open_ and _solve_ +4computer-12processes.xml+. It should no longer assign process 9 to computer 3:
 +
 image::lab102_cloudBalancing_4computers-12processes.png[]
-.. It's feasible.
+.. It must be feasible (+0hard+).
 .. Process 5 is (probably) still assigned to computer 1 and 2, because those computers have +6+ CPU.
 . _Open_ and _solve_ +100computer-300processes.xml+, in both the old and the new window. Compare the results.
 .. Both solutions should become feasible (+0hard+).

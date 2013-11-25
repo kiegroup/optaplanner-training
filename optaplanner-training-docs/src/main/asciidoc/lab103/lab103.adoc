@@ -34,7 +34,7 @@ NOTE: The GUI will still show the network bandwidth capacity per computer and co
 . _Open_ and _solve_ +100computer-300processes.xml+.
 +
 image::lab103_cloudBalancing_100computers-300processes.png[]
-.. It should be feasible (+0hard+).
+.. It must be feasible (+0hard+).
 .. All computers must be used.
 .. The total network bandwidth used per computer must be close to each other,
 except if the computer has a single process which uses far more network bandwidth.
