@@ -8,6 +8,7 @@
     This module generates and overwrites the training labs.
   </description>
 
+  <property name="project.version" value="6.0.0.Final-training-1"/>
   <property name="optaplanner.examples.dir" value="${basedir}/../../optaplanner/optaplanner-examples"/>
 
   <patternset id="example.cloudbalance.patternset">
@@ -26,13 +27,14 @@
     <include name="src/main/resources/org/optaplanner/examples/cloudbalancing/swingui/"/>
   </patternset>
 
+
   <target name="overwrite-all-labs" depends="overwrite-lab101, overwrite-lab102, overwrite-lab103"/>
+
 
   <target name="overwrite-lab101" depends="checks">
     <antcall target="overwrite-cloudBalance">
       <param name="lab.artifactId" value="optaplanner-training-lab101"/>
     </antcall>
-
     <antcall target="overwrite-cloudBalance">
       <param name="lab.artifactId" value="optaplanner-training-lab101-solution"/>
     </antcall>
@@ -57,27 +59,26 @@ end
     </concat>
   </target>
 
+
   <target name="overwrite-lab102" depends="checks">
     <antcall target="overwrite-cloudBalance">
       <param name="lab.artifactId" value="optaplanner-training-lab102"/>
     </antcall>
-
     <antcall target="overwrite-cloudBalance">
       <param name="lab.artifactId" value="optaplanner-training-lab102-solution"/>
     </antcall>
   </target>
+
 
   <target name="overwrite-lab103" depends="checks">
     <property name="lab.number" value="103" />
     <antcall target="overwrite-cloudBalance">
       <param name="lab.artifactId" value="optaplanner-training-lab103"/>
     </antcall>
-
     <antcall target="overwrite-cloudBalance">
       <param name="lab.artifactId" value="optaplanner-training-lab103-solution"/>
     </antcall>
   </target>
-
 
 
   <target name="overwrite-cloudBalance">
@@ -103,11 +104,10 @@ end
                    match="&lt;description&gt;[^&lt;]*&lt;/description&gt;"
                    replace="&lt;description&gt;${lab.artifactId}&lt;/description&gt;"
                    byline="false"/>
-    <!--<replaceregexp file="${output.directory}/pom.xml"-->
-    <!--match="&lt;dependency&gt;[\n ]*&lt;groupId&gt;org.optaplanner&lt;/groupId&gt;[\n ]*&lt;artifactId&gt;optaplanner-benchmark&lt;/artifactId&gt;[\n ]*&lt;/dependency&gt;"-->
-    <!--replace="&lt;dependency&gt;${line.separator}      &lt;groupId&gt;org.optaplanner&lt;/groupId&gt;${line.separator}      &lt;artifactId&gt;optaplanner-benchmark&lt;/artifactId&gt;${line.separator}    &lt;/dependency&gt;${line.separator}    &lt;dependency&gt;${line.separator}      &lt;groupId&gt;org.optaplanner&lt;/groupId&gt;${line.separator}      &lt;artifactId&gt;optaplanner-examples&lt;/artifactId&gt;${line.separator}    &lt;/dependency&gt;"-->
-    <!--byline="false"/>-->
 
+    <replaceregexp file="${lab.directory}/pom.xml"
+                   match="&lt;parent&gt;\n.*\n.*\n.*\n.*&lt;/parent&gt;"
+                   replace="&lt;parent&gt;&lt;groupId&gt;org.optaplanner&lt;/groupId&gt;&lt;artifactId&gt;optaplanner-training&lt;/artifactId&gt;&lt;version&gt;${project.version}&lt;/version&gt;&lt;/parent&gt;"/>
   </target>
 
   <target name="checks">
