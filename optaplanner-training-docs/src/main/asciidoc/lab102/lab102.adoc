@@ -1,0 +1,47 @@
+=== Lab 102: No process should hog half the CPU power
+
+The customer's use case is closely resembles the OptaPlanner example CloudBalancing.
+But there's 1 big difference:
+
+* Don't let a process hog half the CPU power of a computer (unless the computer doesn't have much CPU).
+
+==== Preparation
+
+. Import as a new project in your favorite IDE: +optaplanner-training-lab102/pom.xml+
+. Create a new run configuration:
+.. Main class: +org.optaplanner.examples.cloudbalancing.app.CloudBalancingApp+
+.. VM parameters (optional): +-Xmx512M -server+
+.. Working directory: +optaplanner-training-lab102+ (this is the directory that contains the directory +data+)
+. Run the run configuration.
+.. _Quick open_ +4computer-12processes.xml+, _solve_ it and _terminate solving early_ after about 20 seconds.
+.. Click on the button _Details_ of computer 3 to find out which process id's are assigned to it.
+.. Notice how process 9 hogs 87.5% of the CPU of computer 3:
++
+image::cloudBalancing_4computers-12processes.png[]
+.. Leave this window open to compare it later with your modified version.
+
+==== Assignment
+
+. A process is hogging the CPU of a computer if it requires more that have the computer's CPU power.
+.. Exception: A computer with +6+ CPU or less is never considered hogged.
+. Add a new hard constraint: no process should hog the CPU of a computer.
+. The customer has decided that they want the hogging implementation formula in Java, not in DRL.
+.. But the constraint itself should be in DRL.
+
+==== Success criteria
+
+. _Open_ and _solve_ +4computer-12processes.xml+. It should no longer assign process 9 to computer 3:
++
+image::lab102_cloudBalancing_4computers-12processes.png[]
+.. It's feasible.
+.. Process 5 is (probably) still assigned to computer 1 and 2, because those computers have +6+ CPU.
+. _Open_ and _solve_ +100computer-300processes.xml+, in both the old and the new window. Compare the results.
+.. Both solutions should become feasible (+0hard+).
+.. The old window's soft score is probably better because it has more flexibility.
+
+==== Tips
+
+* Add a new Java method that checks if a process is hogging its computer.
+* Add a new score rule in the file +cloudBalancingScoreRules.drl+ and reuse that method.
+
+<<solution_lab102>>

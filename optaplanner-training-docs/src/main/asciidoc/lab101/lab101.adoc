@@ -1,7 +1,9 @@
 === Lab 101: No more than 4 processes per computer
 
 The customer's use case is closely resembles the OptaPlanner example CloudBalancing.
-But there's 1 big difference: No computer can have more than 4 processes assigned.
+But there's 1 big difference:
+
+* Don't assign many processes to the same computer
 
 ==== Preparation
 
@@ -11,9 +13,7 @@ But there's 1 big difference: No computer can have more than 4 processes assigne
 .. VM parameters (optional): +-Xmx512M -server+
 .. Working directory: +optaplanner-training-lab101+ (this is the directory that contains the directory +data+)
 . Run the run configuration.
-.. _Quick open_ +4computer-12processes.xml+.
-.. _Solve_ it.
-.. _Terminate solving early_ after about 20 seconds.
+.. _Quick open_ +4computer-12processes.xml+, _solve_ it and _terminate solving early_ after about 20 seconds.
 .. Notice how the solution assigns 6 processes to computer 0:
 +
 image::cloudBalancing_4computers-12processes.png[]

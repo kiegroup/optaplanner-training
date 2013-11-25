@@ -1,0 +1,26 @@
+[[solution_lab102]]
+=== Solution Lab 102: No process should hog half the CPU power
+
+Add this in the file +CloudProcess.java+:
+
+[source,java]
+----
+    public boolean isHoggingCpuPower() {
+        if (computer == null || computer.getCpuPower() <= 6) {
+            return false;
+        }
+        return requiredCpuPower * 2 > computer.getCpuPower();
+    }
+----
+
+Add this in the file +cloudBalancingScoreRules.drl+:
+
+[source,drl]
+----
+rule "hoggingCpuPower"
+    when
+        CloudProcess(hoggingCpuPower == true)
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, -1);
+end
+----

@@ -15,6 +15,8 @@ Count how many labs you can complete correctly without cheating :)
 === Preparation
 
 . Open the http://docs.jboss.org/drools/release/latest/optaplanner-docs/html_single/index.html[the reference manual] in your browser.
+.. Read the chapter _Quick start_.
+.. Read the table of contents (TOC). Grok the structure of the reference manual.
 . Unzip the +optaplanner-training-\*.zip+. This is a different zip than +optaplanner-distribution-\*.zip+.
 . Open your favorite IDE (IntelliJ, Eclipse, NetBeans).
 
@@ -24,18 +26,38 @@ Count how many labs you can complete correctly without cheating :)
 http://docs.jboss.org/drools/release/latest/optaplanner-docs/html_single/index.html#runTheExamplesInAnIDE[read this].
 
 
-== Part 1: Playing with the score function
+== Part 1: Customizing the score function
 
 Each business has specific constraints. In this part we will learn to cater for those constraints
 by adjusting the score function accordingly.
 
 include::lab101/lab101.adoc[]
 
+include::lab102/lab102.adoc[]
+
 include::lab103/lab103.adoc[]
 
-== Solutions part 1: Playing with the score function
+
+== Part 2: Designing the model
+
+TODO
+
+
+== Part 3: Algorithm benchmarking and tweaking
+
+TODO
+
+
+== Part 4: Continuous and real-time planning
+
+TODO
+
+
+== Solutions part 1: Customizing the score function
 
 include::lab101/lab101-solution.adoc[]
+
+include::lab102/lab102-solution.adoc[]
 
 include::lab103/lab103-solution.adoc[]
 
