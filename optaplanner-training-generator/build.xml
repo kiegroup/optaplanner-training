@@ -67,6 +67,47 @@ end
     <antcall target="overwrite-cloudBalance">
       <param name="lab.artifactId" value="optaplanner-training-lab102-solution"/>
     </antcall>
+    <replaceregexp file="${basedir}/../optaplanner-training-lab102-solution/src/main/java/org/optaplanner/examples/cloudbalancing/domain/CloudProcess.java"
+                   encoding="UTF-8"
+                   match="}\s*$"
+                   replace=""/>
+    <concat destfile="${basedir}/../optaplanner-training-lab102-solution/src/main/java/org/optaplanner/examples/cloudbalancing/domain/CloudProcess.java" append="true">
+      <![CDATA[
+    // ############################################################################
+    // Solution lab102
+    // ############################################################################
+
+    public boolean isHoggingCpuPower() {
+        if (computer == null || computer.getCpuPower() <= 6) {
+            return false;
+        }
+        return requiredCpuPower * 2 > computer.getCpuPower();
+    }
+
+    public int getHoggingCpuPowerAmount() {
+        if (!isHoggingCpuPower()) {
+            return 0;
+        }
+        return requiredCpuPower * 2 - computer.getCpuPower();
+    }
+}
+]]>
+    </concat>
+    <concat destfile="${basedir}/../optaplanner-training-lab102-solution/src/main/resources/org/optaplanner/examples/cloudbalancing/solver/cloudBalancingScoreRules.drl" append="true">
+      <![CDATA[
+
+// ############################################################################
+// Solution lab102
+// ############################################################################
+
+rule "hoggingCpuPower"
+    when
+        $p : CloudProcess(hoggingCpuPower == true)
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, - $p.getHoggingCpuPowerAmount());
+end
+]]>
+    </concat>
   </target>
 
 
@@ -78,6 +119,35 @@ end
     <antcall target="overwrite-cloudBalance">
       <param name="lab.artifactId" value="optaplanner-training-lab103-solution"/>
     </antcall>
+    <replaceregexp file="${basedir}/../optaplanner-training-lab103-solution/src/main/resources/org/optaplanner/examples/cloudbalancing/solver/cloudBalancingScoreRules.drl"
+                   encoding="UTF-8"
+                   match="rule \&quot;requiredNetworkBandwidthTotal\&quot;[^£]*?end\n"
+                   replace=""/>
+    <replaceregexp file="${basedir}/../optaplanner-training-lab103-solution/src/main/resources/org/optaplanner/examples/cloudbalancing/solver/cloudBalancingScoreRules.drl"
+                   encoding="UTF-8"
+                   match="rule \&quot;computerCost\&quot;[^£]*?end\n"
+                   replace=""/>
+    <concat destfile="${basedir}/../optaplanner-training-lab103-solution/src/main/resources/org/optaplanner/examples/cloudbalancing/solver/cloudBalancingScoreRules.drl" append="true">
+      <![CDATA[
+
+// ############################################################################
+// Solution lab103
+// ############################################################################
+
+rule "distributeNetworkBandwidthFairly"
+    when
+        $computer : CloudComputer()
+        $total : Number() from accumulate(
+            CloudProcess(
+                computer == $computer,
+                $requiredNetworkBandwidth : requiredNetworkBandwidth),
+            sum($requiredNetworkBandwidth)
+        )
+    then
+        scoreHolder.addSoftConstraintMatch(kcontext, - ($total.intValue() * $total.intValue()));
+end
+]]>
+    </concat>
   </target>
 
 
@@ -95,18 +165,22 @@ end
       </fileset>
     </copy>
     <replaceregexp file="${lab.directory}/pom.xml"
+                   encoding="UTF-8"
                    match="&lt;artifactId&gt;optaplanner\-examples&lt;/artifactId&gt;"
                    replace="&lt;artifactId&gt;${lab.artifactId}&lt;/artifactId&gt;"/>
     <replaceregexp file="${lab.directory}/pom.xml"
-                   match="&lt;name&gt;.*&lt;/name&gt;"
+                   encoding="UTF-8"
+                   match="&lt;name&gt;[^&lt;]*&lt;/name&gt;"
                    replace="&lt;name&gt;${lab.artifactId}&lt;/name&gt;"/>
     <replaceregexp file="${lab.directory}/pom.xml"
-                   match="&lt;description&gt;[^&lt;]*&lt;/description&gt;"
+                   encoding="UTF-8"
+                   match="&lt;description&gt;[^&lt;]*?&lt;/description&gt;"
                    replace="&lt;description&gt;${lab.artifactId}&lt;/description&gt;"
                    byline="false"/>
 
     <replaceregexp file="${lab.directory}/pom.xml"
-                   match="&lt;parent&gt;\n.*\n.*\n.*\n.*&lt;/parent&gt;"
+                   encoding="UTF-8"
+                   match="&lt;parent&gt;[^£]*?&lt;/parent&gt;"
                    replace="&lt;parent&gt;&lt;groupId&gt;org.optaplanner.training&lt;/groupId&gt;&lt;artifactId&gt;optaplanner-training&lt;/artifactId&gt;&lt;version&gt;${project.version}&lt;/version&gt;&lt;/parent&gt;"/>
   </target>
 

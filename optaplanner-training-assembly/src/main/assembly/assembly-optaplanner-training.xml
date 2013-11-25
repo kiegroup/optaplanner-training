@@ -20,7 +20,7 @@
     <!-- docs -->
     <fileSet><!-- Note: going outside the module dir is bad -->
       <directory>../optaplanner-training-docs/target/generated-docs</directory>
-      <outputDirectory>docs</outputDirectory>
+      <outputDirectory>instructions</outputDirectory>
     </fileSet>
     <fileSet><!-- Note: going outside the module dir is bad, but it is not fetching generated files -->
       <directory>..</directory>
@@ -35,12 +35,12 @@
         <include>optaplanner-training-lab103-solution/</include>
       </includes>
       <excludes>
-        <exclude>*/target</exclude>
-        <exclude>*/local</exclude>
+        <exclude>*/target/</exclude>
+        <exclude>*/local/</exclude>
         <exclude>*/.classpath</exclude>
-        <exclude>*/.settings</exclude>
-        <exclude>*/.idea</exclude>
-        <exclude>*/nbproject</exclude>
+        <exclude>*/.project</exclude>
+        <exclude>*/.idea/</exclude>
+        <exclude>*/nbproject/</exclude>
         <exclude>*/*.ipr</exclude>
         <exclude>*/*.iws</exclude>
         <exclude>*/*.iml</exclude>
