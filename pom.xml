@@ -3,12 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.optaplanner</groupId>
-    <artifactId>optaplanner</artifactId>
-    <version>6.0.0.Final</version>
-  </parent>
 
+  <groupId>org.optaplanner.training</groupId>
   <artifactId>optaplanner-training</artifactId>
   <packaging>pom</packaging>
   <version>6.0.0.Final-training-1</version>
@@ -24,6 +20,14 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <!-- HACK to import optaplanner-bom, drools-bom and also all library versions needed by the examples -->
+        <groupId>org.kie</groupId>
+        <artifactId>kie-parent-with-dependencies</artifactId>
+        <type>pom</type>
+        <version>6.0.0.Final</version>
+        <scope>import</scope>
+      </dependency>
       <dependency>
         <groupId>org.optaplanner</groupId>
         <artifactId>optaplanner-training-docs</artifactId>
@@ -45,15 +49,28 @@
   </dependencyManagement>
 
   <modules>
-    <module>optaplanner-training-docs</module>
     <module>optaplanner-training-lab101</module>
     <module>optaplanner-training-lab101-solution</module>
     <module>optaplanner-training-lab102</module>
     <module>optaplanner-training-lab102-solution</module>
     <module>optaplanner-training-lab103</module>
     <module>optaplanner-training-lab103-solution</module>
-    <module>optaplanner-training-assembly</module>
   </modules>
+
+  <profiles>
+    <profile>
+      <id>fullProfile</id>
+      <activation>
+        <property>
+          <name>full</name>
+        </property>
+      </activation>
+      <modules>
+        <module>optaplanner-training-docs</module>
+        <module>optaplanner-training-assembly</module>
+      </modules>
+    </profile>
+  </profiles>
 
 </project>
 

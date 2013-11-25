@@ -107,7 +107,7 @@ end
 
     <replaceregexp file="${lab.directory}/pom.xml"
                    match="&lt;parent&gt;\n.*\n.*\n.*\n.*&lt;/parent&gt;"
-                   replace="&lt;parent&gt;&lt;groupId&gt;org.optaplanner&lt;/groupId&gt;&lt;artifactId&gt;optaplanner-training&lt;/artifactId&gt;&lt;version&gt;${project.version}&lt;/version&gt;&lt;/parent&gt;"/>
+                   replace="&lt;parent&gt;&lt;groupId&gt;org.optaplanner.training&lt;/groupId&gt;&lt;artifactId&gt;optaplanner-training&lt;/artifactId&gt;&lt;version&gt;${project.version}&lt;/version&gt;&lt;/parent&gt;"/>
   </target>
 
   <target name="checks">

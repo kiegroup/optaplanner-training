@@ -22,6 +22,30 @@
       <directory>../optaplanner-training-docs/target/generated-docs</directory>
       <outputDirectory>docs</outputDirectory>
     </fileSet>
+    <fileSet><!-- Note: going outside the module dir is bad, but it is not fetching generated files -->
+      <directory>..</directory>
+      <outputDirectory>.</outputDirectory>
+      <includes>
+        <include>pom.xml</include>
+        <include>optaplanner-training-lab101/</include>
+        <include>optaplanner-training-lab101-solution/</include>
+        <include>optaplanner-training-lab102/</include>
+        <include>optaplanner-training-lab102-solution/</include>
+        <include>optaplanner-training-lab103/</include>
+        <include>optaplanner-training-lab103-solution/</include>
+      </includes>
+      <excludes>
+        <exclude>*/target</exclude>
+        <exclude>*/local</exclude>
+        <exclude>*/.classpath</exclude>
+        <exclude>*/.settings</exclude>
+        <exclude>*/.idea</exclude>
+        <exclude>*/nbproject</exclude>
+        <exclude>*/*.ipr</exclude>
+        <exclude>*/*.iws</exclude>
+        <exclude>*/*.iml</exclude>
+      </excludes>
+    </fileSet>
   </fileSets>
 
 </assembly>
