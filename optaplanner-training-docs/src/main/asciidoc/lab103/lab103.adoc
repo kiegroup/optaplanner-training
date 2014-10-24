@@ -25,7 +25,7 @@ image::cloudBalancing_100computers-300processes.png[]
 
 . Remove the hard constraint +requiredNetworkBandwidthTotal+
 . Remove the soft constraint +computerCost+
-. Add a new hard constraint: The network bandwidth used per computer should be as equal as possible (evenly distributed).
+. Add a new soft constraint: The network bandwidth used per computer should be as equal as possible (evenly distributed).
 
 NOTE: The GUI will still show the network bandwidth capacity per computer and color it red. Just ignore that.
 

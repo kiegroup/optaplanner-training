@@ -22,7 +22,7 @@ image::cloudBalancing_4computers-12processes.png[]
 
 ==== Assignment
 
-. A process is hogging the CPU of a computer if it requires more that have the computer's CPU power.
+. A process is hogging the CPU of a computer if it requires more than half of the computer's CPU power.
 .. Exception: A computer with +6+ CPU or less is never considered hogged.
 . Add a new hard constraint: no process should hog the CPU of a computer.
 . The customer has decided that they want the hogging implementation formula in Java, not in DRL.
