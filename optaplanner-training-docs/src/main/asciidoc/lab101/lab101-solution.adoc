@@ -3,7 +3,7 @@
 
 ==== Implementation
 
-. Add this rule in the file +cloudBalancingScoreRules.drl+:
+. Add this rule in the file `cloudBalancingScoreRules.drl`:
 +
 [source,drl]
 ----

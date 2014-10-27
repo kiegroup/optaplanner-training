@@ -1,0 +1,51 @@
+=== Lab 201: Tennis friends
+
+The customer's use case is the OptaPlanner example Tennis.
+
+==== Problem description
+
+A number of couples play double tennis together. Each couple is a team.
+They rent 2 tennis courts every Tuesday evening during 4 months (18 weeks). There are 7 teams.
+On a given Tuesday evening, 4 distinct teams show up and they play 3 matches each: one against every other team there.
+
+Decide which teams play on which Tuesday evening.
+
+Not every Tuesday evening fits for every team: every team marks the dates which it is unable to play.
+All teams like to play as much as possible, so distribution should be fair (as far as that's possible):
+all teams should play an almost equal number of times.
+Nice to have: They don't like to play against the same opponent every time,
+so it would be nice to have that all each team plays against every other teams a similar number of times.
+
+Presume that the number of teams (7) and the number of weeks (18) can change every season.
+
+==== Assignment
+
+. Draw an UML class diagram of the domain objects needed for solving the optimization problem. Include:
+.. All relevant domain classes for solving the optimization problem. For example: `Team`, `Day`, ...
+.. Every relationship between those classes, including cardinality. For example: `Foo` has a `ManyToOne` relationship to `Bar`.
+... Do not include non-domain classes, such as `Solver` or `TennisDao` etc.
+... Adding fields/properties/methods for each class is entirely optional.
+.. Annotate which classes have an `@PlanningEntity` annotation.
+.. Annotate which properties of each class have an `@PlanningVariable` annotation.
+.. Annotate which classes have an `@PlanningSolution` annotation.
+.. Annotate which fields/properties of each class have an `@PlanningEntityCollectionProperty` annotation.
+. Calculate the size of the search space (without taking the unavailability constraint into account).
+. How many constraint types (= how many score rules) do you expect to become implemented?
+
+*Do not look at the Tennis example in the documentation or examples.* That's cheating.
+The problem description above is intentionally less straightforward.
+
+==== Success criteria
+
+. A drawing of an UML class diagram which resembles the class diagram of the Tennis example,
+especially for the `@PlanningEntity` annotation and the `@PlanningVariable` annotation.
+. Search space size
+. Number of constraint types
+
+==== Tips
+
+* Ask yourself: what are the pigeons and what are the pigeons holes?
+* It's highly recommended that the number of planning entities is stable during solving.
+* Read up about how to draw an https://en.wikipedia.org/wiki/Class_diagram[UML class diagram],
+
+<<solution_lab201>>

@@ -18,7 +18,7 @@ Count how many labs you can complete correctly without cheating :)
 .. Read the chapter _Introduction_.
 .. Read the chapter _Quick start_.
 .. Read the table of contents (TOC). Grok the structure of the reference manual.
-. Unzip the +optaplanner-training-\*.zip+. This is a different zip than +optaplanner-distribution-\*.zip+.
+. Unzip the `optaplanner-training-\*.zip`. This is a different zip than `optaplanner-distribution-\*.zip`.
 . Open your favorite IDE (IntelliJ, Eclipse, NetBeans).
 
 === Troubleshooting
@@ -41,7 +41,14 @@ include::lab103/lab103.adoc[]
 
 == Part 2: Designing the model
 
-TODO
+The most difficult thing to learn is - by far - how to design a good domain model.
+Which class is a planning entity? Which property is a planning variable?
+There are 2 guidelines:
+
+* Normalize your domain model. Just as with any other domain model, prefer normalization whenever possible.
+* In a `ManyToOne` relationship, the `Many` side is usually the planning entity which has a planning variable leading to the `One side.
+
+include::lab201/lab201.adoc[]
 
 
 == Part 3: Algorithm benchmarking and tweaking
@@ -62,3 +69,7 @@ include::lab102/lab102-solution.adoc[]
 
 include::lab103/lab103-solution.adoc[]
 
+
+== Solutions part 2: Designing the model
+
+include::lab201/lab201-solution.adoc[]

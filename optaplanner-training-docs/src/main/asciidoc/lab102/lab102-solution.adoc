@@ -3,7 +3,7 @@
 
 ==== Imperfect implementation
 
-. Add this method in the file +CloudProcess.java+:
+. Add this method in the file `CloudProcess.java`:
 +
 [source,java]
 ----
@@ -15,7 +15,7 @@
     }
 ----
 
-. Add this rule in the file +cloudBalancingScoreRules.drl+:
+. Add this rule in the file `cloudBalancingScoreRules.drl`:
 +
 [source,drl]
 ----
@@ -33,7 +33,7 @@ NOTE: That code might trigger a http://docs.jboss.org/drools/release/latest/opta
 
 This code does not trigger that http://docs.jboss.org/drools/release/latest/optaplanner-docs/html_single/index.html#scoreTrap[score trap]:
 
-. Add these 2 methods in the file +CloudProcess.java+:
+. Add these 2 methods in the file `CloudProcess.java`:
 +
 [source,java]
 ----
@@ -52,7 +52,7 @@ This code does not trigger that http://docs.jboss.org/drools/release/latest/opta
     }
 ----
 
-. Add this rule in the file +cloudBalancingScoreRules.drl+:
+. Add this rule in the file `cloudBalancingScoreRules.drl`:
 +
 [source,drl]
 ----

@@ -9,13 +9,13 @@ But there are differences:
 
 ==== Preparation
 
-. Import as a new project in your favorite IDE: +optaplanner-training-lab103/pom.xml+
+. Import as a new project in your favorite IDE: `optaplanner-training-lab103/pom.xml`
 . Create a new run configuration:
-.. Main class: +org.optaplanner.examples.cloudbalancing.app.CloudBalancingApp+
-.. VM parameters (optional): +-Xmx512M -server+
-.. Working directory: +optaplanner-training-lab101+ (this is the directory that contains the directory +data+)
+.. Main class: `org.optaplanner.examples.cloudbalancing.app.CloudBalancingApp`
+.. VM parameters (optional): `-Xmx512M -server`
+.. Working directory: `optaplanner-training-lab101` (this is the directory that contains the directory `data`)
 . Run the run configuration.
-.. _Quick open_ +100computer-300processes.xml+, _solve_ it and _terminate solving early_ after about 20 seconds.
+.. _Quick open_ `100computer-300processes.xml`, _solve_ it and _terminate solving early_ after about 20 seconds.
 .. Notice how the used network bandwidth heavily differs per computer (and that capacity clearly limits it):
 +
 image::cloudBalancing_100computers-300processes.png[]
@@ -23,18 +23,18 @@ image::cloudBalancing_100computers-300processes.png[]
 
 ==== Assignment
 
-. Remove the hard constraint +requiredNetworkBandwidthTotal+
-. Remove the soft constraint +computerCost+
+. Remove the hard constraint `requiredNetworkBandwidthTotal`
+. Remove the soft constraint `computerCost`
 . Add a new soft constraint: The network bandwidth used per computer should be as equal as possible (evenly distributed).
 
 NOTE: The GUI will still show the network bandwidth capacity per computer and color it red. Just ignore that.
 
 ==== Success criteria
 
-. _Open_ and _solve_ +100computer-300processes.xml+.
+. _Open_ and _solve_ `100computer-300processes.xml`.
 +
 image::lab103_cloudBalancing_100computers-300processes.png[]
-.. It must be feasible (+0hard+).
+.. It must be feasible (`0hard`).
 .. All computers must be used.
 .. The total network bandwidth used per computer must be close to each other,
 except if the computer has a single process which uses far more network bandwidth.
@@ -42,7 +42,7 @@ except if the computer has a single process which uses far more network bandwidt
 
 ==== Tips
 
-* Remove 2 score rules and add a new score rule in the file +cloudBalancingScoreRules.drl+. No other files require changes.
+* Remove 2 score rules and add a new score rule in the file `cloudBalancingScoreRules.drl`. No other files require changes.
 * Read up about http://docs.jboss.org/drools/release/latest/optaplanner-docs/html_single/index.html#fairnessScoreConstraints[fairness score constraints].
 * There is no law which says that a score (hard or soft) should converge to 0.
 

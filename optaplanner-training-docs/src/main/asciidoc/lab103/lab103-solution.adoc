@@ -3,9 +3,9 @@
 
 ==== Implementation
 
-. In the file +cloudBalancingScoreRules.drl+, remove the rules +requiredNetworkBandwidthTotal+ and +computerCost+.
+. In the file `cloudBalancingScoreRules.drl`, remove the rules `requiredNetworkBandwidthTotal` and `computerCost`.
 
-. Add this rule in the file +cloudBalancingScoreRules.drl+:
+. Add this rule in the file `cloudBalancingScoreRules.drl`:
 +
 [source,drl]
 ----

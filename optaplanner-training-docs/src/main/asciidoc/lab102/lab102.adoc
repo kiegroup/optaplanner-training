@@ -7,13 +7,13 @@ But there's 1 big difference:
 
 ==== Preparation
 
-. Import as a new project in your favorite IDE: +optaplanner-training-lab102/pom.xml+
+. Import as a new project in your favorite IDE: `optaplanner-training-lab102/pom.xml`
 . Create a new run configuration:
-.. Main class: +org.optaplanner.examples.cloudbalancing.app.CloudBalancingApp+
-.. VM parameters (optional): +-Xmx512M -server+
-.. Working directory: +optaplanner-training-lab102+ (this is the directory that contains the directory +data+)
+.. Main class: `org.optaplanner.examples.cloudbalancing.app.CloudBalancingApp`
+.. VM parameters (optional): `-Xmx512M -server`
+.. Working directory: `optaplanner-training-lab102` (this is the directory that contains the directory `data`)
 . Run the run configuration.
-.. _Quick open_ +4computer-12processes.xml+, _solve_ it and _terminate solving early_ after about 20 seconds.
+.. _Quick open_ `4computer-12processes.xml`, _solve_ it and _terminate solving early_ after about 20 seconds.
 .. Click on the button _Details_ of computer 3 to find out which process id's are assigned to it.
 .. Notice how process 9 hogs 87.5% of the CPU of computer 3:
 +
@@ -23,25 +23,25 @@ image::cloudBalancing_4computers-12processes.png[]
 ==== Assignment
 
 . A process is hogging the CPU of a computer if it requires more than half of the computer's CPU power.
-.. Exception: A computer with +6+ CPU or less is never considered hogged.
+.. Exception: A computer with `6` CPU or less is never considered hogged.
 . Add a new hard constraint: no process should hog the CPU of a computer.
 . The customer has decided that they want the hogging implementation formula in Java, not in DRL.
 .. But the constraint itself should be in DRL.
 
 ==== Success criteria
 
-. _Open_ and _solve_ +4computer-12processes.xml+. It should no longer assign process 9 to computer 3:
+. _Open_ and _solve_ `4computer-12processes.xml`. It should no longer assign process 9 to computer 3:
 +
 image::lab102_cloudBalancing_4computers-12processes.png[]
-.. It must be feasible (+0hard+).
-.. Process 5 is (probably) still assigned to computer 1 and 2, because those computers have +6+ CPU.
-. _Open_ and _solve_ +100computer-300processes.xml+, in both the old and the new window. Compare the results.
-.. Both solutions should become feasible (+0hard+).
+.. It must be feasible (`0hard`).
+.. Process 5 is (probably) still assigned to computer 1 and 2, because those computers have `6` CPU.
+. _Open_ and _solve_ `100computer-300processes.xml`, in both the old and the new window. Compare the results.
+.. Both solutions should become feasible (`0hard`).
 .. The old window's soft score is probably better because it has more flexibility.
 
 ==== Tips
 
 * Add a new Java method that checks if a process is hogging its computer.
-* Add a new score rule in the file +cloudBalancingScoreRules.drl+ and reuse that method.
+* Add a new score rule in the file `cloudBalancingScoreRules.drl` and reuse that method.
 
 <<solution_lab102>>

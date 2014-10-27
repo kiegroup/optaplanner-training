@@ -49,7 +49,7 @@
       <plugin>
         <groupId>org.asciidoctor</groupId>
         <artifactId>asciidoctor-maven-plugin</artifactId>
-        <version>0.1.4-SNAPSHOT</version>
+        <version>1.5.0</version>
         <executions>
           <execution>
             <phase>generate-resources</phase>
@@ -59,11 +59,11 @@
           </execution>
         </executions>
         <configuration>
-          <sourceDocumentName>src/main/asciidoc/training.adoc</sourceDocumentName>
+          <sourceDocumentName>training.adoc</sourceDocumentName>
           <backend>html5</backend>
           <doctype>book</doctype>
           <attributes>
-            <toc>true</toc>
+            <toc>left</toc>
           </attributes>
         </configuration>
       </plugin>
