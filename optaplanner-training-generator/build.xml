@@ -167,6 +167,10 @@ end
     </copy>
     <replaceregexp file="${lab.directory}/pom.xml"
                    encoding="UTF-8"
+                   match="&lt;parent&gt;[^£]*?&lt;/parent&gt;"
+                   replace="&lt;parent&gt;&lt;groupId&gt;org.optaplanner.training&lt;/groupId&gt;&lt;artifactId&gt;optaplanner-training&lt;/artifactId&gt;&lt;version&gt;${project.version}&lt;/version&gt;&lt;/parent&gt;"/>
+    <replaceregexp file="${lab.directory}/pom.xml"
+                   encoding="UTF-8"
                    match="&lt;artifactId&gt;optaplanner\-examples&lt;/artifactId&gt;"
                    replace="&lt;artifactId&gt;${lab.artifactId}&lt;/artifactId&gt;"/>
     <replaceregexp file="${lab.directory}/pom.xml"
@@ -178,11 +182,11 @@ end
                    match="&lt;description&gt;[^&lt;]*?&lt;/description&gt;"
                    replace="&lt;description&gt;${lab.artifactId}&lt;/description&gt;"
                    byline="false"/>
-
     <replaceregexp file="${lab.directory}/pom.xml"
                    encoding="UTF-8"
-                   match="&lt;parent&gt;[^£]*?&lt;/parent&gt;"
-                   replace="&lt;parent&gt;&lt;groupId&gt;org.optaplanner.training&lt;/groupId&gt;&lt;artifactId&gt;optaplanner-training&lt;/artifactId&gt;&lt;version&gt;${project.version}&lt;/version&gt;&lt;/parent&gt;"/>
+                   match="&lt;argument&gt;org.optaplanner.examples.app.OptaPlannerExamplesApp?&lt;/argument&gt;"
+                   replace="&lt;argument&gt;org.optaplanner.examples.cloudbalancing.app.CloudBalancingApp&lt;/argument&gt;"
+                   byline="false"/>
   </target>
 
   <target name="checks">
