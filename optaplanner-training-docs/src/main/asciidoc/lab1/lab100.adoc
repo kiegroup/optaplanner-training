@@ -1,0 +1,33 @@
+=== Lab 100: Quick questions
+
+==== Weighting the wishes of nurses
+
+In a hospital we have these constraints:
+
+* *Parenting nurses*: Nurses with children don't want to work on Wednesday afternoon.
+* *Young nurses Saturday night*: Young nurses don't want to work on Saturday night.
+** This is twice as important as the _Parenting nurses_ constraint.
+* *Young nurses Sunday morning*: Young nurses don't want to work on Sunday morning.
+** This is a third as important as the _Young nurses Saturday night_ constraint.
+* *Double shift*: No nurse should work 2 shifts on the same day.
+** This is more important than any other constraint, no matter how many times that other constraint is matched.
+
+Determine the score weight and level of each constraint.
+
+[.solution]
+===== Solution
+
+* *Parenting nurses*: `-3soft`
+* *Young nurses Saturday night*: `-6soft`
+** `-3soft` times `2` is `-6soft`
+* *Young nurses Sunday morning*: `-2soft`
+** `-6soft` divided by `3` is `-2soft`
+* *Double shift*: `-1hard`
+
+Any multiple applied to all of the soft or hard numbers is fine too (for example `-30soft;-60soft;-20soft;-1hard`),
+but it would increase the likeliness of overflow.
+
+Using decimal or floating point numbers (for example `-1.5soft;-3.0soft;-1.0soft;-1hard`) is a bad idea:
+
+* Decimal numbers (`BigDecimal`) heavily slow down the score calculation.
+* Floating point numbers (`double` or `float`) cause http://docs.jboss.org/optaplanner/release/latest/optaplanner-docs/html_single/index.html#avoidFloatingPointNumbersInScoreCalculation[errors].

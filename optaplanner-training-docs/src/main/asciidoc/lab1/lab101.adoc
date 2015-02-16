@@ -3,7 +3,7 @@
 The customer's use case is closely resembles the OptaPlanner example CloudBalancing.
 But there's 1 big difference:
 
-* Don't assign many processes to the same computer
+* Don't assign too many processes to the same computer
 
 ==== Preparation
 

@@ -32,11 +32,13 @@ http://docs.jboss.org/optaplanner/release/latest/optaplanner-docs/html_single/in
 Each business has specific constraints. In this part we will learn to cater for those constraints
 by adjusting the score function accordingly.
 
-include::lab101/lab101.adoc[]
+include::lab1/lab100.adoc[]
 
-include::lab102/lab102.adoc[]
+include::lab1/lab101.adoc[]
 
-include::lab103/lab103.adoc[]
+include::lab1/lab102.adoc[]
+
+include::lab1/lab103.adoc[]
 
 
 == Part 2: Designing the model
@@ -48,7 +50,7 @@ There are 2 guidelines:
 * Normalize your domain model. Just as with any other domain model, prefer normalization whenever possible.
 * In a `ManyToOne` relationship, the `Many` side is usually the planning entity which has a planning variable leading to the `One side.
 
-include::lab201/lab201.adoc[]
+include::lab2/lab201.adoc[]
 
 
 == Part 3: Algorithm benchmarking and tweaking
