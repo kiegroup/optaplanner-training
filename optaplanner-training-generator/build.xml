@@ -9,7 +9,7 @@
   </description>
 
   <!-- Keep in sync with pom.xml version -->
-  <property name="project.version" value="6.2.0.CR1-training-2"/>
+  <property name="project.version" value="6.2.0.Final-training-3"/>
   <property name="optaplanner.examples.dir" value="${basedir}/../../optaplanner/optaplanner-examples"/>
 
   <patternset id="example.cloudbalance.patternset">

@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.optaplanner.training</groupId>
     <artifactId>optaplanner-training</artifactId>
-    <version>6.2.0.CR1-training-2</version>
+    <version>6.2.0.Final-training-3</version>
   </parent>
 
   <artifactId>optaplanner-training-docs</artifactId>
@@ -49,7 +49,7 @@
       <plugin>
         <groupId>org.asciidoctor</groupId>
         <artifactId>asciidoctor-maven-plugin</artifactId>
-        <version>1.5.0</version>
+        <version>1.5.2</version>
         <executions>
           <execution>
             <phase>generate-resources</phase>
