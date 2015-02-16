@@ -46,6 +46,41 @@ especially for the `@PlanningEntity` annotation and the `@PlanningVariable` anno
 
 * Ask yourself: what are the pigeons and what are the pigeons holes?
 * It's highly recommended that the number of planning entities is stable during solving.
-* Read up about how to draw an https://en.wikipedia.org/wiki/Class_diagram[UML class diagram],
+* Read up about how to draw an https://en.wikipedia.org/wiki/Class_diagram[UML class diagram].
 
-<<solution_lab201>>
+[.solution]
+==== Solution
+
+===== Class design
+
+image::lab201_tennisClassDiagram.png[]
+
+* What are the pigeons and what are the pigeons holes?
+** Every Tuesday, there are 4 spots to fill. Over 18 weeks that makes 72 spots to fill.
+*** Each of those spots, is a `TeamAssignment` instance. That class is the planning entity.
+*** *A `TeamAssignment` is clearly defined* by a `Day` and an `indexInDay` (0, 1, 2 or 3). Those 2 properties are a unique business key, immutable during solving.
+*** OptaPlanner's job is to find the best `Team` to schedule for each spot, so `TeamAssignment.getTeam()` is the planning variable (so definitely not immutable during solving).
+*** Notice how `TeamAssignment` has a `ManyToOne` relationship to `Team`.
+* Why is `TeamAssignment.getDay()` _not_ a planning variable?
+** Despite that `TeamAssignment` has a `ManyToOne` relationship to `Day`, it makes a poor planning variable, because `Team` makes a poor business key (part).
+** Even if the day is a planning variable, a `TeamAssignment` cannot fill in the `Team` field decidedly:
+*** The number of times each team plays is unknown.
+**** Some teams will play 10 days, others 11 days (because `18*4/7 = 10.29`), presuming the unavailability constraint allow this.
+**** If the unavailability constraint is very disruptive, some teams might even only play 9 days or less, possibly even allowing others to play 12 days or more.
+* Why not make both `TeamAssignment.getDay()` and `TeamAssignment.getTeam()` each a planning variable?
+** Then what defines a `TeamAssignment`?
+** This would blow up the search space a lot more. This impacts Solver speed a lot.
+** The build-in fine grained moves might no longer suffice to get efficiently from feasible solution to feasible solution. This impacts Solver speed.
+
+===== Search space size
+
+`valueSize^entitySize^ = 7^72^ = 10^60^`
+
+===== Number of constraint types
+
+4 constraint types (score rules):
+
+* oneAssignmentPerDatePerTeam (hard)
+* unavailabilityPenalty (hard)
+* fairAssignmentCountPerTeam (medium)
+* evenlyConfrontationCount (soft)

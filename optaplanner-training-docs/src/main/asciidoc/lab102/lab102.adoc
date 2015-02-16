@@ -44,4 +44,68 @@ image::lab102_cloudBalancing_4computers-12processes.png[]
 * Add a new Java method that checks if a process is hogging its computer.
 * Add a new score rule in the file `cloudBalancingScoreRules.drl` and reuse that method.
 
-<<solution_lab102>>
+[.solution]
+==== Solution
+
+===== Imperfect implementation
+
+. Add this method in the file `CloudProcess.java`:
++
+[source,java]
+----
+    public boolean isHoggingCpuPower() {
+        if (computer == null || computer.getCpuPower() <= 6) {
+            return false;
+        }
+        return requiredCpuPower * 2 > computer.getCpuPower();
+    }
+----
+
+. Add this rule in the file `cloudBalancingScoreRules.drl`:
++
+[source,drl]
+----
+rule "hoggingCpuPower"
+    when
+        CloudProcess(hoggingCpuPower == true)
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, -1);
+end
+----
+
+NOTE: That code might trigger a http://docs.jboss.org/drools/release/latest/optaplanner-docs/html_single/index.html#scoreTrap[score trap].
+
+===== Correct implementation
+
+This code does not trigger that http://docs.jboss.org/drools/release/latest/optaplanner-docs/html_single/index.html#scoreTrap[score trap]:
+
+. Add these 2 methods in the file `CloudProcess.java`:
++
+[source,java]
+----
+    public boolean isHoggingCpuPower() {
+        if (computer == null || computer.getCpuPower() <= 6) {
+            return false;
+        }
+        return requiredCpuPower * 2 > computer.getCpuPower();
+    }
+
+    public int getHoggingCpuPowerAmount() {
+        if (!isHoggingCpuPower()) {
+            return 0;
+        }
+        return requiredCpuPower * 2 - computer.getCpuPower();
+    }
+----
+
+. Add this rule in the file `cloudBalancingScoreRules.drl`:
++
+[source,drl]
+----
+rule "hoggingCpuPower"
+    when
+        $p : CloudProcess(hoggingCpuPower == true)
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, - $p.getHoggingCpuPowerAmount());
+end
+----

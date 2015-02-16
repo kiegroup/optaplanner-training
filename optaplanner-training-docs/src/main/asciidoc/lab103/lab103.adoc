@@ -46,4 +46,27 @@ except if the computer has a single process which uses far more network bandwidt
 * Read up about http://docs.jboss.org/drools/release/latest/optaplanner-docs/html_single/index.html#fairnessScoreConstraints[fairness score constraints].
 * There is no law which says that a score (hard or soft) should converge to 0.
 
-<<solution_lab103>>
+[.solution]
+==== Solution
+
+===== Implementation
+
+. In the file `cloudBalancingScoreRules.drl`, remove the rules `requiredNetworkBandwidthTotal` and `computerCost`.
+
+. Add this rule in the file `cloudBalancingScoreRules.drl`:
++
+[source,drl]
+----
+rule "distributeNetworkBandwidthFairly"
+    when
+        $computer : CloudComputer()
+        $total : Number() from accumulate(
+            CloudProcess(
+                computer == $computer,
+                $requiredNetworkBandwidth : requiredNetworkBandwidth),
+            sum($requiredNetworkBandwidth)
+        )
+    then
+        scoreHolder.addSoftConstraintMatch(kcontext, - ($total.intValue() * $total.intValue()));
+end
+----

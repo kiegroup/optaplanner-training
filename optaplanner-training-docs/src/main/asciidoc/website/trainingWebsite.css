@@ -32,5 +32,8 @@
 }
 
 .solution {
-    background-color: #FFFF99;
+    background-color: #FFFFCC;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
 }

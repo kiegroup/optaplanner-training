@@ -59,17 +59,3 @@ TODO
 == Part 4: Continuous and real-time planning
 
 TODO
-
-
-== Solutions part 1: Customizing the score function
-
-include::lab101/lab101-solution.adoc[]
-
-include::lab102/lab102-solution.adoc[]
-
-include::lab103/lab103-solution.adoc[]
-
-
-== Solutions part 2: Designing the model
-
-include::lab201/lab201-solution.adoc[]
