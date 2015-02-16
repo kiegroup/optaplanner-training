@@ -12,16 +12,19 @@ In a hospital we have these constraints:
 * *Double shift*: No nurse should work 2 shifts on the same day.
 ** This is more important than any other constraint, no matter how many times that other constraint is matched.
 
-Determine the score weight and level of each constraint.
+Specify the `ScoreDefinitionType` and determine the score weight and level of each constraint.
 
 [.solution]
 ===== Solution
 
+The `ScoreDefinitionType` is `HARD_SOFT` because we need 2 score levels.
+The weight and level for each constraint:
+
 * *Parenting nurses*: `-3soft`
 * *Young nurses Saturday night*: `-6soft`
-** `-3soft` times `2` is `-6soft`
+** Because `-3soft` times `2` is `-6soft`
 * *Young nurses Sunday morning*: `-2soft`
-** `-6soft` divided by `3` is `-2soft`
+** Because `-6soft` divided by `3` is `-2soft`
 * *Double shift*: `-1hard`
 
 Any multiple applied to all of the soft or hard numbers is fine too (for example `-30soft;-60soft;-20soft;-1hard`),
