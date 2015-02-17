@@ -2,15 +2,15 @@
 
 ==== Weighting the wishes of nurses
 
-In a hospital we have these constraints:
+In a hospital nurse rostering use case, we have these constraints:
 
+* *Double shift*: No nurse should work 2 shifts on the same day.
+** This is more important than any other constraint, no matter how many times that other constraint is matched.
 * *Parenting nurses*: Nurses with children don't want to work on Wednesday afternoon.
 * *Young nurses Saturday night*: Young nurses don't want to work on Saturday night.
 ** This is twice as important as the _Parenting nurses_ constraint.
 * *Young nurses Sunday morning*: Young nurses don't want to work on Sunday morning.
 ** This is a third as important as the _Young nurses Saturday night_ constraint.
-* *Double shift*: No nurse should work 2 shifts on the same day.
-** This is more important than any other constraint, no matter how many times that other constraint is matched.
 
 Specify the `ScoreDefinitionType` and determine the score weight and level of each constraint.
 
@@ -20,12 +20,16 @@ Specify the `ScoreDefinitionType` and determine the score weight and level of ea
 The `ScoreDefinitionType` is `HARD_SOFT` because we need 2 score levels.
 The weight and level for each constraint:
 
-* *Parenting nurses*: `-3soft`
-* *Young nurses Saturday night*: `-6soft`
+* *Double shift*: `-1hard` for each match
+** `scoreHolder.addHardConstraintMatch(kcontext, -1);`
+* *Parenting nurses*: `-3soft` for each match
+** `scoreHolder.addSoftConstraintMatch(kcontext, -3);`
+* *Young nurses Saturday night*: `-6soft` for each match
 ** Because `-3soft` times `2` is `-6soft`
-* *Young nurses Sunday morning*: `-2soft`
+** `scoreHolder.addSoftConstraintMatch(kcontext, -6);`
+* *Young nurses Sunday morning*: `-2soft` for each match
 ** Because `-6soft` divided by `3` is `-2soft`
-* *Double shift*: `-1hard`
+** `scoreHolder.addSoftConstraintMatch(kcontext, -2);`
 
 Any multiple applied to all of the soft or hard numbers is fine too (for example `-30soft;-60soft;-20soft;-1hard`),
 but it would increase the likeliness of overflow.
@@ -34,3 +38,53 @@ Using decimal or floating point numbers (for example `-1.5soft;-3.0soft;-1.0soft
 
 * Decimal numbers (`BigDecimal`) heavily slow down the score calculation.
 * Floating point numbers (`double` or `float`) cause http://docs.jboss.org/optaplanner/release/latest/optaplanner-docs/html_single/index.html#avoidFloatingPointNumbersInScoreCalculation[errors].
+
+==== Weighting the costs of manufacturing jobs
+
+In a manufacturing job shop scheduling use case, we have have these constraints:
+
+* *Machine conflict*: a machine can only process 1 job at a time. (This is physical reality.)
+** There can be up to `50 000` jobs and `200` machines.
+** Each job takes between `30` seconds and `5` minutes.
+** The planning window is `24` hours: a job can start at any time on any machine during that window.
+* *Machine cost*: Each machine has a specific power cost per second in dollars.
+** Older machines have a higher power cost, newer machines have a smaller power cost.
+** The power cost per second is between `1` dollar cent and `10` dollars.
+* *Nighttime cost*: Any job starting outside normal working hours (before 8:00 or after 18:00) costs an extra `1` dollar per second.
+* *Employee happiness*: Some of the machines are labor intensive or clumsy to work with. Minimize the time they have to work with those.
+** The company values profit exclusively over employee happiness. It doesn't believe that employee retention has an impact on profit.
+
+Specify the `ScoreDefinitionType` and determine the score weight and level of each constraint.
+
+[.solution]
+===== Solution
+
+The `ScoreDefinitionType` is `HARD_MEDIUM_SOFT_LONG` because we need 3 score levels and to avoid overflow.
+The weight and level for each constraint:
+
+* *Machine conflict*: `-1hard` per second that the jobs conflict
+** `scoreHolder.addHardConstraintMatch(kcontext, - job1.conflictingDurationWith(job2));`
+* *Machine cost*: `-1medium` per dollar cent of machine power cost and per second of job duration
+** `scoreHolder.addMediumConstraintMatch(kcontext, - machine.getPowerCostInDollarCent() * job.getDurationInSeconds());`
+* *Nighttime cost*: `-100medium` per second of job duration
+** Because the medium score level represents dollar cents, not dollars.
+** `scoreHolder.addMediumConstraintMatch(kcontext, -100 * job.getDurationInSeconds());`
+* *Employee happiness*: `-1soft` per second of job duration
+** Soft because the company prioritizes an extra profit of 1 dollar cent, even if that makes all its employees unhappy.
+*** Note: Most companies do realize that employee retention impact profit: they factor in employee unhappiness by putting a price tag on it.
+** `scoreHolder.addSoftConstraintMatch(kcontext, - job.getDurationInSeconds());`
+
+It uses 3 score levels:
+
+* Hard: constraints of the universe
+* Medium: profit (currently it only contains expenses, so it's a negative number)
+* Soft: employee happiness
+
+It requires to the use of `long` numbers instead of `int` (at least for the medium level), to avoid overflow:
+
+. There are `50 000` jobs.
+. Each job has a maximum duration of `5` minutes (or `300` seconds).
+** This totals up to a maximum of `15 000 000` seconds to pay for.
+. Each machine cost up `10` dollars (or `1000` dollar cents) per used second.
+** This totals up to a maximum cost of `15 000 000 000` dollar cents (without even taking the nighttime cost in account), which needs to fit in the medium score level.
+** The maximum `int` value is only `2 147 483 647`: the medium score level would overflow, so it needs to use a `long` instead.
