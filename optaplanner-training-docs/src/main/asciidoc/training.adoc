@@ -52,6 +52,8 @@ There are 2 guidelines:
 
 include::lab2/lab201.adoc[]
 
+include::lab2/lab202.adoc[]
+
 
 == Part 3: Algorithm benchmarking and tweaking
 

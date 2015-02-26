@@ -1,0 +1,98 @@
+=== Lab 201: House cleaner scheduling
+
+==== Problem description
+
+A cleaner company cleans houses and needs to match cleaners and houses in a week.
+Each cleaner cleans exactly 1 house per day. He/she cleans it entirely during that day, alone.
+All houses needs to be cleaned once, at a specified day of the week (determined by the house owner).
+A cleaner works from Monday to Friday.
+A cleaner travel from his/her home to the cleaning house in the morning and back in the evening.
+Minimize the overall traveling distance of the cleaners.
+
+Plan a schedule of the cleaning company for an entire week.
+
+==== Assignment
+
+. What is the planning entity class(es)?
+. What is the planning variable(s)?
+. What is the planning value class(es)?
+. Extra credit: write the DRL score rules in pseudo code.
+
+Presume there's `Location` class with a functioning `long getDistance(Location)` method.
+
+==== Success criteria
+
+. Describe the relevant domain classes and their fields.
+.. Add the `@PlanningEntity` annotation and the `@PlanningVariable` annotation where needed.
+
+==== Tips
+
+* Ask yourself: what are the pigeons and what are the pigeons holes?
+* It's highly recommended that the number of planning entities is stable during solving.
+
+[.solution]
+==== Solution
+
+===== Domain
+
+. Planning entity class(es): `House`
+. Planning variable(s): `House.getCleaner()`
+. Planning value class(es): `Cleaner`
+
+[source,java]
+----
+public class Cleaner {
+    private Location home;
+}
+----
+
+[source,java]
+----
+@PlanningEntity
+public class House {
+    private Location location;
+    private DayOfWeek dayOfWeek;
+
+    // Note: annotation must be on getter instead of field
+    @PlanningVariable private Cleaner cleaner;
+
+}
+----
+
+* Why is `House` is the planning entity and not `Cleaner`?
+** 1 cleaner handles multiple houses, but 1 house has only 1 cleaner, so `House` has a _manyToOne_ relationship to `Cleaner`.
+** Furthermore, the number of `House` instances is stable during planning.
+* What about the traveling distance constraint? Isn't this like Vehicle Routing?
+Isn't the planning variable _chained_?
+** No. The cleaners go home after every house.
+** So it doesn't matter what house they cleaned the day before, because they always have to go home first.
+** So it's not like TSP/VRP. So there's no need for the complexity of chained planning variables.
+** Furthermore, because the DayOfWeek is fixed, introducing chained variables would require additional constraint rules.
+
+===== Score rules
+
+[source,drl]
+----
+rule "Conflict: 1 cleaner has to clean 2 houses on the same day of week"
+when
+   House($c : cleaner, $d : dayOfweek, $leftId : id)
+   House(cleaner == $c, dayOfWeek == $d, id > $leftId)
+then
+   scoreholder.addHardConstraintMatch(kcontext, -1);
+end
+----
+
+[source,drl]
+----
+rule "Minimize traveling distance"
+when
+   House($d : location.getDistance(cleaner.home)))
+then
+   scoreholder.addSoftConstraintMatch(kcontext, - $d);
+end
+----
+
+Note: This last rule doesn't imply fairness across the cleaners.
+For example, if all cleaners live in Manhattan and 98 houses are in Manhattan, but 2 houses are in Queens,
+it's still possible that both Queens houses are assigned to the same cleaner (which really isn't fair).
+To make it fair, apply the http://docs.jboss.org/optaplanner/release/latest/optaplanner-docs/html_single/index.html#fairnessScoreConstraints[fairness trick].

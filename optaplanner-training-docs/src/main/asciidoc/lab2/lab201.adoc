@@ -1,7 +1,5 @@
 === Lab 201: Tennis friends
 
-The customer's use case is the OptaPlanner example Tennis.
-
 ==== Problem description
 
 A number of couples play double tennis together. Each couple is a team.
@@ -37,8 +35,8 @@ The problem description above is intentionally less straightforward.
 
 ==== Success criteria
 
-. A drawing of an UML class diagram which resembles the class diagram of the Tennis example,
-especially for the `@PlanningEntity` annotation and the `@PlanningVariable` annotation.
+. A drawing of an UML class diagram which resembles the class diagram of the CloudBalancing example.
+.. Add the `@PlanningEntity` annotation and the `@PlanningVariable` annotation where needed.
 . Search space size
 . Number of constraint types
 
