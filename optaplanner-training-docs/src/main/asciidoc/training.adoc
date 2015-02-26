@@ -54,6 +54,8 @@ include::lab2/lab201.adoc[]
 
 include::lab2/lab202.adoc[]
 
+include::lab2/lab203.adoc[]
+
 
 == Part 3: Algorithm benchmarking and tweaking
 

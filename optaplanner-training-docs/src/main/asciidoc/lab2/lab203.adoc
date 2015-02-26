@@ -1,0 +1,105 @@
+=== Lab 203: Office cleaner scheduling
+
+==== Problem description
+
+A cleaner company cleans offices. It and needs to match cleaners and offices in a week.
+
+* Each cleaner cleans exactly 1 office per day, together with 2 other cleaners. Those 3 cleaners cleans it entirely during that day.
+* A cleaner can work with different cleaning colleague's during the week.
+* All offices need to be cleaned once by 3 cleaners on the same day. The cleaning company can decide the day of the week.
+* A cleaner travels from his/her home to one office in the morning and travels back in the evening.
+
+Plan a schedule of the cleaning company for an entire week. Minimize the overall traveling distance of the cleaners.
+
+==== Assignment
+
+. What is the planning entity class(es)?
+. What is the planning variable(s)?
+. What is the planning value class(es)?
+. Extra credit: write the DRL score rules in pseudo code.
+
+Presume there's `Location` class with a functioning `long getDistance(Location)` method.
+
+==== Success criteria
+
+. Describe the relevant domain classes and their fields.
+.. Add the `@PlanningEntity` annotation and the `@PlanningVariable` annotation where needed.
+
+[.solution]
+==== Solution
+
+===== Answers
+
+. Planning entity classes:
+** `Office`
+** `OfficeCleaningSpot`, identified by an `Office` and a `spotIndex` (`0`, `1`, or `2`)
+. Planning variables:
+** `Office.getDayOfWeek()`
+** `OfficeCleaningSpot.getCleaner()`
+. Planning value classes:
+** `DayOfWeek` for `Office.getDayOfWeek()`
+** `Cleaner` for `OfficeCleaningSpot.getCleaner()`
+
+===== Domain code
+
+[source,java]
+----
+public class Cleaner {
+    private Location home;
+}
+----
+
+[source,java]
+----
+@PlanningEntity
+public class Office {
+    private Location location;
+
+    // Note: annotation must be on getter instead of field
+    @PlanningVariable private DayOfWeek dayOfWeek;
+}
+----
+
+[source,java]
+----
+@PlanningEntity
+public class OfficeCleaningSpot {
+    private Office office;
+    private int spotIndex; // 0, 1 or 2
+
+    // Note: annotation must be on getter instead of field
+    @PlanningVariable private Cleaner cleaner;
+
+}
+----
+
+===== Score rules
+
+[source,drl]
+----
+rule "Conflict: 1 cleaner has to clean 2 houses on the same day of week"
+when
+   OfficeCleaningSpot($c : cleaner, $d : office.dayOfweek, $leftId : id)
+   OfficeCleaningSpot(cleaner == $c, dayOfWeek == $d, id > $leftId)
+then
+   scoreholder.addHardConstraintMatch(kcontext, -1);
+end
+----
+
+[source,drl]
+----
+rule "Minimize traveling distance"
+when
+   OfficeCleaningSpot($d : office.location.getDistance(cleaner.home)))
+then
+   scoreholder.addSoftConstraintMatch(kcontext, - $d);
+end
+----
+
+===== Move discussion
+
+If all cleaners work full time, then a `ChangeMove` or `SwapMove` that changes `Office.getDayOfWeek()`
+is unlikely to lead to a feasible solution, which can end up straining the metaheuristics.
+There are several ways to alleviate that strain (if desired):
+smarter (custom) moves, Strategic Oscillation Tabu Search, Ruin And Recreate (not yet supported), ...
+

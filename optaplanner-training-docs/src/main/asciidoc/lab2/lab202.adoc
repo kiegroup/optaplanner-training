@@ -1,22 +1,24 @@
-=== Lab 201: House cleaner scheduling
+=== Lab 202: House cleaner scheduling
 
 ==== Problem description
 
-A cleaner company cleans houses and needs to match cleaners and houses in a week.
-Each cleaner cleans exactly 1 house per day. He/she cleans it entirely during that day, alone.
-All houses needs to be cleaned once, at a specified day of the week (determined by the house owner).
-A cleaner works from Monday to Friday.
-A cleaner travel from his/her home to the cleaning house in the morning and back in the evening.
-Minimize the overall traveling distance of the cleaners.
+A cleaner company cleans houses. It needs to match cleaners and houses in a week.
 
-Plan a schedule of the cleaning company for an entire week.
+* Each cleaner cleans exactly 1 house per day. He/she cleans it entirely during that day, alone.
+* All houses needs to be cleaned once, at a specified day of the week (determined by the house owner).
+* A cleaner works from Monday to Friday. some cleaners work only 3 days in a week, but the company can chose when.
+* A cleaner travels from his/her home to one house in the morning and travels back in the evening.
+
+Plan a schedule of the cleaning company for an entire week. Minimize the overall traveling distance of the cleaners.
 
 ==== Assignment
 
 . What is the planning entity class(es)?
 . What is the planning variable(s)?
 . What is the planning value class(es)?
-. Extra credit: write the DRL score rules in pseudo code.
+. Extra credit: Write the DRL score rules in pseudo code.
+. Smart-ass extra credit: Why does the problem description stipulate that some cleaners don't work full-time?
+What would happen if they all work full-time?
 
 Presume there's `Location` class with a functioning `long getDistance(Location)` method.
 
@@ -25,19 +27,16 @@ Presume there's `Location` class with a functioning `long getDistance(Location)`
 . Describe the relevant domain classes and their fields.
 .. Add the `@PlanningEntity` annotation and the `@PlanningVariable` annotation where needed.
 
-==== Tips
-
-* Ask yourself: what are the pigeons and what are the pigeons holes?
-* It's highly recommended that the number of planning entities is stable during solving.
-
 [.solution]
 ==== Solution
 
-===== Domain
+===== Answers
 
-. Planning entity class(es): `House`
-. Planning variable(s): `House.getCleaner()`
-. Planning value class(es): `Cleaner`
+. Planning entity class: `House`
+. Planning variable: `House.getCleaner()`
+. Planning value class: `Cleaner`
+
+===== Domain code
 
 [source,java]
 ----
@@ -96,3 +95,14 @@ Note: This last rule doesn't imply fairness across the cleaners.
 For example, if all cleaners live in Manhattan and 98 houses are in Manhattan, but 2 houses are in Queens,
 it's still possible that both Queens houses are assigned to the same cleaner (which really isn't fair).
 To make it fair, apply the http://docs.jboss.org/optaplanner/release/latest/optaplanner-docs/html_single/index.html#fairnessScoreConstraints[fairness trick].
+
+===== What would happen if all cleaners work full-time?
+
+Then we can split up the planning problem of an entire week into 5 separate problems, once per day, without losing score quality, because:
+
+* The DayOfWeek of every house is fixed.
+* The number of times a cleaner works on other days doesn't constrain the planning of 1 day.
+
+It's far easier to solve 5 smaller problems, than to solve 1 big one.
+But because not all cleaners work full-time, we must not do that,
+because during the split up it's impossible to predict which days a half-time working cleaner needs to work.
