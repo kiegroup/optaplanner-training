@@ -89,6 +89,18 @@
         <module>optaplanner-training-assembly</module>
       </modules>
     </profile>
+    <profile>
+      <id>productizedProfile</id>
+      <activation>
+        <property>
+          <name>productized</name>
+        </property>
+      </activation>
+      <properties>
+        <!-- TODO Use this to generate a training zip distribution that uses the product artifacts -->
+        <optaplanner.maven.repository.url>http://maven.repository.redhat.com/techpreview/all</optaplanner.maven.repository.url>
+      </properties>
+    </profile>
   </profiles>
 
 </project>
