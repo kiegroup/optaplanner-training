@@ -26,6 +26,13 @@ Count how many labs you can complete correctly without cheating :)
 * If you have any trouble running the code in your favorite IDE,
 http://docs.jboss.org/optaplanner/release/latest/optaplanner-docs/html_single/index.html#runTheExamplesInAnIDE[read this].
 
+== Part 0: What is a planning problem?
+
+Print link:lab0/lab0.pdf[the exercises on paper] and complete them.
+Verify your answers with the OptaPlanner examples:
+
+* Open the NQueens example and quick open dataset `8queens`.
+* Open the Traveling Salesman example and import dataset `tutorial/st68.tsp`.
 
 == Part 1: Customizing the score function
 
