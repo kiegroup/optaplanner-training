@@ -44,7 +44,7 @@
         <groupId>org.kie</groupId>
         <artifactId>kie-parent-with-dependencies</artifactId>
         <type>pom</type>
-        <version>6.2.0-SNAPSHOT</version>
+        <version>6.2.0.Final</version>
         <scope>import</scope>
       </dependency>
       <dependency>
@@ -74,6 +74,7 @@
     <module>optaplanner-training-lab102-solution</module>
     <module>optaplanner-training-lab103</module>
     <module>optaplanner-training-lab103-solution</module>
+    <module>optaplanner-training-lab901</module>
   </modules>
 
   <profiles>

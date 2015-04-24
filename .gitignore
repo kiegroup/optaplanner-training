@@ -15,3 +15,4 @@
 
 # Everything generated with optaplanner-training-generator
 /optaplanner-training-lab*
+!optaplanner-training-lab9*
