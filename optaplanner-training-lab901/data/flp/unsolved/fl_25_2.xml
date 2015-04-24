@@ -1,0 +1,632 @@
+<FlpSolution id="1">
+  <id>0</id>
+  <warehouseList id="2">
+    <Warehouse id="3">
+      <id>0</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="4">
+        <latitude>430582.903998</latitude>
+        <longitude>430582.903998</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="5">
+      <id>1</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="6">
+        <latitude>447095.077733</latitude>
+        <longitude>441967.566511</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="7">
+      <id>2</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="8">
+        <latitude>444706.599336</latitude>
+        <longitude>432905.8718</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="9">
+      <id>3</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="10">
+        <latitude>433986.863525</latitude>
+        <longitude>427142.671483</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="11">
+      <id>4</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="12">
+        <latitude>439147.783561</latitude>
+        <longitude>428333.083285</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="13">
+      <id>5</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="14">
+        <latitude>442044.334989</latitude>
+        <longitude>430307.998493</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="15">
+      <id>6</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="16">
+        <latitude>348947.990899</latitude>
+        <longitude>434319.760208</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="17">
+      <id>7</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="18">
+        <latitude>236298.791087</latitude>
+        <longitude>437312.884269</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="19">
+      <id>8</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="20">
+        <latitude>440158.789247</latitude>
+        <longitude>429898.89115</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="21">
+      <id>9</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="22">
+        <latitude>309704.537261</latitude>
+        <longitude>468580.203206</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="23">
+      <id>10</id>
+      <setupCost>0</setupCost>
+      <capacity>58268</capacity>
+      <location id="24">
+        <latitude>438586.802905</latitude>
+        <longitude>427330.722028</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="25">
+      <id>11</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="26">
+        <latitude>407682.076185</latitude>
+        <longitude>424118.342226</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="27">
+      <id>12</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="28">
+        <latitude>14516.50956</latitude>
+        <longitude>384802.033706</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="29">
+      <id>13</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="30">
+        <latitude>418931.439518</latitude>
+        <longitude>426329.771259</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="31">
+      <id>14</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="32">
+        <latitude>368646.428732</latitude>
+        <longitude>481984.149045</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="33">
+      <id>15</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="34">
+        <latitude>394292.526943</latitude>
+        <longitude>432098.903302</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="35">
+      <id>16</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="36">
+        <latitude>450113.198552</latitude>
+        <longitude>438572.694477</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="37">
+      <id>17</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="38">
+        <latitude>448932.035513</latitude>
+        <longitude>436874.502971</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="39">
+      <id>18</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="40">
+        <latitude>444153.081356</latitude>
+        <longitude>431558.339438</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="41">
+      <id>19</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="42">
+        <latitude>428053.302347</latitude>
+        <longitude>425944.670705</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="43">
+      <id>20</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="44">
+        <latitude>408740.437421</latitude>
+        <longitude>427630.945127</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="45">
+      <id>21</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="46">
+        <latitude>110170.066274</latitude>
+        <longitude>394480.895391</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="47">
+      <id>22</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="48">
+        <latitude>0.0</latitude>
+        <longitude>384295.454825</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="49">
+      <id>23</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="50">
+        <latitude>13931.450473</latitude>
+        <longitude>388328.901804</longitude>
+      </location>
+    </Warehouse>
+    <Warehouse id="51">
+      <id>24</id>
+      <setupCost>75000000</setupCost>
+      <capacity>58268</capacity>
+      <location id="52">
+        <latitude>447103.687854</latitude>
+        <longitude>435685.130355</longitude>
+      </location>
+    </Warehouse>
+  </warehouseList>
+  <storeList id="53">
+    <Store id="54">
+      <id>0</id>
+      <demand>146</demand>
+      <location id="55">
+        <latitude>279924.793498</latitude>
+        <longitude>416189.973974</longitude>
+      </location>
+    </Store>
+    <Store id="56">
+      <id>1</id>
+      <demand>87</demand>
+      <location id="57">
+        <latitude>279953.351993</latitude>
+        <longitude>416200.962928</longitude>
+      </location>
+    </Store>
+    <Store id="58">
+      <id>2</id>
+      <demand>672</demand>
+      <location id="59">
+        <latitude>281420.913036</latitude>
+        <longitude>416235.375342</longitude>
+      </location>
+    </Store>
+    <Store id="60">
+      <id>3</id>
+      <demand>1337</demand>
+      <location id="61">
+        <latitude>287758.719716</latitude>
+        <longitude>416041.801381</longitude>
+      </location>
+    </Store>
+    <Store id="62">
+      <id>4</id>
+      <demand>31</demand>
+      <location id="63">
+        <latitude>279952.407299</latitude>
+        <longitude>416203.112456</longitude>
+      </location>
+    </Store>
+    <Store id="64">
+      <id>5</id>
+      <demand>559</demand>
+      <location id="65">
+        <latitude>280854.97338</latitude>
+        <longitude>416217.961112</longitude>
+      </location>
+    </Store>
+    <Store id="66">
+      <id>6</id>
+      <demand>2370</demand>
+      <location id="67">
+        <latitude>313480.956397</latitude>
+        <longitude>407844.877813</longitude>
+      </location>
+    </Store>
+    <Store id="68">
+      <id>7</id>
+      <demand>1089</demand>
+      <location id="69">
+        <latitude>284292.337751</latitude>
+        <longitude>415956.078122</longitude>
+      </location>
+    </Store>
+    <Store id="70">
+      <id>8</id>
+      <demand>33</demand>
+      <location id="71">
+        <latitude>279950.944713</latitude>
+        <longitude>416202.706826</longitude>
+      </location>
+    </Store>
+    <Store id="72">
+      <id>9</id>
+      <demand>32</demand>
+      <location id="73">
+        <latitude>279953.320311</latitude>
+        <longitude>416203.385487</longitude>
+      </location>
+    </Store>
+    <Store id="74">
+      <id>10</id>
+      <demand>5495</demand>
+      <location id="75">
+        <latitude>459101.879327</latitude>
+        <longitude>301852.601198</longitude>
+      </location>
+    </Store>
+    <Store id="76">
+      <id>11</id>
+      <demand>904</demand>
+      <location id="77">
+        <latitude>282477.95044</latitude>
+        <longitude>416145.372162</longitude>
+      </location>
+    </Store>
+    <Store id="78">
+      <id>12</id>
+      <demand>1466</demand>
+      <location id="79">
+        <latitude>287343.54075</latitude>
+        <longitude>415753.19989</longitude>
+      </location>
+    </Store>
+    <Store id="80">
+      <id>13</id>
+      <demand>143</demand>
+      <location id="81">
+        <latitude>280029.518347</latitude>
+        <longitude>416205.945564</longitude>
+      </location>
+    </Store>
+    <Store id="82">
+      <id>14</id>
+      <demand>615</demand>
+      <location id="83">
+        <latitude>280314.598578</latitude>
+        <longitude>416128.050052</longitude>
+      </location>
+    </Store>
+    <Store id="84">
+      <id>15</id>
+      <demand>564</demand>
+      <location id="85">
+        <latitude>279715.00832</latitude>
+        <longitude>416005.244245</longitude>
+      </location>
+    </Store>
+    <Store id="86">
+      <id>16</id>
+      <demand>226</demand>
+      <location id="87">
+        <latitude>280030.155212</latitude>
+        <longitude>416190.248294</longitude>
+      </location>
+    </Store>
+    <Store id="88">
+      <id>17</id>
+      <demand>3016</demand>
+      <location id="89">
+        <latitude>319656.101204</latitude>
+        <longitude>404930.24619</longitude>
+      </location>
+    </Store>
+    <Store id="90">
+      <id>18</id>
+      <demand>253</demand>
+      <location id="91">
+        <latitude>280052.145685</latitude>
+        <longitude>416177.919605</longitude>
+      </location>
+    </Store>
+    <Store id="92">
+      <id>19</id>
+      <demand>195</demand>
+      <location id="93">
+        <latitude>279903.129895</latitude>
+        <longitude>416179.770958</longitude>
+      </location>
+    </Store>
+    <Store id="94">
+      <id>20</id>
+      <demand>38</demand>
+      <location id="95">
+        <latitude>279955.326144</latitude>
+        <longitude>416203.263566</longitude>
+      </location>
+    </Store>
+    <Store id="96">
+      <id>21</id>
+      <demand>807</demand>
+      <location id="97">
+        <latitude>280678.966717</latitude>
+        <longitude>416104.798995</longitude>
+      </location>
+    </Store>
+    <Store id="98">
+      <id>22</id>
+      <demand>551</demand>
+      <location id="99">
+        <latitude>280804.702077</latitude>
+        <longitude>416173.828443</longitude>
+      </location>
+    </Store>
+    <Store id="100">
+      <id>23</id>
+      <demand>304</demand>
+      <location id="101">
+        <latitude>280274.727997</latitude>
+        <longitude>416215.303062</longitude>
+      </location>
+    </Store>
+    <Store id="102">
+      <id>24</id>
+      <demand>814</demand>
+      <location id="103">
+        <latitude>280906.816241</latitude>
+        <longitude>416051.672631</longitude>
+      </location>
+    </Store>
+    <Store id="104">
+      <id>25</id>
+      <demand>337</demand>
+      <location id="105">
+        <latitude>280331.587594</latitude>
+        <longitude>416208.796835</longitude>
+      </location>
+    </Store>
+    <Store id="106">
+      <id>26</id>
+      <demand>4368</demand>
+      <location id="107">
+        <latitude>187215.186265</latitude>
+        <longitude>250434.12112</longitude>
+      </location>
+    </Store>
+    <Store id="108">
+      <id>27</id>
+      <demand>577</demand>
+      <location id="109">
+        <latitude>280929.527847</latitude>
+        <longitude>416187.082652</longitude>
+      </location>
+    </Store>
+    <Store id="110">
+      <id>28</id>
+      <demand>482</demand>
+      <location id="111">
+        <latitude>280491.239857</latitude>
+        <longitude>416196.152806</longitude>
+      </location>
+    </Store>
+    <Store id="112">
+      <id>29</id>
+      <demand>495</demand>
+      <location id="113">
+        <latitude>280836.244976</latitude>
+        <longitude>416225.028739</longitude>
+      </location>
+    </Store>
+    <Store id="114">
+      <id>30</id>
+      <demand>231</demand>
+      <location id="115">
+        <latitude>280094.445899</latitude>
+        <longitude>416206.203653</longitude>
+      </location>
+    </Store>
+    <Store id="116">
+      <id>31</id>
+      <demand>322</demand>
+      <location id="117">
+        <latitude>280254.428039</latitude>
+        <longitude>416204.643497</longitude>
+      </location>
+    </Store>
+    <Store id="118">
+      <id>32</id>
+      <demand>685</demand>
+      <location id="119">
+        <latitude>281045.423457</latitude>
+        <longitude>416204.142469</longitude>
+      </location>
+    </Store>
+    <Store id="120">
+      <id>33</id>
+      <demand>12912</demand>
+      <location id="121">
+        <latitude>1042778.922491</latitude>
+        <longitude>498348.622166</longitude>
+      </location>
+    </Store>
+    <Store id="122">
+      <id>34</id>
+      <demand>325</demand>
+      <location id="123">
+        <latitude>280057.581514</latitude>
+        <longitude>416179.102073</longitude>
+      </location>
+    </Store>
+    <Store id="124">
+      <id>35</id>
+      <demand>366</demand>
+      <location id="125">
+        <latitude>280094.540903</latitude>
+        <longitude>416161.819666</longitude>
+      </location>
+    </Store>
+    <Store id="126">
+      <id>36</id>
+      <demand>3671</demand>
+      <location id="127">
+        <latitude>398310.433016</latitude>
+        <longitude>333744.356821</longitude>
+      </location>
+    </Store>
+    <Store id="128">
+      <id>37</id>
+      <demand>2213</demand>
+      <location id="129">
+        <latitude>300297.443467</latitude>
+        <longitude>414235.515804</longitude>
+      </location>
+    </Store>
+    <Store id="130">
+      <id>38</id>
+      <demand>705</demand>
+      <location id="131">
+        <latitude>276838.289088</latitude>
+        <longitude>415188.053917</longitude>
+      </location>
+    </Store>
+    <Store id="132">
+      <id>39</id>
+      <demand>328</demand>
+      <location id="133">
+        <latitude>280393.884218</latitude>
+        <longitude>416206.142378</longitude>
+      </location>
+    </Store>
+    <Store id="134">
+      <id>40</id>
+      <demand>1681</demand>
+      <location id="135">
+        <latitude>286746.974892</latitude>
+        <longitude>415716.236926</longitude>
+      </location>
+    </Store>
+    <Store id="136">
+      <id>41</id>
+      <demand>1117</demand>
+      <location id="137">
+        <latitude>281877.987819</latitude>
+        <longitude>415698.915544</longitude>
+      </location>
+    </Store>
+    <Store id="138">
+      <id>42</id>
+      <demand>275</demand>
+      <location id="139">
+        <latitude>279722.785725</latitude>
+        <longitude>416119.647107</longitude>
+      </location>
+    </Store>
+    <Store id="140">
+      <id>43</id>
+      <demand>500</demand>
+      <location id="141">
+        <latitude>280096.149318</latitude>
+        <longitude>416137.917099</longitude>
+      </location>
+    </Store>
+    <Store id="142">
+      <id>44</id>
+      <demand>2241</demand>
+      <location id="143">
+        <latitude>242474.851379</latitude>
+        <longitude>400036.118513</longitude>
+      </location>
+    </Store>
+    <Store id="144">
+      <id>45</id>
+      <demand>733</demand>
+      <location id="145">
+        <latitude>276755.173333</latitude>
+        <longitude>415078.765968</longitude>
+      </location>
+    </Store>
+    <Store id="146">
+      <id>46</id>
+      <demand>222</demand>
+      <location id="147">
+        <latitude>279743.79992</latitude>
+        <longitude>416124.787869</longitude>
+      </location>
+    </Store>
+    <Store id="148">
+      <id>47</id>
+      <demand>49</demand>
+      <location id="149">
+        <latitude>279947.509166</latitude>
+        <longitude>416201.847278</longitude>
+      </location>
+    </Store>
+    <Store id="150">
+      <id>48</id>
+      <demand>1464</demand>
+      <location id="151">
+        <latitude>289392.477399</latitude>
+        <longitude>416009.61528</longitude>
+      </location>
+    </Store>
+    <Store id="152">
+      <id>49</id>
+      <demand>222</demand>
+      <location id="153">
+        <latitude>280003.552376</latitude>
+        <longitude>416191.073327</longitude>
+      </location>
+    </Store>
+  </storeList>
+</FlpSolution>
