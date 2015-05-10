@@ -1,6 +1,6 @@
 === Lab 200: Quick questions
 
-Print link:lab2/lab200.pdf[the exercises on paper] and complete them.
+Print link:lab2/lab200A.pdf[lab 200 A] and link:lab2/lab200B.pdf[lab 200 B] and then complete them.
 
 Each solution is in the docs: each problem is an existing example
 with a annotated class diagram in the docs.

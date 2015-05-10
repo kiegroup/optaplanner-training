@@ -14,8 +14,8 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   sodipodi:docname="lab200.svg"
-   inkscape:export-filename="lab200.png"
+   sodipodi:docname="lab200A.svg"
+   inkscape:export-filename="lab200A.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -247,7 +247,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.66789186"
      inkscape:cx="404.74772"
-     inkscape:cy="661.4895"
+     inkscape:cy="302.14989"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -293,7 +293,7 @@
             <dc:title>www.optaplanner.org</dc:title>
           </cc:Agent>
         </dc:creator>
-        <dc:title></dc:title>
+        <dc:title />
         <dc:rights>
           <cc:Agent>
             <dc:title>www.optaplanner.org</dc:title>
@@ -323,7 +323,7 @@
            x="50"
            y="220.0002"
            style="font-size:36px;text-align:center;text-anchor:middle" /></flowRegion><flowPara
-         id="flowPara4308">Lab 200: Domain annotations</flowPara></flowRoot>    <flowRoot
+         id="flowPara4308">Lab 200 A: Domain annotations</flowPara></flowRoot>    <flowRoot
        transform="translate(-47.682739,-57.63795)"
        xml:space="preserve"
        id="flowRoot4302-6"
