@@ -33,6 +33,7 @@ Verify your answers with the OptaPlanner examples:
 
 * Open the NQueens example and quick open dataset `8queens`.
 * Open the Traveling Salesman example and import dataset `tutorial/st68.tsp`.
+  Right click to connect a location to the end of the trip.
 
 == Part 1: Customizing the score function
 
@@ -52,10 +53,8 @@ include::lab1/lab103.adoc[]
 
 The most difficult thing to learn is - by far - how to design a good domain model.
 Which class is a planning entity? Which property is a planning variable?
-There are 2 guidelines:
 
-* Normalize your domain model. Just as with any other domain model, prefer normalization whenever possible.
-* In a `ManyToOne` relationship, the `Many` side is usually the planning entity which has a planning variable leading to the `One side.
+include::lab2/lab200.adoc[]
 
 include::lab2/lab201.adoc[]
 
