@@ -59,7 +59,7 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <!-- HACK to import optaplanner-bom, drools-bom and also all library versions needed by the examples -->
+        <!-- TODO import kie-platform-bom instead when upgrading to 6.3.x -->
         <groupId>org.kie</groupId>
         <artifactId>kie-parent-with-dependencies</artifactId>
         <type>pom</type>
