@@ -292,6 +292,7 @@ public class SolverAndPersistenceFrame extends JFrame {
                 Solution bestSolution = get();
                 solutionBusiness.setSolution(bestSolution);
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 throw new IllegalStateException("Solving interrupted.", e);
             } catch (ExecutionException e) {
                 throw new IllegalStateException("Solving failed.", e.getCause());
