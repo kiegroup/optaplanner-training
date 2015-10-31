@@ -1,5 +1,5 @@
-Developing Drools and jBPM
-==========================
+Developing Drools, OptaPlanner and jBPM
+=======================================
 
 **If you want to build or contribute to a droolsjbpm project, [read this document](https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/master/README.md).**
 
