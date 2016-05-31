@@ -2,14 +2,14 @@
 
 ==== Problem description
 
-A cleaner company cleans offices. It and needs to match cleaners and offices in a week.
+A cleaning company cleans offices. It needs to match cleaners and offices in a week.
 
-* Each cleaner cleans exactly 1 office per day, together with 2 other cleaners. Those 3 cleaners cleans it entirely during that day.
-* A cleaner can work with different cleaning colleague's during the week.
+* Each cleaner cleans exactly 1 office per day, together with 2 other cleaners. Those 3 cleaners clean it entirely during that day.
+* A cleaner can work with different colleagues during the week.
 * All offices need to be cleaned once by 3 cleaners on the same day. The cleaning company can decide the day of the week.
 * A cleaner travels from his/her home to one office in the morning and travels back in the evening.
 
-Plan a schedule of the cleaning company for an entire week. Minimize the overall traveling distance of the cleaners.
+Plan a schedule of the cleaning company for an entire week. Minimize the overall travelling distance of the cleaners.
 
 ==== Assignment
 
@@ -18,7 +18,7 @@ Plan a schedule of the cleaning company for an entire week. Minimize the overall
 . What is the planning value class(es)?
 . Extra credit: write the DRL score rules in pseudo code.
 
-Presume there's `Location` class with a functioning `long getDistance(Location)` method.
+Presume there is a `Location` class with a functioning `long getDistance(Location)` method.
 
 ==== Success criteria
 
@@ -88,7 +88,7 @@ end
 
 [source,drl]
 ----
-rule "Minimize traveling distance"
+rule "Minimize travelling distance"
 when
    OfficeCleaningSpot($d : office.location.getDistance(cleaner.home)))
 then
