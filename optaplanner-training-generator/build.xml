@@ -49,9 +49,10 @@
 rule "atMost4ProcessesPerComputer"
   when
     $computer : CloudComputer()
-    $count : Number(intValue > 4) from accumulate(
-    $c : CloudProcess(computer == $computer),
-      count($c)
+    accumulate(
+    $c : CloudProcess(computer == $computer);
+      $count : count($c);
+      $count > 4
     )
   then
     scoreHolder.addHardConstraintMatch(kcontext, 4 - $count.intValue());
@@ -138,14 +139,14 @@ end
 rule "distributeNetworkBandwidthFairly"
     when
         $computer : CloudComputer()
-        $total : Number() from accumulate(
+        accumulate(
             CloudProcess(
                 computer == $computer,
-                $requiredNetworkBandwidth : requiredNetworkBandwidth),
-            sum($requiredNetworkBandwidth)
+                $requiredNetworkBandwidth : requiredNetworkBandwidth);
+            $total : sum($requiredNetworkBandwidth)
         )
     then
-        scoreHolder.addSoftConstraintMatch(kcontext, - ($total.intValue() * $total.intValue()));
+        scoreHolder.addSoftConstraintMatch(kcontext, - ($total * $total));
 end
 ]]>
     </concat>

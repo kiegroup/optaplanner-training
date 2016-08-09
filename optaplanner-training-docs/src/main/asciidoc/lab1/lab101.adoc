@@ -50,9 +50,10 @@ especially if `100computer-300processes.xml` does not become feasible.
 rule "atMost4ProcessesPerComputer"
     when
       $computer : CloudComputer()
-      $count : Number(intValue > 4) from accumulate(
-          $c : CloudProcess(computer == $computer),
-          count($c)
+      accumulate(
+          $c : CloudProcess(computer == $computer);
+          $count : count($c);
+          $count > 4
       )
     then
         scoreHolder.addHardConstraintMatch(kcontext, 4 - $count.intValue());

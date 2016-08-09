@@ -60,13 +60,13 @@ except if the computer has a single process which uses far more network bandwidt
 rule "distributeNetworkBandwidthFairly"
     when
         $computer : CloudComputer()
-        $total : Number() from accumulate(
+        accumulate(
             CloudProcess(
                 computer == $computer,
-                $requiredNetworkBandwidth : requiredNetworkBandwidth),
-            sum($requiredNetworkBandwidth)
+                $requiredNetworkBandwidth : requiredNetworkBandwidth);
+            $total : sum($requiredNetworkBandwidth)
         )
     then
-        scoreHolder.addSoftConstraintMatch(kcontext, - ($total.intValue() * $total.intValue()));
+        scoreHolder.addSoftConstraintMatch(kcontext, - ($total * $total));
 end
 ----
