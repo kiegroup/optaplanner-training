@@ -37,7 +37,7 @@ but it would increase the likeliness of overflow.
 Using decimal or floating point numbers (for example `-1.5soft;-3.0soft;-1.0soft;-1hard`) is a bad idea:
 
 * Decimal numbers (`BigDecimal`) heavily slow down the score calculation.
-* Floating point numbers (`double` or `float`) cause http://docs.jboss.org/optaplanner/release/latest/optaplanner-docs/html_single/index.html#avoidFloatingPointNumbersInScoreCalculation[errors].
+* Floating point numbers (`double` or `float`) cause http://docs.optaplanner.org/latest/optaplanner-docs/html_single/index.html#avoidFloatingPointNumbersInScoreCalculation[errors].
 
 ==== Weighting the costs of manufacturing jobs
 

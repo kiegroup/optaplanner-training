@@ -73,11 +73,11 @@ rule "hoggingCpuPower"
 end
 ----
 
-NOTE: That code might trigger a http://docs.jboss.org/optaplanner/release/latest/optaplanner-docs/html_single/index.html#scoreTrap[score trap].
+NOTE: That code might trigger a http://docs.optaplanner.org/latest/optaplanner-docs/html_single/index.html#scoreTrap[score trap].
 
 ===== Correct implementation
 
-This code does not trigger that http://docs.jboss.org/optaplanner/release/latest/optaplanner-docs/html_single/index.html#scoreTrap[score trap]:
+This code does not trigger that http://docs.optaplanner.org/latest/optaplanner-docs/html_single/index.html#scoreTrap[score trap]:
 
 . Add these 2 methods in the file `CloudProcess.java`:
 +

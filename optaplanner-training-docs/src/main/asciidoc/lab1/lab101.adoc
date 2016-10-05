@@ -35,7 +35,7 @@ image::lab101_cloudBalancing_4computers-12processes.png[]
 ==== Tips
 
 * Add a new score rule in the file `cloudBalancingScoreRules.drl`. No other files require changes.
-* Read up about http://docs.jboss.org/optaplanner/release/latest/optaplanner-docs/html_single/index.html#scoreTrap[score traps],
+* Read up about http://docs.optaplanner.org/latest/optaplanner-docs/html_single/index.html#scoreTrap[score traps],
 especially if `100computer-300processes.xml` does not become feasible.
 
 [.solution]
@@ -66,7 +66,7 @@ A computer that has 6 processes is worse than a computer that has 5 processes.
 The score function should reflect that, even if the customer's business analyst does not want to think
 about any solution for which a computer has more than 4 computers (because it's an infeasible solution).
 
-This code might trigger a http://docs.jboss.org/optaplanner/release/latest/optaplanner-docs/html_single/index.html#scoreTrap[score trap]:
+This code might trigger a http://docs.optaplanner.org/latest/optaplanner-docs/html_single/index.html#scoreTrap[score trap]:
 
 [source,drl]
 ----

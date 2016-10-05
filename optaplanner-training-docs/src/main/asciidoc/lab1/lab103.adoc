@@ -43,7 +43,7 @@ except if the computer has a single process which uses far more network bandwidt
 ==== Tips
 
 * Remove 2 score rules and add a new score rule in the file `cloudBalancingScoreRules.drl`. No other files require changes.
-* Read up about http://docs.jboss.org/optaplanner/release/latest/optaplanner-docs/html_single/index.html#fairnessScoreConstraints[fairness score constraints].
+* Read up about http://docs.optaplanner.org/latest/optaplanner-docs/html_single/index.html#fairnessScoreConstraints[fairness score constraints].
 * There is no law which says that a score (hard or soft) should converge to 0.
 
 [.solution]

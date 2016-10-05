@@ -14,7 +14,7 @@ Count how many labs you can complete correctly without cheating :)
 
 === Preparation
 
-. Open the http://docs.jboss.org/optaplanner/release/latest/optaplanner-docs/html_single/index.html[the reference manual] in your browser.
+. Open the http://docs.optaplanner.org/latest/optaplanner-docs/html_single/index.html[the reference manual] in your browser.
 .. Read the chapter _Introduction_.
 .. Read the chapter _Quick start_.
 .. Read the table of contents (TOC). Grok the structure of the reference manual.
@@ -24,7 +24,7 @@ Count how many labs you can complete correctly without cheating :)
 === Troubleshooting
 
 * If you have any trouble running the code in your favorite IDE,
-http://docs.jboss.org/optaplanner/release/latest/optaplanner-docs/html_single/index.html#runTheExamplesInAnIDE[read this].
+http://docs.optaplanner.org/latest/optaplanner-docs/html_single/index.html#runTheExamplesInAnIDE[read this].
 
 == Part 0: What is a planning problem?
 

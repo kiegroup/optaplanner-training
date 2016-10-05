@@ -94,7 +94,7 @@ end
 Note: This last rule doesn't imply fairness across the cleaners.
 For example, if all cleaners live in Manhattan and 98 houses are in Manhattan, but 2 houses are in Queens,
 it's still possible that both Queens houses are assigned to the same cleaner (which really isn't fair).
-To make it fair, apply the http://docs.jboss.org/optaplanner/release/latest/optaplanner-docs/html_single/index.html#fairnessScoreConstraints[fairness trick].
+To make it fair, apply the http://docs.optaplanner.org/latest/optaplanner-docs/html_single/index.html#fairnessScoreConstraints[fairness trick].
 
 ===== What would happen if all cleaners work full-time?
 
