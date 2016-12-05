@@ -8,6 +8,7 @@
   <artifactId>optaplanner-training</artifactId>
   <packaging>pom</packaging>
   <!-- Keep in sync with optaplanner-training-generator/build.xml project.version -->
+  <!-- Keep in sync with child module pom.xml's parent's version -->
   <!-- Keep in sync with dependency kie-platform-bom's version -->
   <version>7.0.0.Beta3-training-4</version>
 
@@ -94,6 +95,7 @@
     <module>optaplanner-training-lab102-solution</module>
     <module>optaplanner-training-lab103</module>
     <module>optaplanner-training-lab103-solution</module>
+    <module>optaplanner-training-lab901-solution</module>
     <module>optaplanner-training-lab903</module>
   </modules>
 

@@ -9,7 +9,7 @@
     <version>7.0.0.Beta3-training-4</version>
   </parent>
 
-  <artifactId>optaplanner-training-lab903</artifactId>
+  <artifactId>optaplanner-training-lab901-solution</artifactId>
 
   <repositories>
     <!-- TODO remove this once maven central replicates the jboss repository -->
@@ -39,10 +39,6 @@
     <dependency>
       <groupId>org.optaplanner</groupId>
       <artifactId>optaplanner-benchmark</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.optaplanner</groupId>
-      <artifactId>optaplanner-examples</artifactId>
     </dependency>
     <!-- External dependencies -->
     <!-- Common utils -->

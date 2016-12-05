@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solver>
+  <!--<environmentMode>FAST_ASSERT</environmentMode>-->
+  <scanAnnotatedClasses/>
+
+  <!-- Score configuration -->
+  <scoreDirectorFactory>
+    <easyScoreCalculatorClass>org.optaplanner.training.election.solver.score.ElectionScoreCalculator</easyScoreCalculatorClass>
+  </scoreDirectorFactory>
+
+  <!-- Optimization algorithms configuration -->
+  <termination>
+    <secondsSpentLimit>10</secondsSpentLimit>
+  </termination>
+</solver>
