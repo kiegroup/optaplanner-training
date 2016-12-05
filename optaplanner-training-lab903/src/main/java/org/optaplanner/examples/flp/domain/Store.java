@@ -14,15 +14,31 @@
  * limitations under the License.
  */
 
-package org.optaplanner.examples.flp.persistence;
+package org.optaplanner.examples.flp.domain;
 
-import org.optaplanner.examples.common.persistence.XStreamSolutionDao;
-import org.optaplanner.examples.flp.domain.FlpSolution;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.optaplanner.examples.common.domain.AbstractPersistable;
 
-public class FlpDao extends XStreamSolutionDao {
+@XStreamAlias("Store")
+public class Store extends AbstractPersistable {
 
-    public FlpDao() {
-        super("flp", FlpSolution.class);
+    private FlpLocation location;
+    private int demand;
+
+    public FlpLocation getLocation() {
+        return location;
+    }
+
+    public void setLocation(FlpLocation location) {
+        this.location = location;
+    }
+
+    public int getDemand() {
+        return demand;
+    }
+
+    public void setDemand(int demand) {
+        this.demand = demand;
     }
 
 }

@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
   <parent><groupId>org.optaplanner.training</groupId><artifactId>optaplanner-training</artifactId><version>6.2.0.Final-training-3</version></parent>
 
-  <artifactId>optaplanner-training-lab901</artifactId>
+  <artifactId>optaplanner-training-lab903</artifactId>
 
-  <name>optaplanner-training-lab901</name>
-  <description>optaplanner-training-lab901</description>
+  <name>optaplanner-training-lab903</name>
+  <description>optaplanner-training-lab903</description>
 
   <repositories>
     <!-- TODO remove this once maven central replicates the jboss repository -->
@@ -78,6 +78,10 @@
     <dependency>
       <groupId>org.drools</groupId>
       <artifactId>drools-decisiontables</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.optaplanner</groupId>
+      <artifactId>optaplanner-examples</artifactId>
     </dependency>
     <!-- External dependencies -->
     <dependency>

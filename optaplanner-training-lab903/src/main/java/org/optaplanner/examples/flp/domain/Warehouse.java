@@ -22,9 +22,17 @@ import org.optaplanner.examples.common.domain.AbstractPersistable;
 @XStreamAlias("Warehouse")
 public class Warehouse extends AbstractPersistable {
 
+    private FlpLocation location;
     private long setupCost;
     private int capacity;
-    private FlpLocation location;
+
+    public FlpLocation getLocation() {
+        return location;
+    }
+
+    public void setLocation(FlpLocation location) {
+        this.location = location;
+    }
 
     public long getSetupCost() {
         return setupCost;
@@ -40,14 +48,6 @@ public class Warehouse extends AbstractPersistable {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
-    }
-
-    public FlpLocation getLocation() {
-        return location;
-    }
-
-    public void setLocation(FlpLocation location) {
-        this.location = location;
     }
 
 }

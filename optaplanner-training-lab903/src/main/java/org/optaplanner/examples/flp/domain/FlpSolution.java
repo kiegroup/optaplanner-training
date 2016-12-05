@@ -26,7 +26,7 @@ import org.optaplanner.core.api.score.buildin.simple.SimpleScore;
 import org.optaplanner.examples.common.domain.AbstractPersistable;
 
 @XStreamAlias("FlpSolution")
-public class FlpSolution extends AbstractPersistable implements Solution<Score>{
+public class FlpSolution extends AbstractPersistable {
 
     private List<FlpLocation> locationList;
     private List<Warehouse> warehouseList;
@@ -54,20 +54,6 @@ public class FlpSolution extends AbstractPersistable implements Solution<Score>{
 
     public void setStoreList(List<Store> storeList) {
         this.storeList = storeList;
-    }
-
-
-
-    public Score getScore() {
-        throw new UnsupportedOperationException();
-    }
-
-    public void setScore(Score score) {
-        throw new UnsupportedOperationException();
-    }
-
-    public Collection<?> getProblemFacts() {
-        throw new UnsupportedOperationException();
     }
 
 }

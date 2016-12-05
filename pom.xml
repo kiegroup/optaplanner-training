@@ -8,7 +8,8 @@
   <artifactId>optaplanner-training</artifactId>
   <packaging>pom</packaging>
   <!-- Keep in sync with optaplanner-training-generator/build.xml project.version -->
-  <version>6.2.0.Final-training-3</version>
+  <!-- Keep in sync with dependency kie-platform-bom's version -->
+  <version>7.0.0.Beta3-training-4</version>
 
   <name>OptaPlanner training</name>
   <description>
@@ -45,8 +46,8 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>2.5.1</version>
           <configuration>
-            <source>1.6</source>
-            <target>1.6</target>
+            <source>1.8</source>
+            <target>1.8</target>
             <fork>true</fork>
             <meminitial>128m</meminitial>
             <maxmem>512m</maxmem>
@@ -59,11 +60,11 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <!-- TODO import kie-platform-bom instead when upgrading to 6.3.x -->
         <groupId>org.kie</groupId>
-        <artifactId>kie-parent-with-dependencies</artifactId>
+        <artifactId>kie-platform-bom</artifactId>
         <type>pom</type>
-        <version>6.2.0.Final</version>
+        <!-- Keep in sync with part of project version -->
+        <version>7.0.0-SNAPSHOT</version>
         <scope>import</scope>
       </dependency>
       <dependency>
@@ -93,7 +94,7 @@
     <module>optaplanner-training-lab102-solution</module>
     <module>optaplanner-training-lab103</module>
     <module>optaplanner-training-lab103-solution</module>
-    <module>optaplanner-training-lab901</module>
+    <module>optaplanner-training-lab903</module>
   </modules>
 
   <profiles>

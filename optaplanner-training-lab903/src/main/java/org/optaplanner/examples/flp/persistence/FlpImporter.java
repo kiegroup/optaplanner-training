@@ -31,12 +31,8 @@ public class FlpImporter extends AbstractTxtSolutionImporter {
 
     private static final String INPUT_FILE_SUFFIX = "txt";
 
-    public static void main(String[] args) {
-        new FlpImporter().convertAll();
-    }
-
     public FlpImporter() {
-        super(new FlpDao());
+        super(true);
     }
 
     @Override
@@ -55,7 +51,7 @@ public class FlpImporter extends AbstractTxtSolutionImporter {
         private int warehousesListSize;
         private int storesListSize;
 
-        public Solution readSolution() throws IOException {
+        public FlpSolution readSolution() throws IOException {
             solution = new FlpSolution();
             solution.setId(0L);
             readHeaders();
@@ -87,10 +83,10 @@ public class FlpImporter extends AbstractTxtSolutionImporter {
                 Warehouse warehouse = new Warehouse();
                 warehouse.setId(id);
                 id++;
+                warehouse.setLocation(new FlpLocation(Double.valueOf(lineTokens[3]), Double.valueOf(lineTokens[2])));
                 // Avoid doubles by multiplying all numbers by 10000
                 warehouse.setSetupCost((long) (Double.valueOf(lineTokens[0]) * 10000.0));
                 warehouse.setCapacity(Integer.valueOf(lineTokens[1]));
-                warehouse.setLocation(new FlpLocation(Double.valueOf(lineTokens[3]), Double.valueOf(lineTokens[2])));
                 warehouseList.add(warehouse);
             }
             solution.setWarehouseList(warehouseList);
@@ -105,8 +101,8 @@ public class FlpImporter extends AbstractTxtSolutionImporter {
                 Store store = new Store();
                 store.setId(id);
                 id++;
-                store.setDemand(Integer.valueOf(lineTokens[0]));
                 store.setLocation(new FlpLocation(Double.valueOf(lineTokens[2]), Double.valueOf(lineTokens[1])));
+                store.setDemand(Integer.valueOf(lineTokens[0]));
                 storeList.add(store);
             }
             solution.setStoreList(storeList);
