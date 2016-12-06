@@ -19,7 +19,7 @@
     <unionMoveSelector>
       <changeMoveSelector/>
       <swapMoveSelector/>
-      <!-- To escape the local optimum in this knapsack variant, add pillar moves: -->
+      <!-- To escape the local optimum in this knapsack variant, add pillar moves to swap 2 sets of states. -->
       <pillarChangeMoveSelector/>
       <pillarSwapMoveSelector/>
     </unionMoveSelector>
