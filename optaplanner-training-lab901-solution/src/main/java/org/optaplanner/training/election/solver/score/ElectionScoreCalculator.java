@@ -19,17 +19,17 @@ package org.optaplanner.training.election.solver.score;
 import org.optaplanner.core.api.score.Score;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.impl.score.director.easy.EasyScoreCalculator;
-import org.optaplanner.training.election.domain.ElectionSolution;
+import org.optaplanner.training.election.domain.Election;
 import org.optaplanner.training.election.domain.FederalState;
 
-public class ElectionScoreCalculator implements EasyScoreCalculator<ElectionSolution> {
+public class ElectionScoreCalculator implements EasyScoreCalculator<Election> {
 
     @Override
-    public Score calculateScore(ElectionSolution electionSolution, int initScore) {
+    public Score calculateScore(Election election, int initScore) {
         int badCandidateWins = 0;
         int bribeMinimumPopulation = 0;
-        for (FederalState federalState : electionSolution.getFederalStateList()) {
-            if (ElectionSolution.BAD_CANDIDATE.equals(federalState.getWinningCandidate())) {
+        for (FederalState federalState : election.getFederalStateList()) {
+            if (Election.BAD_CANDIDATE.equals(federalState.getWinningCandidate())) {
                 badCandidateWins += federalState.getElectoralVotes();
                 bribeMinimumPopulation += federalState.getMinimumMajorityPopulation();
             }

@@ -59,7 +59,7 @@ public class FederalState {
     }
 
     public int getMinimumMajorityPopulation() {
-        return (population + 1) / 2;
+        return (population / 2) + 1;
     }
 
     @Override

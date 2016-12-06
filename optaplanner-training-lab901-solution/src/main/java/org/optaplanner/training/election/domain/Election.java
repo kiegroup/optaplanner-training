@@ -25,7 +25,7 @@ import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 
 @PlanningSolution
-public class ElectionSolution {
+public class Election {
 
     public static final String GOOD_CANDIDATE = "Good candidate";
     public static final String BAD_CANDIDATE = "Bad candidate";
@@ -36,10 +36,10 @@ public class ElectionSolution {
     @PlanningScore
     private HardSoftScore score;
 
-    private ElectionSolution() {
+    private Election() {
     }
 
-    public ElectionSolution(List<FederalState> federalStateList) {
+    public Election(List<FederalState> federalStateList) {
         this.federalStateList = federalStateList;
     }
 
@@ -52,7 +52,7 @@ public class ElectionSolution {
     }
 
     @ValueRangeProvider(id = "candidateRange")
-    public String[] createCandidateRange() {
+    public String[] createCandidates() {
         return new String[] {GOOD_CANDIDATE, BAD_CANDIDATE};
     }
 
