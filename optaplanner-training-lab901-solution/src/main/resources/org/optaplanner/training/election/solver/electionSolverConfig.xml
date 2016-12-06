@@ -5,7 +5,8 @@
 
   <!-- Score configuration -->
   <scoreDirectorFactory>
-    <easyScoreCalculatorClass>org.optaplanner.training.election.solver.score.ElectionScoreCalculator</easyScoreCalculatorClass>
+    <easyScoreCalculatorClass>org.optaplanner.training.election.solver.score.ElectionEasyScoreCalculator</easyScoreCalculatorClass>
+    <!--<incrementalScoreCalculatorClass>org.optaplanner.training.election.solver.score.ElectionIncrementalScoreCalculator</incrementalScoreCalculatorClass>-->
   </scoreDirectorFactory>
 
   <!-- Optimization algorithms configuration -->

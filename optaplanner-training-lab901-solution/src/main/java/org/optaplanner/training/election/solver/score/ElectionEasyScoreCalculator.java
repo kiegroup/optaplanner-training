@@ -22,7 +22,7 @@ import org.optaplanner.core.impl.score.director.easy.EasyScoreCalculator;
 import org.optaplanner.training.election.domain.Election;
 import org.optaplanner.training.election.domain.FederalState;
 
-public class ElectionScoreCalculator implements EasyScoreCalculator<Election> {
+public class ElectionEasyScoreCalculator implements EasyScoreCalculator<Election> {
 
     @Override
     public Score calculateScore(Election election, int initScore) {
