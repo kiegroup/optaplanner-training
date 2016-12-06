@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.optaplanner.training.election.solver.score;
+package org.optaplanner.training.election.solver;
 
 import org.optaplanner.core.api.score.Score;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;

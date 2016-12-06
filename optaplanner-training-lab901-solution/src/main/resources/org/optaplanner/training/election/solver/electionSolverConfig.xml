@@ -3,14 +3,25 @@
   <!--<environmentMode>FAST_ASSERT</environmentMode>-->
   <scanAnnotatedClasses/>
 
-  <!-- Score configuration -->
   <scoreDirectorFactory>
-    <easyScoreCalculatorClass>org.optaplanner.training.election.solver.score.ElectionEasyScoreCalculator</easyScoreCalculatorClass>
-    <!--<incrementalScoreCalculatorClass>org.optaplanner.training.election.solver.score.ElectionIncrementalScoreCalculator</incrementalScoreCalculatorClass>-->
+    <easyScoreCalculatorClass>org.optaplanner.training.election.solver.ElectionEasyScoreCalculator</easyScoreCalculatorClass>
+    <!-- Alternative implementation: -->
+    <!--<incrementalScoreCalculatorClass>org.optaplanner.training.election.optional.solver.ElectionIncrementalScoreCalculator</incrementalScoreCalculatorClass>-->
   </scoreDirectorFactory>
 
-  <!-- Optimization algorithms configuration -->
   <termination>
-    <secondsSpentLimit>10</secondsSpentLimit>
+    <unimprovedSecondsSpentLimit>10</unimprovedSecondsSpentLimit>
   </termination>
+
+  <!-- Optimization algorithms configuration -->
+  <constructionHeuristic/>
+  <localSearch>
+    <unionMoveSelector>
+      <changeMoveSelector/>
+      <swapMoveSelector/>
+      <!-- To escape the local optimum in this knapsack variant, add pillar moves: -->
+      <pillarChangeMoveSelector/>
+      <pillarSwapMoveSelector/>
+    </unionMoveSelector>
+  </localSearch>
 </solver>

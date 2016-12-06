@@ -18,8 +18,9 @@ package org.optaplanner.training.election.domain;
 
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
+import org.optaplanner.training.election.optional.domain.FederalStateDifficultyComparator;
 
-@PlanningEntity
+@PlanningEntity(difficultyComparatorClass = FederalStateDifficultyComparator.class)
 public class FederalState {
 
     private String name;
