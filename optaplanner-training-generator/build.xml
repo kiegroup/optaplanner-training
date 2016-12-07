@@ -240,6 +240,15 @@ end
       </fileset>
     </replaceregexp>
     <replaceregexp encoding="UTF-8"
+                   match="\nimport org\.optaplanner\.training\.election\.optional\..*;"
+                   replace="" flags="g">
+      <fileset dir="${lab.directory}" defaultexcludes="true">
+        <patternset>
+          <include name="src/main/java/org/optaplanner/training/election/**/*.java"/>
+        </patternset>
+      </fileset>
+    </replaceregexp>
+    <replaceregexp encoding="UTF-8"
                    match="\n *\@Planning.*"
                    replace="" flags="g">
       <fileset dir="${lab.directory}" defaultexcludes="true">
@@ -250,6 +259,24 @@ end
     </replaceregexp>
     <replaceregexp encoding="UTF-8"
                    match="\n *\@ValueRangeProvider.*"
+                   replace="" flags="g">
+      <fileset dir="${lab.directory}" defaultexcludes="true">
+        <patternset>
+          <include name="src/main/java/org/optaplanner/training/election/**/*.java"/>
+        </patternset>
+      </fileset>
+    </replaceregexp>
+    <replaceregexp encoding="UTF-8"
+                   match="\n *private \w+Score score;"
+                   replace="" flags="g">
+      <fileset dir="${lab.directory}" defaultexcludes="true">
+        <patternset>
+          <include name="src/main/java/org/optaplanner/training/election/**/*.java"/>
+        </patternset>
+      </fileset>
+    </replaceregexp>
+    <replaceregexp encoding="UTF-8"
+                   match="\n *public \w+Score getScore\(\) *\{\n.*\n *\}\n"
                    replace="" flags="g">
       <fileset dir="${lab.directory}" defaultexcludes="true">
         <patternset>

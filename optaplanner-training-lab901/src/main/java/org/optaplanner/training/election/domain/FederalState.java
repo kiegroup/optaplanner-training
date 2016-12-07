@@ -16,7 +16,6 @@
 
 package org.optaplanner.training.election.domain;
 
-import org.optaplanner.training.election.optional.domain.FederalStateDifficultyComparator;
 
 public class FederalState {
 

@@ -26,7 +26,6 @@ public class Election {
 
     private List<FederalState> federalStateList;
 
-    private HardSoftScore score;
 
     private Election() {
     }
@@ -37,10 +36,6 @@ public class Election {
 
     public List<FederalState> getFederalStateList() {
         return federalStateList;
-    }
-
-    public HardSoftScore getScore() {
-        return score;
     }
 
     public String[] createCandidates() {
