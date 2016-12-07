@@ -44,23 +44,33 @@ public class ElectionApp {
         System.out.println("========");
 
         List<FederalState> federalStateList = election.getFederalStateList();
-        int populationTotal = federalStateList.stream().mapToInt(FederalState::getPopulation).sum();
         federalStateList.stream()
                 .filter((federalState) -> Election.BAD_CANDIDATE.equals(federalState.getWinningCandidate()))
                 .sorted(Comparator.comparing(FederalState::getElectoralVotes)
-                        .thenComparing(FederalState::getPopulation).reversed())
+                        .thenComparing(FederalState::getPopulation))
                 .forEach((federalState) -> System.out.printf(
-                        "Win %2d electoral votes in %-20s. Bribe %,10d citizens there.\n",
-                        federalState.getElectoralVotes(),
+                        "%-20s %3d EC: %,11d of %,11d voters (%.2f%%).\n",
                         federalState.getName(),
-                        federalState.getMinimumMajorityPopulation()));
+                        federalState.getElectoralVotes(),
+                        federalState.getMinimumMajorityPopulation(),
+                        federalState.getPopulation(),
+                        federalState.getMinimumMajorityPopulation() * 100.0 / federalState.getPopulation()));
 
         System.out.println("");
-        int bribeMinimumPopulation = federalStateList.stream()
+        int electoralVotes = federalStateList.stream()
+                .filter((federalState) -> Election.BAD_CANDIDATE.equals(federalState.getWinningCandidate()))
+                .mapToInt(FederalState::getElectoralVotes).sum();
+        int minimumPopulation = federalStateList.stream()
                 .filter((federalState) -> Election.BAD_CANDIDATE.equals(federalState.getWinningCandidate()))
                 .mapToInt(FederalState::getMinimumMajorityPopulation).sum();
-        double percentage = bribeMinimumPopulation * 100.0 / populationTotal;
-        System.out.printf("Bribe %.2f%% of the US population to become president (even if all citizens votes).\n", percentage);
+        int populationTotal = federalStateList.stream().mapToInt(FederalState::getPopulation).sum();
+        System.out.printf(
+                "%-20s %3d EC: %,11d of %,11d voters (%.2f%%).\n",
+                "TOTAL",
+                electoralVotes,
+                minimumPopulation,
+                populationTotal,
+                minimumPopulation * 100.0 / populationTotal);
     }
 
     private static Election readElection() {
