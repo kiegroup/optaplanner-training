@@ -33,9 +33,13 @@ public class ElectionApp {
 
     public static void main(String[] args) {
         Election election = readElection();
+
+        // LAB-SOLUTION-START
         SolverFactory<Election> solverFactory = SolverFactory.createFromXmlResource(
                 "org/optaplanner/training/election/solver/electionSolverConfig.xml");
         election = solverFactory.buildSolver().solve(election);
+        // LAB-SOLUTION-END
+
         printElection(election);
     }
 

@@ -228,8 +228,8 @@ end
                    replace="&lt;/artifactId&gt;"/>
     <replaceregexp file="${lab.directory}/src/main/java/org/optaplanner/training/election/app/ElectionApp.java"
                    encoding="UTF-8"
-                   match="    public static void main[\s\S]*?\n    \}"
-                   replace="    // TODO add main() here"
+                   match="// LAB-SOLUTION-START[\s\S]*// LAB-SOLUTION-END"
+                   replace="// TODO Implement this lab"
                    byline="false"/>
   </target>
 
