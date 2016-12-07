@@ -14,5 +14,5 @@
 .DS_Store
 
 # Everything generated with optaplanner-training-generator
-/optaplanner-training-lab*
-!optaplanner-training-lab9*
+/optaplanner-training-lab1*
+/optaplanner-training-lab901
