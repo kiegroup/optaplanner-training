@@ -1,0 +1,52 @@
+# State,population,electoralVotes
+Alabama,4858979,9
+Alaska,738432,3
+Arizona,6828065,11
+Arkansas,2978204,6
+California,39144818,55
+Colorado,5456574,9
+Connecticut,3590886,7
+Delaware,945934,3
+District of Columbia,601767,3
+Florida,20271272,29
+Georgia,10214860,16
+Hawaii,1431603,4
+Idaho,1654930,4
+Illinois,12859995,20
+Indiana,6619680,11
+Iowa,3123899,6
+Kansas,2911641,6
+Kentucky,4425092,8
+Louisiana,4670724,8
+Maine,1329328,4
+Maryland,6006401,10
+Massachusetts,6794422,11
+Michigan,9922576,16
+Minnesota,5489594,10
+Mississippi,2992333,6
+Missouri,6083672,10
+Montana,1032949,3
+Nebraska,1896190,5
+Nevada,2890845,6
+New Hampshire,1330608,4
+New Jersey,8958013,14
+New Mexico,2085109,5
+New York,19795791,29
+North Carolina,10042802,15
+North Dakota,756927,3
+Ohio,11613423,18
+Oklahoma,3911338,7
+Oregon,4028977,7
+Pennsylvania,12802503,20
+Rhode Island,1056298,4
+South Carolina,4896146,9
+South Dakota,858469,3
+Tennessee,6600299,11
+Texas,27469114,38
+Utah,2995919,6
+Vermont,626042,3
+Virginia,8382993,13
+Washington,7170351,12
+West Virginia,1844128,5
+Wisconsin,5771337,10
+Wyoming,586107,3

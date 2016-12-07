@@ -229,8 +229,34 @@ end
     <replaceregexp file="${lab.directory}/src/main/java/org/optaplanner/training/election/app/ElectionApp.java"
                    encoding="UTF-8"
                    match="// LAB-SOLUTION-START[\s\S]*// LAB-SOLUTION-END"
-                   replace="// TODO Implement this lab"
-                   byline="false"/>
+                   replace="// TODO Implement this lab"/>
+    <replaceregexp encoding="UTF-8"
+                   match="\nimport org\.optaplanner\.core\..*;"
+                   replace="" flags="g">
+      <fileset dir="${lab.directory}" defaultexcludes="true">
+        <patternset>
+          <include name="src/main/java/org/optaplanner/training/election/**/*.java"/>
+        </patternset>
+      </fileset>
+    </replaceregexp>
+    <replaceregexp encoding="UTF-8"
+                   match="\n *\@Planning.*"
+                   replace="" flags="g">
+      <fileset dir="${lab.directory}" defaultexcludes="true">
+        <patternset>
+          <include name="src/main/java/org/optaplanner/training/election/**/*.java"/>
+        </patternset>
+      </fileset>
+    </replaceregexp>
+    <replaceregexp encoding="UTF-8"
+                   match="\n *\@ValueRangeProvider.*"
+                   replace="" flags="g">
+      <fileset dir="${lab.directory}" defaultexcludes="true">
+        <patternset>
+          <include name="src/main/java/org/optaplanner/training/election/**/*.java"/>
+        </patternset>
+      </fileset>
+    </replaceregexp>
   </target>
 
 </project>
