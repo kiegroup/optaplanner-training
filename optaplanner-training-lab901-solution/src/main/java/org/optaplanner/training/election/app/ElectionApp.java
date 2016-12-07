@@ -39,6 +39,25 @@ public class ElectionApp {
         printElection(election);
     }
 
+    private static Election readElection() {
+        Path inputFile = Paths.get("data/election/import/president2016.txt");
+        try (Stream<String> stream = Files.lines(inputFile)) {
+            List<FederalState> federalStateList = stream
+                    .filter((line) -> !line.isEmpty() && !line.startsWith("#"))
+                    .map((line) -> {
+                        String[] tokens = line.split(",");
+                        if (tokens.length != 3) {
+                            throw new IllegalStateException("The line (" + line + ") does not have 3 tokens.");
+                        }
+                        return new FederalState(tokens[0], Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
+                    }).collect(Collectors.toList());
+            return new Election(federalStateList);
+        } catch (IOException | NumberFormatException e) {
+            throw new IllegalStateException("Reading inputFile (" + inputFile + ") failed.", e);
+        }
+
+    }
+
     private static void printElection(Election election) {
         System.out.println("Election");
         System.out.println("========");
@@ -71,25 +90,6 @@ public class ElectionApp {
                 minimumPopulation,
                 populationTotal,
                 minimumPopulation * 100.0 / populationTotal);
-    }
-
-    private static Election readElection() {
-        Path inputFile = Paths.get("data/election/import/president2016.txt");
-        try (Stream<String> stream = Files.lines(inputFile)) {
-            List<FederalState> federalStateList = stream
-                    .filter((line) -> !line.isEmpty() && !line.startsWith("#"))
-                    .map((line) -> {
-                        String[] tokens = line.split(",");
-                        if (tokens.length != 3) {
-                            throw new IllegalStateException("The line (" + line + ") does not have 3 tokens.");
-                        }
-                        return new FederalState(tokens[0], Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
-                    }).collect(Collectors.toList());
-            return new Election(federalStateList);
-        } catch (IOException | NumberFormatException e) {
-            throw new IllegalStateException("Reading inputFile (" + inputFile + ") failed.", e);
-        }
-
     }
 
 }

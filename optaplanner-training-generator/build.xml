@@ -30,7 +30,7 @@
   </patternset>
 
 
-  <target name="overwrite-all-labs" depends="overwrite-lab101, overwrite-lab102, overwrite-lab103"/>
+  <target name="overwrite-all-labs" depends="overwrite-lab101, overwrite-lab102, overwrite-lab103, overwrite-lab901"/>
 
 
   <target name="overwrite-lab101" depends="checks">
@@ -195,6 +195,42 @@ end
     <available file="${optaplanner.examples.dir}" property="optaplanner.examples.dir.available" />
     <fail unless="optaplanner.examples.dir.available"
           message="The optaplanner.examples.dir (${optaplanner.examples.dir}) does not exist." />
+  </target>
+
+  <target name="overwrite-lab901" depends="checks">
+    <antcall target="overwrite-from-solution">
+      <param name="lab.artifactId" value="optaplanner-training-lab901"/>
+    </antcall>
+  </target>
+
+  <target name="overwrite-from-solution">
+    <property name="lab.directory" value="${basedir}/../${lab.artifactId}"/>
+    <property name="lab-solution.directory" value="${basedir}/../${lab.artifactId}-solution"/>
+    <echo>Overwriting of ${lab.directory}</echo>
+    <delete failonerror="false">
+      <fileset dir="${lab.directory}" defaultexcludes="false"/>
+    </delete>
+    <copy todir="${lab.directory}" overwrite="true">
+      <fileset dir="${lab-solution.directory}" defaultexcludes="false">
+        <patternset>
+          <include name="pom.xml"/>
+          <include name=".gitignore"/>
+          <include name="data/election/import/"/>
+          <include name="src/main/java/org/optaplanner/training/election/app/"/>
+          <include name="src/main/java/org/optaplanner/training/election/domain/"/>
+          <include name="src/main/resources/logback.xml"/>
+        </patternset>
+      </fileset>
+    </copy>
+    <replaceregexp file="${lab.directory}/pom.xml"
+                   encoding="UTF-8"
+                   match="\-solution&lt;/artifactId&gt;"
+                   replace="&lt;/artifactId&gt;"/>
+    <replaceregexp file="${lab.directory}/src/main/java/org/optaplanner/training/election/app/ElectionApp.java"
+                   encoding="UTF-8"
+                   match="    public static void main[\s\S]*?\n    \}"
+                   replace="    // TODO add main() here"
+                   byline="false"/>
   </target>
 
 </project>
