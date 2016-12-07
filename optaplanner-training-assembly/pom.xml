@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.optaplanner.training</groupId>
     <artifactId>optaplanner-training</artifactId>
-    <version>6.2.0.Final-training-3</version>
+    <version>7.0.0.Beta4-training-4</version>
   </parent>
 
   <artifactId>optaplanner-training-assembly</artifactId>
