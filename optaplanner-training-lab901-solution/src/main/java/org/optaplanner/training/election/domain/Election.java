@@ -30,6 +30,8 @@ public class Election {
     public static final String GOOD_CANDIDATE = "Good candidate";
     public static final String BAD_CANDIDATE = "Bad candidate";
 
+    @ValueRangeProvider(id = "candidateRange")
+    private String[] candidates = new String[]{GOOD_CANDIDATE, BAD_CANDIDATE};
     @PlanningEntityCollectionProperty
     private List<FederalState> federalStateList;
 
@@ -49,11 +51,6 @@ public class Election {
 
     public HardSoftScore getScore() {
         return score;
-    }
-
-    @ValueRangeProvider(id = "candidateRange")
-    public String[] createCandidates() {
-        return new String[] {GOOD_CANDIDATE, BAD_CANDIDATE};
     }
 
 }

@@ -24,6 +24,7 @@ public class Election {
     public static final String GOOD_CANDIDATE = "Good candidate";
     public static final String BAD_CANDIDATE = "Bad candidate";
 
+    private String[] candidates = new String[]{GOOD_CANDIDATE, BAD_CANDIDATE};
     private List<FederalState> federalStateList;
 
 
@@ -36,10 +37,6 @@ public class Election {
 
     public List<FederalState> getFederalStateList() {
         return federalStateList;
-    }
-
-    public String[] createCandidates() {
-        return new String[] {GOOD_CANDIDATE, BAD_CANDIDATE};
     }
 
 }
