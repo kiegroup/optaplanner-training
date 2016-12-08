@@ -22,6 +22,7 @@
     <include name="data/cloudbalancing/unsolved/"/>
     <include name="src/main/java/org/optaplanner/examples/cloudbalancing/app/CloudBalancingApp.java"/>
     <include name="src/main/java/org/optaplanner/examples/cloudbalancing/domain/"/>
+    <include name="src/main/java/org/optaplanner/examples/cloudbalancing/optional/domain/"/>
     <include name="src/main/java/org/optaplanner/examples/cloudbalancing/optional/realtime/"/>
     <include name="src/main/java/org/optaplanner/examples/cloudbalancing/persistence/CloudBalancingDao.java"/>
     <include name="src/main/java/org/optaplanner/examples/cloudbalancing/swingui/"/>
