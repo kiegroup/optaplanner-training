@@ -16,6 +16,7 @@
 
 package org.optaplanner.training.workerrostering.persistence;
 
+import java.io.File;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -58,18 +59,19 @@ public class WorkerRosteringGenerator {
                     "analyst");
 
     public static void main(String[] args) {
-        WorkerRosteringGenerator generator = new WorkerRosteringGenerator();
-        Roster roster = generator.createRoster(10, 28);
-
+        new WorkerRosteringGenerator().generateAndWriteRoster(10, 28);
     }
 
-    protected Random random;
+    protected Random random = new Random(37);
+    protected WorkerRosteringSolutionFileIO solutionFileIO = new WorkerRosteringSolutionFileIO();
 
-    public WorkerRosteringGenerator() {
-        random = new Random(37);
+    public void generateAndWriteRoster(int spotListSize, int timeSlotListSize) {
+        Roster roster = generateRoster(spotListSize, timeSlotListSize);
+        solutionFileIO.write(roster, new File("data/workerrostering/import/roster-"
+                + spotListSize + "spots-" + timeSlotListSize + "timeslots.xlsx"));
     }
 
-    public Roster createRoster(int spotListSize, int timeSlotListSize) {
+    public Roster generateRoster(int spotListSize, int timeSlotListSize) {
         int employeeListSize = spotListSize * 4;
         int skillListSize = (spotListSize + 4) / 5;
         RosterParametrization rosterParametrization = new RosterParametrization();
