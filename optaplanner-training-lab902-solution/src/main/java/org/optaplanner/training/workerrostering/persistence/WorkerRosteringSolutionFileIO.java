@@ -16,23 +16,29 @@
 
 package org.optaplanner.training.workerrostering.persistence;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.optaplanner.persistence.common.api.domain.solution.SolutionFileIO;
 import org.optaplanner.training.workerrostering.domain.Employee;
 import org.optaplanner.training.workerrostering.domain.Roster;
+import org.optaplanner.training.workerrostering.domain.ShiftAssignment;
 import org.optaplanner.training.workerrostering.domain.Skill;
 import org.optaplanner.training.workerrostering.domain.Spot;
 import org.optaplanner.training.workerrostering.domain.TimeSlot;
@@ -71,6 +77,7 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
 
         private final Workbook workbook;
         private final CellStyle headerStyle;
+        private final CellStyle unexistingStyle;
 
         public RosterWriter(Roster roster) {
             this.roster = roster;
@@ -79,12 +86,33 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             Font font = workbook.createFont();
             font.setBold(true);
             headerStyle.setFont(font);
+            unexistingStyle = workbook.createCellStyle();
+            unexistingStyle.setFillForegroundColor(IndexedColors.GREY_80_PERCENT.getIndex());
+            unexistingStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
         }
 
         public Workbook fillWorkbook() {
-            writeListSheet("Spots", new String[]{"Name", "Required skill"}, roster.getSpotList(), (Row row, Spot spot) -> {
+            Map<Pair<Spot, TimeSlot>, ShiftAssignment> spotMap = roster.getShiftAssignmentList().stream().collect(Collectors.toMap(
+                    shiftAssignment -> Pair.of(shiftAssignment.getSpot(), shiftAssignment.getTimeSlot()),
+                    shiftAssignment -> shiftAssignment));
+
+            writeGridSheet("Spots", new String[]{"Name", "Required skill"}, roster.getSpotList(), (Row row, Spot spot) -> {
                 row.createCell(0).setCellValue(spot.getName());
                 row.createCell(1).setCellValue(spot.getRequiredSkill().getName());
+            }, roster.getTimeSlotList(), (Cell cell, TimeSlot timeSlot) -> {
+                cell.setCellValue(timeSlot.getStartDateTime().getDayOfWeek().toString() + " " + timeSlot.getStartDateTime().toLocalTime().toString());
+            }, (Cell cell, Pair<Spot, TimeSlot> pair) -> {
+                ShiftAssignment shiftAssignment = spotMap.get(pair);
+                if (shiftAssignment == null) {
+                    cell.setCellStyle(unexistingStyle);
+                    return;
+                }
+                Employee employee = shiftAssignment.getEmployee();
+                if (employee == null) {
+                    cell.setCellValue("?");
+                    return;
+                }
+                cell.setCellValue(employee.getName());
             });
             writeListSheet("Employees", new String[]{"Name", "Skills"}, roster.getEmployeeList(), (Row row, Employee employee) -> {
                 row.createCell(0).setCellValue(employee.getName());
@@ -100,21 +128,49 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             return workbook;
         }
 
-        private <E> void writeListSheet(String sheetName, String[] headerTitles, List<E> elementList,
-                BiConsumer<Row, E> f) {
+        private <E> Sheet writeListSheet(String sheetName, String[] headerTitles, List<E> elementList,
+                BiConsumer<Row, E> rowConsumer) {
             Sheet sheet = workbook.createSheet(sheetName);
             sheet.setDefaultColumnWidth(20);
             int rowNumber = 0;
             Row headerRow = sheet.createRow(rowNumber++);
             int columnNumber = 0;
             for (String headerTitle : headerTitles) {
-                Cell cell = headerRow.createCell(columnNumber++);
+                Cell cell = headerRow.createCell(columnNumber);
                 cell.setCellValue(headerTitle);
                 cell.setCellStyle(headerStyle);
+                columnNumber++;
             }
             for (E element : elementList) {
-                Row row = sheet.createRow(rowNumber++);
-                f.accept(row, element);
+                Row row = sheet.createRow(rowNumber);
+                rowConsumer.accept(row, element);
+                rowNumber++;
+            }
+            return sheet;
+        }
+
+        private <E, F> void writeGridSheet(String sheetName, String[] headerTitles, List<E> rowElementList,
+                BiConsumer<Row, E> rowConsumer, List<F> columnElementList, BiConsumer<Cell, F> columnConsumer,
+                BiConsumer<Cell, Pair<E, F>> cellConsumer) {
+            Sheet sheet = writeListSheet(sheetName, headerTitles, rowElementList, rowConsumer);
+            sheet.setDefaultColumnWidth(5);
+            Row headerRow = sheet.getRow(0);
+            int columnNumber = headerTitles.length;
+            for (F columnElement : columnElementList) {
+                Cell cell = headerRow.createCell(columnNumber);
+                columnConsumer.accept(cell, columnElement);
+                columnNumber++;
+            }
+            int rowNumber = 1;
+            for (E rowElement : rowElementList) {
+                Row row = sheet.getRow(rowNumber);
+                columnNumber = headerTitles.length;
+                for (F columnElement : columnElementList) {
+                    Cell cell = row.createCell(columnNumber);
+                    cellConsumer.accept(cell, Pair.of(rowElement, columnElement));
+                    columnNumber++;
+                }
+                rowNumber++;
             }
         }
 
