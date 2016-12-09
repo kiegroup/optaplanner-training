@@ -19,17 +19,23 @@ package org.optaplanner.training.workerrostering.persistence;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.optaplanner.persistence.common.api.domain.solution.SolutionFileIO;
 import org.optaplanner.training.workerrostering.domain.Employee;
 import org.optaplanner.training.workerrostering.domain.Roster;
 import org.optaplanner.training.workerrostering.domain.Skill;
+import org.optaplanner.training.workerrostering.domain.Spot;
+import org.optaplanner.training.workerrostering.domain.TimeSlot;
 
 public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
 
@@ -50,21 +56,68 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
 
     @Override
     public void write(Roster roster, File outputSolutionFile) {
-        XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet skillSheet = workbook.createSheet("Skills");
-        skillSheet.createRow(0).createCell(0).setCellValue("Name");
-        int rowNumber = 1;
-        for (Skill skill : roster.getSkillList()) {
-            Row row = skillSheet.createRow(rowNumber);
-            row.createCell(0).setCellValue(skill.getName());
-            rowNumber++;
-        }
+        Workbook workbook = new RosterWriter(roster).fillWorkbook();
         try (FileOutputStream out = new FileOutputStream(outputSolutionFile)) {
             workbook.write(out);
         } catch (IOException e) {
             throw new IllegalStateException("Failed creating  outputSolutionFile ("
                     + outputSolutionFile + ") for roster (" + roster + ").", e);
         }
+    }
+
+    private static class RosterWriter {
+
+        private final Roster roster;
+
+        private final Workbook workbook;
+        private final CellStyle headerStyle;
+
+        public RosterWriter(Roster roster) {
+            this.roster = roster;
+            workbook = new XSSFWorkbook();
+            headerStyle = workbook.createCellStyle();
+            Font font = workbook.createFont();
+            font.setBold(true);
+            headerStyle.setFont(font);
+        }
+
+        public Workbook fillWorkbook() {
+            writeListSheet("Spots", new String[]{"Name", "Required skill"}, roster.getSpotList(), (Row row, Spot spot) -> {
+                row.createCell(0).setCellValue(spot.getName());
+                row.createCell(1).setCellValue(spot.getRequiredSkill().getName());
+            });
+            writeListSheet("Employees", new String[]{"Name", "Skills"}, roster.getEmployeeList(), (Row row, Employee employee) -> {
+                row.createCell(0).setCellValue(employee.getName());
+                row.createCell(1).setCellValue(employee.getSkillSet().stream().map(Skill::getName).collect(Collectors.joining(",")));
+            });
+            writeListSheet("Timeslots", new String[]{"Start", "End"}, roster.getTimeSlotList(), (Row row, TimeSlot timeSlot) -> {
+                row.createCell(0).setCellValue(timeSlot.getStartDateTime().toString());
+                row.createCell(1).setCellValue(timeSlot.getEndDateTime().toString());
+            });
+            writeListSheet("Skills", new String[]{"Name"}, roster.getSkillList(), (Row row, Skill skill) -> {
+                row.createCell(0).setCellValue(skill.getName());
+            });
+            return workbook;
+        }
+
+        private <E> void writeListSheet(String sheetName, String[] headerTitles, List<E> elementList,
+                BiConsumer<Row, E> f) {
+            Sheet sheet = workbook.createSheet(sheetName);
+            sheet.setDefaultColumnWidth(20);
+            int rowNumber = 0;
+            Row headerRow = sheet.createRow(rowNumber++);
+            int columnNumber = 0;
+            for (String headerTitle : headerTitles) {
+                Cell cell = headerRow.createCell(columnNumber++);
+                cell.setCellValue(headerTitle);
+                cell.setCellStyle(headerStyle);
+            }
+            for (E element : elementList) {
+                Row row = sheet.createRow(rowNumber++);
+                f.accept(row, element);
+            }
+        }
+
     }
 
 }
