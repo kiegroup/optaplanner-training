@@ -33,6 +33,7 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.optaplanner.persistence.common.api.domain.solution.SolutionFileIO;
@@ -92,15 +93,18 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
         }
 
         public Workbook fillWorkbook() {
-            Map<Pair<Spot, TimeSlot>, ShiftAssignment> spotMap = roster.getShiftAssignmentList().stream().collect(Collectors.toMap(
+            Map<Pair<Spot, TimeSlot>, ShiftAssignment> spotMap = roster.getShiftAssignmentList().stream()
+                    .collect(Collectors.toMap(
                     shiftAssignment -> Pair.of(shiftAssignment.getSpot(), shiftAssignment.getTimeSlot()),
                     shiftAssignment -> shiftAssignment));
+            Map<Pair<Employee, TimeSlot>, List<ShiftAssignment>> employeeMap = roster.getShiftAssignmentList().stream()
+                    .collect(Collectors.groupingBy(
+                    shiftAssignment -> Pair.of(shiftAssignment.getEmployee(), shiftAssignment.getTimeSlot()),
+                    Collectors.toList()));
 
             writeGridSheet("Spots", new String[]{"Name", "Required skill"}, roster.getSpotList(), (Row row, Spot spot) -> {
                 row.createCell(0).setCellValue(spot.getName());
                 row.createCell(1).setCellValue(spot.getRequiredSkill().getName());
-            }, roster.getTimeSlotList(), (Cell cell, TimeSlot timeSlot) -> {
-                cell.setCellValue(timeSlot.getStartDateTime().getDayOfWeek().toString() + " " + timeSlot.getStartDateTime().toLocalTime().toString());
             }, (Cell cell, Pair<Spot, TimeSlot> pair) -> {
                 ShiftAssignment shiftAssignment = spotMap.get(pair);
                 if (shiftAssignment == null) {
@@ -114,9 +118,18 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                 }
                 cell.setCellValue(employee.getName());
             });
-            writeListSheet("Employees", new String[]{"Name", "Skills"}, roster.getEmployeeList(), (Row row, Employee employee) -> {
+            writeGridSheet("Employees", new String[]{"Name", "Skills"}, roster.getEmployeeList(), (Row row, Employee employee) -> {
                 row.createCell(0).setCellValue(employee.getName());
-                row.createCell(1).setCellValue(employee.getSkillSet().stream().map(Skill::getName).collect(Collectors.joining(",")));
+                row.createCell(1).setCellValue(employee.getSkillSet().stream()
+                        .map(Skill::getName).collect(Collectors.joining(",")));
+            }, (Cell cell, Pair<Employee, TimeSlot> pair) -> {
+                List<ShiftAssignment> shiftAssignmentList = employeeMap.get(pair);
+                if (shiftAssignmentList == null) {
+                    return;
+                }
+                cell.setCellValue(shiftAssignmentList.stream()
+                        .map((shiftAssignment) -> shiftAssignment.getSpot().getName())
+                        .collect(Collectors.joining(",")));
             });
             writeListSheet("Timeslots", new String[]{"Start", "End"}, roster.getTimeSlotList(), (Row row, TimeSlot timeSlot) -> {
                 row.createCell(0).setCellValue(timeSlot.getStartDateTime().toString());
@@ -133,6 +146,7 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             Sheet sheet = workbook.createSheet(sheetName);
             sheet.setDefaultColumnWidth(20);
             int rowNumber = 0;
+            sheet.createRow(rowNumber++); // Leave empty
             Row headerRow = sheet.createRow(rowNumber++);
             int columnNumber = 0;
             for (String headerTitle : headerTitles) {
@@ -149,25 +163,35 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             return sheet;
         }
 
-        private <E, F> void writeGridSheet(String sheetName, String[] headerTitles, List<E> rowElementList,
-                BiConsumer<Row, E> rowConsumer, List<F> columnElementList, BiConsumer<Cell, F> columnConsumer,
-                BiConsumer<Cell, Pair<E, F>> cellConsumer) {
+        private <E> void writeGridSheet(String sheetName, String[] headerTitles, List<E> rowElementList,
+                BiConsumer<Row, E> rowConsumer,
+                BiConsumer<Cell, Pair<E, TimeSlot>> cellConsumer) {
             Sheet sheet = writeListSheet(sheetName, headerTitles, rowElementList, rowConsumer);
             sheet.setDefaultColumnWidth(5);
-            Row headerRow = sheet.getRow(0);
+            Row higherHeaderRow = sheet.getRow(0);
+            Row lowerHeaderRow = sheet.getRow(1);
             int columnNumber = headerTitles.length;
-            for (F columnElement : columnElementList) {
-                Cell cell = headerRow.createCell(columnNumber);
-                columnConsumer.accept(cell, columnElement);
+            for (TimeSlot timeSlot : roster.getTimeSlotList()) {
+                if (timeSlot.getStartDateTime().getHour() == 6) {
+                    Cell cell = higherHeaderRow.createCell(columnNumber);
+                    // TODO use formatter
+                    cell.setCellValue(timeSlot.getStartDateTime().getDayOfWeek().toString().substring(0, 3)
+                            + " " + timeSlot.getStartDateTime().toLocalDate().toString());
+                    cell.setCellStyle(headerStyle);
+                    sheet.addMergedRegion(new CellRangeAddress(0, 0, columnNumber, columnNumber + 2));
+                }
+                Cell cell = lowerHeaderRow.createCell(columnNumber);
+                cell.setCellValue(timeSlot.getStartDateTime().toLocalTime().toString());
+                cell.setCellStyle(headerStyle);
                 columnNumber++;
             }
-            int rowNumber = 1;
+            int rowNumber = 2;
             for (E rowElement : rowElementList) {
                 Row row = sheet.getRow(rowNumber);
                 columnNumber = headerTitles.length;
-                for (F columnElement : columnElementList) {
+                for (TimeSlot timeSlot : roster.getTimeSlotList()) {
                     Cell cell = row.createCell(columnNumber);
-                    cellConsumer.accept(cell, Pair.of(rowElement, columnElement));
+                    cellConsumer.accept(cell, Pair.of(rowElement, timeSlot));
                     columnNumber++;
                 }
                 rowNumber++;
