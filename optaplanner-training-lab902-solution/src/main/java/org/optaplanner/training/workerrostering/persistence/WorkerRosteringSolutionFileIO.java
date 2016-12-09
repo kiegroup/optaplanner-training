@@ -102,7 +102,7 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                     shiftAssignment -> Pair.of(shiftAssignment.getEmployee(), shiftAssignment.getTimeSlot()),
                     Collectors.toList()));
 
-            writeGridSheet("Spots", new String[]{"Name", "Required skill"}, roster.getSpotList(), (Row row, Spot spot) -> {
+            writeGridSheet("Spot roster", new String[]{"Name", "Required skill"}, roster.getSpotList(), (Row row, Spot spot) -> {
                 row.createCell(0).setCellValue(spot.getName());
                 row.createCell(1).setCellValue(spot.getRequiredSkill().getName());
             }, (Cell cell, Pair<Spot, TimeSlot> pair) -> {
@@ -118,10 +118,8 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                 }
                 cell.setCellValue(employee.getName());
             });
-            writeGridSheet("Employees", new String[]{"Name", "Skills"}, roster.getEmployeeList(), (Row row, Employee employee) -> {
+            writeGridSheet("Employee roster", new String[]{"Name"}, roster.getEmployeeList(), (Row row, Employee employee) -> {
                 row.createCell(0).setCellValue(employee.getName());
-                row.createCell(1).setCellValue(employee.getSkillSet().stream()
-                        .map(Skill::getName).collect(Collectors.joining(",")));
             }, (Cell cell, Pair<Employee, TimeSlot> pair) -> {
                 List<ShiftAssignment> shiftAssignmentList = employeeMap.get(pair);
                 if (shiftAssignmentList == null) {
@@ -130,6 +128,11 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                 cell.setCellValue(shiftAssignmentList.stream()
                         .map((shiftAssignment) -> shiftAssignment.getSpot().getName())
                         .collect(Collectors.joining(",")));
+            });
+            writeListSheet("Employees", new String[]{"Name", "Skills"}, roster.getEmployeeList(), (Row row, Employee employee) -> {
+                row.createCell(0).setCellValue(employee.getName());
+                row.createCell(1).setCellValue(employee.getSkillSet().stream()
+                        .map(Skill::getName).collect(Collectors.joining(",")));
             });
             writeListSheet("Timeslots", new String[]{"Start", "End"}, roster.getTimeSlotList(), (Row row, TimeSlot timeSlot) -> {
                 row.createCell(0).setCellValue(timeSlot.getStartDateTime().toString());
@@ -155,6 +158,7 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                 cell.setCellStyle(headerStyle);
                 columnNumber++;
             }
+            sheet.createFreezePane(1, 2);
             for (E element : elementList) {
                 Row row = sheet.createRow(rowNumber);
                 rowConsumer.accept(row, element);
@@ -168,6 +172,7 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                 BiConsumer<Cell, Pair<E, TimeSlot>> cellConsumer) {
             Sheet sheet = writeListSheet(sheetName, headerTitles, rowElementList, rowConsumer);
             sheet.setDefaultColumnWidth(5);
+            sheet.createFreezePane(headerTitles.length, 2);
             Row higherHeaderRow = sheet.getRow(0);
             Row lowerHeaderRow = sheet.getRow(1);
             int columnNumber = headerTitles.length;

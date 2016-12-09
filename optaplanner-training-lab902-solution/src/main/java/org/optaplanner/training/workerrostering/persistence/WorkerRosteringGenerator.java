@@ -60,6 +60,9 @@ public class WorkerRosteringGenerator {
 
     public static void main(String[] args) {
         new WorkerRosteringGenerator().generateAndWriteRoster(10, 28);
+        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28);
+        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28 * 4);
+        new WorkerRosteringGenerator().generateAndWriteRoster(100, 28 * 4);
     }
 
     protected Random random = new Random(37);
