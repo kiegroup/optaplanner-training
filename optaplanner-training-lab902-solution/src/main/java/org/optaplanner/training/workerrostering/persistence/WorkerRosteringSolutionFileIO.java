@@ -22,10 +22,16 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -49,7 +55,8 @@ import org.optaplanner.training.workerrostering.domain.TimeSlot;
 
 public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
 
-    private static final String SKILL_SHEET_NAME = "Skills";
+    public static final DateTimeFormatter DATE_TIME_FORMATTER
+            = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.ENGLISH);
 
     @Override
     public String getInputFileExtension() {
@@ -83,41 +90,78 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
 
         public Roster readRoster() {
             RosterParametrization rosterParametrization = new RosterParametrization();
-            List<Skill> skillList = createSkillList();
+            List<Skill> skillList = readListSheet("Skills", new String[]{"Name"}, (Row row) -> {
+                String name = row.getCell(0).getStringCellValue();
+                return new Skill(name);
+            });
+            Map<String, Skill> skillMap = skillList.stream().collect(Collectors.toMap(
+                    Skill::getName, skill -> skill));
             List<Spot> spotList = createSpotList(skillList);
-            List<TimeSlot> timeSlotList = createTimeSlotList();
-            List<Employee> employeeList = createEmployeeList(skillList);
+            List<TimeSlot> timeSlotList = readListSheet("Timeslots", new String[]{"Start", "End"}, (Row row) -> {
+                LocalDateTime startDateTime = LocalDateTime.parse(row.getCell(0).getStringCellValue(), DATE_TIME_FORMATTER);
+                LocalDateTime endDateTime = LocalDateTime.parse(row.getCell(1).getStringCellValue(), DATE_TIME_FORMATTER);
+                return new TimeSlot(startDateTime, endDateTime);
+            });
+            List<Employee> employeeList = readListSheet("Employees", new String[]{"Name", "Skills"}, (Row row) -> {
+                String name = row.getCell(0).getStringCellValue();
+                Set<Skill> skillSet = Arrays.stream(row.getCell(1).getStringCellValue().split(",")).map((skillName) -> {
+                    Skill skill = skillMap.get(skillName);
+                    if (skill == null) {
+                        throw new IllegalStateException("The skillName (" + skillName
+                                + ") does not exist in the skillList (" + skillList + ").");
+                    }
+                    return skill;
+                }).collect(Collectors.toSet());
+                return new Employee(name, skillSet);
+            });
             List<ShiftAssignment> shiftAssignmentList = createShiftAssignmentList(spotList, timeSlotList, employeeList);
             return new Roster(rosterParametrization,
                     skillList, spotList, timeSlotList, employeeList,
                     shiftAssignmentList);
         }
 
-        private List<Skill> createSkillList() {
-            Sheet sheet = workbook.getSheet(SKILL_SHEET_NAME);
+        private <E> List<E> readListSheet(String sheetName, String[] headerTitles,
+                Function<Row, E> rowConsumer) {
+            Sheet sheet = workbook.getSheet(sheetName);
             if (sheet == null) {
-                throw new IllegalStateException("The workbook does not contain a sheet with the name "
-                        + SKILL_SHEET_NAME + ".");
+                throw new IllegalStateException("The workbook does not contain a sheet with name ("
+                        + sheetName + ").");
             }
             Row headerRow = sheet.getRow(1);
             if (headerRow == null) {
-                throw new IllegalStateException("The sheet (" + SKILL_SHEET_NAME + ") has no header data at row 1.");
+                throw new IllegalStateException("The sheet (" + sheetName + ") has no header data at row (1).");
             }
-            if (!headerRow.getCell(0).getStringCellValue().equals("Name")) {
-                throw new IllegalStateException("The sheet (" + SKILL_SHEET_NAME + ") does not have the right content.");
+            int columnNumber = 0;
+            for (String headerTitle : headerTitles) {
+                Cell cell = headerRow.getCell(columnNumber);
+                if (cell == null) {
+                    throw new IllegalStateException("The sheet (" + sheetName + ") at header row (1) at column ("
+                            + columnNumber + ") does not contain the headerTitle (" + headerTitle + ").");
+                }
+                if (!cell.getStringCellValue().equals(headerTitle)) {
+                    throw new IllegalStateException("The sheet (" + sheetName + ") at header row (1) at column ("
+                            + columnNumber + ") does not contain the headerTitle (" + headerTitle
+                            + "), it contains cellValue (" + cell.getStringCellValue() + ") instead.");
+                }
+                columnNumber++;
             }
-
-            List<Skill> skillList = new ArrayList<>(sheet.getLastRowNum() - 2);
+            List<E> elementList = new ArrayList<>(sheet.getLastRowNum() - 2);
             for (int i = 2; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
                 if (row == null) {
                     continue;
                 }
-                Cell cell = row.getCell(0);
-                String name = cell.getStringCellValue();
-                skillList.add(new Skill(name));
+                for (int j = 0; j < headerTitles.length; j++) {
+                    Cell cell = row.getCell(j);
+                    if (cell == null) {
+                        throw new IllegalStateException("The sheet (" + sheetName
+                                + ") has no cell for " + headerTitles[j]
+                                + " at row (" + i + ") at column (" + j + ").");
+                    }
+                }
+                elementList.add(rowConsumer.apply(row));
             }
-            return skillList;
+            return elementList;
         }
 
         private List<Spot> createSpotList(List<Skill> skillList) {
@@ -212,10 +256,10 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                         .map(Skill::getName).collect(Collectors.joining(",")));
             });
             writeListSheet("Timeslots", new String[]{"Start", "End"}, roster.getTimeSlotList(), (Row row, TimeSlot timeSlot) -> {
-                row.createCell(0).setCellValue(timeSlot.getStartDateTime().toString());
-                row.createCell(1).setCellValue(timeSlot.getEndDateTime().toString());
+                row.createCell(0).setCellValue(timeSlot.getStartDateTime().format(DATE_TIME_FORMATTER));
+                row.createCell(1).setCellValue(timeSlot.getEndDateTime().format(DATE_TIME_FORMATTER));
             });
-            writeListSheet(SKILL_SHEET_NAME, new String[]{"Name"}, roster.getSkillList(), (Row row, Skill skill) -> {
+            writeListSheet("Skills", new String[]{"Name"}, roster.getSkillList(), (Row row, Skill skill) -> {
                 row.createCell(0).setCellValue(skill.getName());
             });
             return workbook;
