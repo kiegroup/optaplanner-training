@@ -31,7 +31,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -57,6 +59,9 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
 
     public static final DateTimeFormatter DATE_TIME_FORMATTER
             = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.ENGLISH);
+
+    public static final DateTimeFormatter TIME_FORMATTER
+            = DateTimeFormatter.ofPattern("HH:mm", Locale.ENGLISH);
 
     @Override
     public String getInputFileExtension() {
@@ -106,6 +111,8 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                 }
                 return new Spot(name, requiredSkill);
             });
+            Map<String, Spot> spotMap = spotList.stream().collect(Collectors.toMap(
+                    Spot::getName, spot -> spot));
             List<TimeSlot> timeSlotList = readListSheet("Timeslots", new String[]{"Start", "End"}, (Row row) -> {
                 LocalDateTime startDateTime = LocalDateTime.parse(row.getCell(0).getStringCellValue(), DATE_TIME_FORMATTER);
                 LocalDateTime endDateTime = LocalDateTime.parse(row.getCell(1).getStringCellValue(), DATE_TIME_FORMATTER);
@@ -123,14 +130,49 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                 }).collect(Collectors.toSet());
                 return new Employee(name, skillSet);
             });
-            List<ShiftAssignment> shiftAssignmentList = createShiftAssignmentList(spotList, timeSlotList, employeeList);
+            Map<String, Employee> employeeMap = employeeList.stream().collect(Collectors.toMap(
+                    Employee::getName, employee -> employee));
+            List<ShiftAssignment> shiftAssignmentList = readGridSheet("Spot roster", new String[]{"Name"}, (Row row) -> {
+                String spotName = row.getCell(0).getStringCellValue();
+                Spot spot = spotMap.get(spotName);
+                if (spot == null) {
+                    throw new IllegalStateException("The spotName (" + spotName
+                            + ") does not exist in the spotList (" + spotList + ").");
+                }
+                return spot;
+            }, timeSlotList, (Pair<Spot, TimeSlot> pair, Cell cell) ->  {
+                if (cell.getCellStyle().getFillForegroundColor() == IndexedColors.GREY_80_PERCENT.getIndex()
+                        && cell.getCellStyle().getFillPattern() == CellStyle.SOLID_FOREGROUND) {
+                    // unexistingStyle
+                    return null;
+                }
+                ShiftAssignment shiftAssignment = new ShiftAssignment(pair.getKey(), pair.getValue());
+                String employeeName = cell.getStringCellValue();
+                if (employeeName.isEmpty()) {
+                    throw new IllegalStateException("The sheet (Spot roster), has a cell ("
+                            + cell.getRowIndex() + "," + cell.getColumnIndex() + ") which does not contain ? or an employeeName.");
+                }
+                if (employeeName.equals("?")) {
+                    shiftAssignment.setEmployee(null);
+                } else {
+                    Employee employee = employeeMap.get(employeeName);
+                    if (employee == null) {
+                        throw new IllegalStateException("The sheet (Spot roster), has a cell ("
+                                + cell.getRowIndex() + "," + cell.getColumnIndex()
+                                + ") with an employeeName (" + employeeName
+                                + ") that does not exist in the employeeList (" + employeeList + ").");
+                    }
+                    shiftAssignment.setEmployee(employee);
+                }
+                return shiftAssignment;
+            });
             return new Roster(rosterParametrization,
                     skillList, spotList, timeSlotList, employeeList,
                     shiftAssignmentList);
         }
 
         private <E> List<E> readListSheet(String sheetName, String[] headerTitles,
-                Function<Row, E> rowConsumer) {
+                Function<Row, E> rowMapper) {
             Sheet sheet = workbook.getSheet(sheetName);
             if (sheet == null) {
                 throw new IllegalStateException("The workbook does not contain a sheet with name ("
@@ -144,12 +186,14 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             for (String headerTitle : headerTitles) {
                 Cell cell = headerRow.getCell(columnNumber);
                 if (cell == null) {
-                    throw new IllegalStateException("The sheet (" + sheetName + ") at header row (1) at column ("
-                            + columnNumber + ") does not contain the headerTitle (" + headerTitle + ").");
+                    throw new IllegalStateException("The sheet (" + sheetName + ") at header cell ("
+                            + cell.getRowIndex() + "," + cell.getColumnIndex()
+                            + ") does not contain the headerTitle (" + headerTitle + ").");
                 }
                 if (!cell.getStringCellValue().equals(headerTitle)) {
-                    throw new IllegalStateException("The sheet (" + sheetName + ") at header row (1) at column ("
-                            + columnNumber + ") does not contain the headerTitle (" + headerTitle
+                    throw new IllegalStateException("The sheet (" + sheetName + ") at header cell ("
+                            + cell.getRowIndex() + "," + cell.getColumnIndex()
+                            + ") does not contain the headerTitle (" + headerTitle
                             + "), it contains cellValue (" + cell.getStringCellValue() + ") instead.");
                 }
                 columnNumber++;
@@ -168,13 +212,55 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                                 + " at row (" + i + ") at column (" + j + ").");
                     }
                 }
-                elementList.add(rowConsumer.apply(row));
+                elementList.add(rowMapper.apply(row));
             }
             return elementList;
         }
 
-        private List<ShiftAssignment> createShiftAssignmentList(List<Spot> spotList, List<TimeSlot> timeSlotList, List<Employee> employeeList) {
-            return null; // TODO
+        private <E, F> List<F> readGridSheet(String sheetName, String[] headerTitles,
+                Function<Row, E> rowMapper, List<TimeSlot> timeSlotList,
+                BiFunction<Pair<E, TimeSlot>, Cell, F> cellMapper) {
+            readListSheet(sheetName, headerTitles, rowMapper);
+            Sheet sheet = workbook.getSheet(sheetName);
+            Row higherHeaderRow = sheet.getRow(0);
+            Row lowerHeaderRow = sheet.getRow(1);
+            int columnNumber = headerTitles.length;
+            for (TimeSlot timeSlot : timeSlotList) {
+                String expectedStartDateTimeString = timeSlot.getStartDateTime().format(TIME_FORMATTER);
+                Cell lowerCell = lowerHeaderRow.getCell(columnNumber);
+                if (lowerCell == null) {
+                    throw new IllegalStateException("The sheet (" + sheetName + ") at header cell ("
+                            + lowerCell.getRowIndex() + "," + lowerCell.getColumnIndex()
+                            + ") does not contain the startDateTime (" + expectedStartDateTimeString + ").");
+                }
+                if (!lowerCell.getStringCellValue().equals(expectedStartDateTimeString)) {
+                    throw new IllegalStateException("The sheet (" + sheetName + ") at header cell ("
+                            + lowerCell.getRowIndex() + "," + lowerCell.getColumnIndex()
+                            + ") does not contain the startDateTime (" + expectedStartDateTimeString
+                            + "), it contains cellValue (" + lowerCell.getStringCellValue() + ") instead.");
+                }
+                columnNumber++;
+            }
+
+            List<F> cellElementList = new ArrayList<>((sheet.getLastRowNum() - 2) * timeSlotList.size());
+            for (int i = 2; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row == null) {
+                    continue;
+                }
+                E rowElement = rowMapper.apply(row);
+                for (int j = 0; j < timeSlotList.size(); j++) {
+                    TimeSlot timeSlot = timeSlotList.get(j);
+                    Cell cell = row.getCell(headerTitles.length + j);
+                    if (cell == null) {
+                        throw new IllegalStateException("The sheet (" + sheetName
+                                + ") has no cell for " + headerTitles[j]
+                                + " at row (" + i + ") at column (" + j + ").");
+                    }
+                    cellElementList.add(cellMapper.apply(Pair.of(rowElement, timeSlot), cell));
+                }
+            }
+            return cellElementList;
         }
 
     }
@@ -307,7 +393,7 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                     sheet.addMergedRegion(new CellRangeAddress(0, 0, columnNumber, columnNumber + 2));
                 }
                 Cell cell = lowerHeaderRow.createCell(columnNumber);
-                cell.setCellValue(timeSlot.getStartDateTime().toLocalTime().toString());
+                cell.setCellValue(timeSlot.getStartDateTime().toLocalTime().format(TIME_FORMATTER));
                 cell.setCellStyle(headerStyle);
                 columnNumber++;
             }

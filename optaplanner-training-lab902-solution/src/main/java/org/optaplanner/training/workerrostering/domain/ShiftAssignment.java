@@ -50,6 +50,10 @@ public class ShiftAssignment {
         return employee;
     }
 
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
     @Override
     public String toString() {
         return spot + " " + timeSlot;
