@@ -257,7 +257,10 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                                 + ") has no cell for " + headerTitles[j]
                                 + " at row (" + i + ") at column (" + j + ").");
                     }
-                    cellElementList.add(cellMapper.apply(Pair.of(rowElement, timeSlot), cell));
+                    F cellElement = cellMapper.apply(Pair.of(rowElement, timeSlot), cell);
+                    if (cellElement != null) {
+                        cellElementList.add(cellElement);
+                    }
                 }
             }
             return cellElementList;

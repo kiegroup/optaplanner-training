@@ -16,7 +16,12 @@
 
 package org.optaplanner.training.workerrostering.app;
 
+import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import org.optaplanner.core.api.solver.SolverFactory;
 import org.optaplanner.training.workerrostering.domain.Roster;
@@ -26,9 +31,9 @@ import org.optaplanner.training.workerrostering.persistence.WorkerRosteringSolut
 public class WorkerRosteringApp {
 
     public static void main(String[] args) {
-        String filename = "roster-10spots-28timeslots.xlsx";
+        String filename = "roster-10spots-28timeslots";
         WorkerRosteringSolutionFileIO solutionFileIO = new WorkerRosteringSolutionFileIO();
-        Roster roster = solutionFileIO.read(new File("data/workerrostering/import/" + filename));
+        Roster roster = solutionFileIO.read(new File("data/workerrostering/import/" + filename + ".xlsx"));
         // WorkerRosteringGenerator generator = new WorkerRosteringGenerator();
         // Roster roster = generator.generateRoster(10, 28);
 
@@ -38,7 +43,18 @@ public class WorkerRosteringApp {
         roster = solverFactory.buildSolver().solve(roster);
         // LAB-SOLUTION-END
 
-        solutionFileIO.write(roster, new File("data/workerrostering/export/" + filename));
+        File outputSolutionFile = new File("data/workerrostering/export/" + filename + "-solved"
+                + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss", Locale.ENGLISH)) + ".xlsx");
+        solutionFileIO.write(roster, outputSolutionFile);
+        Desktop desktop = Desktop.getDesktop();
+        if (desktop.isSupported(Desktop.Action.OPEN)) {
+            try {
+                desktop.open(outputSolutionFile);
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Could not open outputSolutionFile (" + outputSolutionFile
+                        + ") on this operation system.", e);
+            }
+        }
     }
 
 }
