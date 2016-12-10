@@ -16,10 +16,13 @@
 
 package org.optaplanner.training.workerrostering.persistence;
 
-import java.awt.Color;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -34,17 +37,19 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.optaplanner.persistence.common.api.domain.solution.SolutionFileIO;
 import org.optaplanner.training.workerrostering.domain.Employee;
 import org.optaplanner.training.workerrostering.domain.Roster;
+import org.optaplanner.training.workerrostering.domain.RosterParametrization;
 import org.optaplanner.training.workerrostering.domain.ShiftAssignment;
 import org.optaplanner.training.workerrostering.domain.Skill;
 import org.optaplanner.training.workerrostering.domain.Spot;
 import org.optaplanner.training.workerrostering.domain.TimeSlot;
 
 public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
+
+    private static final String SKILL_SHEET_NAME = "Skills";
 
     @Override
     public String getInputFileExtension() {
@@ -58,16 +63,88 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
 
     @Override
     public Roster read(File inputSolutionFile) {
-        return null; // TODO
+        Workbook workbook;
+        try (InputStream in = new BufferedInputStream(new FileInputStream(inputSolutionFile))) {
+            workbook = new XSSFWorkbook(in);
+            return new RosterReader(workbook).readRoster();
+        } catch (IOException | RuntimeException e) {
+            throw new IllegalStateException("Failed reading inputSolutionFile ("
+                    + inputSolutionFile + ") to create a roster.", e);
+        }
+    }
+
+    private static  class RosterReader {
+
+        private final Workbook workbook;
+
+        public RosterReader(Workbook workbook) {
+            this.workbook = workbook;
+        }
+
+        public Roster readRoster() {
+            RosterParametrization rosterParametrization = new RosterParametrization();
+            List<Skill> skillList = createSkillList();
+            List<Spot> spotList = createSpotList(skillList);
+            List<TimeSlot> timeSlotList = createTimeSlotList();
+            List<Employee> employeeList = createEmployeeList(skillList);
+            List<ShiftAssignment> shiftAssignmentList = createShiftAssignmentList(spotList, timeSlotList, employeeList);
+            return new Roster(rosterParametrization,
+                    skillList, spotList, timeSlotList, employeeList,
+                    shiftAssignmentList);
+        }
+
+        private List<Skill> createSkillList() {
+            Sheet sheet = workbook.getSheet(SKILL_SHEET_NAME);
+            if (sheet == null) {
+                throw new IllegalStateException("The workbook does not contain a sheet with the name "
+                        + SKILL_SHEET_NAME + ".");
+            }
+            Row headerRow = sheet.getRow(1);
+            if (headerRow == null) {
+                throw new IllegalStateException("The sheet (" + SKILL_SHEET_NAME + ") has no header data at row 1.");
+            }
+            if (!headerRow.getCell(0).getStringCellValue().equals("Name")) {
+                throw new IllegalStateException("The sheet (" + SKILL_SHEET_NAME + ") does not have the right content.");
+            }
+
+            List<Skill> skillList = new ArrayList<>(sheet.getLastRowNum() - 2);
+            for (int i = 2; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row == null) {
+                    continue;
+                }
+                Cell cell = row.getCell(0);
+                String name = cell.getStringCellValue();
+                skillList.add(new Skill(name));
+            }
+            return skillList;
+        }
+
+        private List<Spot> createSpotList(List<Skill> skillList) {
+            return null; // TODO
+        }
+
+        private List<TimeSlot> createTimeSlotList() {
+            return null; // TODO
+        }
+
+        private List<Employee> createEmployeeList(List<Skill> skillList) {
+            return null; // TODO
+        }
+
+        private List<ShiftAssignment> createShiftAssignmentList(List<Spot> spotList, List<TimeSlot> timeSlotList, List<Employee> employeeList) {
+            return null; // TODO
+        }
+
     }
 
     @Override
     public void write(Roster roster, File outputSolutionFile) {
-        Workbook workbook = new RosterWriter(roster).fillWorkbook();
+        Workbook workbook = new RosterWriter(roster).writeWorkbook();
         try (FileOutputStream out = new FileOutputStream(outputSolutionFile)) {
             workbook.write(out);
         } catch (IOException e) {
-            throw new IllegalStateException("Failed creating  outputSolutionFile ("
+            throw new IllegalStateException("Failed writing outputSolutionFile ("
                     + outputSolutionFile + ") for roster (" + roster + ").", e);
         }
     }
@@ -92,7 +169,7 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             unexistingStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
         }
 
-        public Workbook fillWorkbook() {
+        public Workbook writeWorkbook() {
             Map<Pair<Spot, TimeSlot>, ShiftAssignment> spotMap = roster.getShiftAssignmentList().stream()
                     .collect(Collectors.toMap(
                     shiftAssignment -> Pair.of(shiftAssignment.getSpot(), shiftAssignment.getTimeSlot()),
@@ -138,7 +215,7 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                 row.createCell(0).setCellValue(timeSlot.getStartDateTime().toString());
                 row.createCell(1).setCellValue(timeSlot.getEndDateTime().toString());
             });
-            writeListSheet("Skills", new String[]{"Name"}, roster.getSkillList(), (Row row, Skill skill) -> {
+            writeListSheet(SKILL_SHEET_NAME, new String[]{"Name"}, roster.getSkillList(), (Row row, Skill skill) -> {
                 row.createCell(0).setCellValue(skill.getName());
             });
             return workbook;

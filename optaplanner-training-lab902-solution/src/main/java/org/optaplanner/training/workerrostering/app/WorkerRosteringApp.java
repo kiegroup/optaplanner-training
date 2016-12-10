@@ -16,21 +16,29 @@
 
 package org.optaplanner.training.workerrostering.app;
 
+import java.io.File;
+
 import org.optaplanner.core.api.solver.SolverFactory;
 import org.optaplanner.training.workerrostering.domain.Roster;
 import org.optaplanner.training.workerrostering.persistence.WorkerRosteringGenerator;
+import org.optaplanner.training.workerrostering.persistence.WorkerRosteringSolutionFileIO;
 
 public class WorkerRosteringApp {
 
     public static void main(String[] args) {
-        WorkerRosteringGenerator generator = new WorkerRosteringGenerator();
-        Roster roster = generator.generateRoster(10, 28);
+        String filename = "roster-10spots-28timeslots.xlsx";
+        WorkerRosteringSolutionFileIO solutionFileIO = new WorkerRosteringSolutionFileIO();
+        Roster roster = solutionFileIO.read(new File("data/workerrostering/import/" + filename));
+        // WorkerRosteringGenerator generator = new WorkerRosteringGenerator();
+        // Roster roster = generator.generateRoster(10, 28);
 
         // LAB-SOLUTION-START
         SolverFactory<Roster> solverFactory = SolverFactory.createFromXmlResource(
                 "org/optaplanner/training/workerrostering/solver/workerRosteringSolverConfig.xml");
         roster = solverFactory.buildSolver().solve(roster);
         // LAB-SOLUTION-END
+
+        solutionFileIO.write(roster, new File("data/workerrostering/export/" + filename));
     }
 
 }
