@@ -33,6 +33,14 @@ global HardSoftScoreHolder scoreHolder;
 // Hard constraints
 // ############################################################################
 
+rule "One shift assignment per day"
+    when
+        $s : ShiftAssignment(employee != null, $e : employee, $d : timeSlot.startDateTime.toLocalDate())
+        ShiftAssignment(employee == $e, timeSlot.startDateTime.toLocalDate() == $d, this != $s)
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, -1);
+end
+
 // ############################################################################
 // Soft constraints
 // ############################################################################
