@@ -60,6 +60,9 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
     public static final DateTimeFormatter DATE_TIME_FORMATTER
             = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.ENGLISH);
 
+    public static final DateTimeFormatter DAY_FORMATTER
+            = DateTimeFormatter.ofPattern("EEE dd-MMM", Locale.ENGLISH);
+
     public static final DateTimeFormatter TIME_FORMATTER
             = DateTimeFormatter.ofPattern("HH:mm", Locale.ENGLISH);
 
@@ -226,6 +229,21 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             Row lowerHeaderRow = sheet.getRow(1);
             int columnNumber = headerTitles.length;
             for (TimeSlot timeSlot : timeSlotList) {
+                if (timeSlot.getStartDateTime().getHour() == 6) {
+                    String expectedDayString = timeSlot.getStartDateTime().toLocalDate().format(DAY_FORMATTER);
+                    Cell higherCell = higherHeaderRow.getCell(columnNumber);
+                    if (higherCell == null) {
+                        throw new IllegalStateException("The sheet (" + sheetName + ") at header cell ("
+                                + higherCell.getRowIndex() + "," + higherCell.getColumnIndex()
+                                + ") does not contain the date (" + expectedDayString + ").");
+                    }
+                    if (!higherCell.getStringCellValue().equals(expectedDayString)) {
+                        throw new IllegalStateException("The sheet (" + sheetName + ") at header cell ("
+                                + higherCell.getRowIndex() + "," + higherCell.getColumnIndex()
+                                + ") does not contain the date (" + expectedDayString
+                                + "), it contains cellValue (" + higherCell.getStringCellValue() + ") instead.");
+                    }
+                }
                 String expectedStartDateTimeString = timeSlot.getStartDateTime().format(TIME_FORMATTER);
                 Cell lowerCell = lowerHeaderRow.getCell(columnNumber);
                 if (lowerCell == null) {
@@ -390,8 +408,7 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                 if (timeSlot.getStartDateTime().getHour() == 6) {
                     Cell cell = higherHeaderRow.createCell(columnNumber);
                     // TODO use formatter
-                    cell.setCellValue(timeSlot.getStartDateTime().getDayOfWeek().toString().substring(0, 3)
-                            + " " + timeSlot.getStartDateTime().toLocalDate().toString());
+                    cell.setCellValue(timeSlot.getStartDateTime().toLocalDate().format(DAY_FORMATTER));
                     cell.setCellStyle(headerStyle);
                     sheet.addMergedRegion(new CellRangeAddress(0, 0, columnNumber, columnNumber + 2));
                 }
