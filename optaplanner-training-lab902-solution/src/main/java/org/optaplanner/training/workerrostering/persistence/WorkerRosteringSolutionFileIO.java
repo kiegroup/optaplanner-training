@@ -96,7 +96,16 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             });
             Map<String, Skill> skillMap = skillList.stream().collect(Collectors.toMap(
                     Skill::getName, skill -> skill));
-            List<Spot> spotList = createSpotList(skillList);
+            List<Spot> spotList = readListSheet("Spots", new String[]{"Name", "Required skill"}, (Row row) -> {
+                String name = row.getCell(0).getStringCellValue();
+                String requiredSkillName = row.getCell(1).getStringCellValue();
+                Skill requiredSkill = skillMap.get(requiredSkillName);
+                if (requiredSkill == null) {
+                    throw new IllegalStateException("The requiredSkillName (" + requiredSkillName
+                            + ") does not exist in the skillList (" + skillList + ").");
+                }
+                return new Spot(name, requiredSkill);
+            });
             List<TimeSlot> timeSlotList = readListSheet("Timeslots", new String[]{"Start", "End"}, (Row row) -> {
                 LocalDateTime startDateTime = LocalDateTime.parse(row.getCell(0).getStringCellValue(), DATE_TIME_FORMATTER);
                 LocalDateTime endDateTime = LocalDateTime.parse(row.getCell(1).getStringCellValue(), DATE_TIME_FORMATTER);
@@ -164,18 +173,6 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             return elementList;
         }
 
-        private List<Spot> createSpotList(List<Skill> skillList) {
-            return null; // TODO
-        }
-
-        private List<TimeSlot> createTimeSlotList() {
-            return null; // TODO
-        }
-
-        private List<Employee> createEmployeeList(List<Skill> skillList) {
-            return null; // TODO
-        }
-
         private List<ShiftAssignment> createShiftAssignmentList(List<Spot> spotList, List<TimeSlot> timeSlotList, List<Employee> employeeList) {
             return null; // TODO
         }
@@ -223,9 +220,8 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                     shiftAssignment -> Pair.of(shiftAssignment.getEmployee(), shiftAssignment.getTimeSlot()),
                     Collectors.toList()));
 
-            writeGridSheet("Spot roster", new String[]{"Name", "Required skill"}, roster.getSpotList(), (Row row, Spot spot) -> {
+            writeGridSheet("Spot roster", new String[]{"Name"}, roster.getSpotList(), (Row row, Spot spot) -> {
                 row.createCell(0).setCellValue(spot.getName());
-                row.createCell(1).setCellValue(spot.getRequiredSkill().getName());
             }, (Cell cell, Pair<Spot, TimeSlot> pair) -> {
                 ShiftAssignment shiftAssignment = spotMap.get(pair);
                 if (shiftAssignment == null) {
@@ -258,6 +254,10 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             writeListSheet("Timeslots", new String[]{"Start", "End"}, roster.getTimeSlotList(), (Row row, TimeSlot timeSlot) -> {
                 row.createCell(0).setCellValue(timeSlot.getStartDateTime().format(DATE_TIME_FORMATTER));
                 row.createCell(1).setCellValue(timeSlot.getEndDateTime().format(DATE_TIME_FORMATTER));
+            });
+            writeListSheet("Spots", new String[]{"Name", "Required skill"}, roster.getSpotList(), (Row row, Spot spot) -> {
+                row.createCell(0).setCellValue(spot.getName());
+                row.createCell(1).setCellValue(spot.getRequiredSkill().getName());
             });
             writeListSheet("Skills", new String[]{"Name"}, roster.getSkillList(), (Row row, Skill skill) -> {
                 row.createCell(0).setCellValue(skill.getName());
