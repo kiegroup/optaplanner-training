@@ -364,6 +364,7 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                 ShiftAssignment shiftAssignment = spotMap.get(pair);
                 if (shiftAssignment == null) {
                     cell.setCellStyle(nonExistingStyle);
+                    cell.setCellValue(" "); // TODO HACK to get a clearer xlsx file
                     return;
                 }
                 if (shiftAssignment.isLockedByUser()) {
@@ -383,10 +384,10 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                 TimeSlot timeSlot = pair.getValue();
                 if (employee.getUnavailableTimeSlotSet().contains(timeSlot)) {
                     cell.setCellStyle(unavailableStyle);
-                    return;
                 }
                 List<ShiftAssignment> shiftAssignmentList = employeeMap.get(pair);
                 if (shiftAssignmentList == null) {
+                    cell.setCellValue(" "); // TODO HACK to get a clearer xlsx file
                     return;
                 }
                 cell.setCellValue(shiftAssignmentList.stream()
