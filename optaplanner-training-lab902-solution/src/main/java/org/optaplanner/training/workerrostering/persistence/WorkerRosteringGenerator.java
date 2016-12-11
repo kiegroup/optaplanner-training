@@ -36,10 +36,21 @@ import org.optaplanner.training.workerrostering.domain.TimeSlot;
 
 public class WorkerRosteringGenerator {
 
-    private static final StringDataGenerator employeeNameGenerator = StringDataGenerator.build10kFullNames();
-    private static final StringDataGenerator spotNameGenerator = StringDataGenerator.build10kLocationNames();
+    public static void main(String[] args) {
+        new WorkerRosteringGenerator().generateAndWriteRoster(10, 28, false);
+        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28, false);
+        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28 * 4, false);
+        new WorkerRosteringGenerator().generateAndWriteRoster(100, 28 * 4, false);
+        new WorkerRosteringGenerator().generateAndWriteRoster(10, 28, true);
+        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28, true);
+        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28 * 4, true);
+        new WorkerRosteringGenerator().generateAndWriteRoster(100, 28 * 4, true);
+    }
 
-    private static final StringDataGenerator skillNameGenerator = new StringDataGenerator()
+    private final StringDataGenerator employeeNameGenerator = StringDataGenerator.build10kFullNames();
+    private final StringDataGenerator spotNameGenerator = StringDataGenerator.build10kLocationNames();
+
+    private final StringDataGenerator skillNameGenerator = new StringDataGenerator()
             .addPart(
                     "Mechanical",
                     "Electrical",
@@ -58,17 +69,6 @@ public class WorkerRosteringGenerator {
                     "expert",
                     "inspector",
                     "analyst");
-
-    public static void main(String[] args) {
-        new WorkerRosteringGenerator().generateAndWriteRoster(10, 28, false);
-        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28, false);
-        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28 * 4, false);
-        new WorkerRosteringGenerator().generateAndWriteRoster(100, 28 * 4, false);
-        new WorkerRosteringGenerator().generateAndWriteRoster(10, 28, true);
-        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28, true);
-        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28 * 4, true);
-        new WorkerRosteringGenerator().generateAndWriteRoster(100, 28 * 4, true);
-    }
 
     protected Random random = new Random(37);
     protected WorkerRosteringSolutionFileIO solutionFileIO = new WorkerRosteringSolutionFileIO();
