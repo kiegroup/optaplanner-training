@@ -18,15 +18,18 @@ package org.optaplanner.training.workerrostering.domain;
 
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
+import org.optaplanner.training.workerrostering.optional.domain.MovableShiftAssignmentFilter;
 
-@PlanningEntity
+@PlanningEntity(movableEntitySelectionFilter = MovableShiftAssignmentFilter.class)
 public class ShiftAssignment {
 
     private final Spot spot;
     private final TimeSlot timeSlot;
 
+    private boolean lockedByUser = false;
+
     @PlanningVariable(valueRangeProviderRefs = "employeeRange")
-    private Employee employee;
+    private Employee employee = null;
 
     private ShiftAssignment() {
         spot = null;
@@ -44,6 +47,14 @@ public class ShiftAssignment {
 
     public TimeSlot getTimeSlot() {
         return timeSlot;
+    }
+
+    public boolean isLockedByUser() {
+        return lockedByUser;
+    }
+
+    public void setLockedByUser(boolean lockedByUser) {
+        this.lockedByUser = lockedByUser;
     }
 
     public Employee getEmployee() {

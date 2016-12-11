@@ -33,7 +33,6 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -65,6 +64,9 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
 
     public static final DateTimeFormatter TIME_FORMATTER
             = DateTimeFormatter.ofPattern("HH:mm", Locale.ENGLISH);
+
+    public static final IndexedColors NON_EXISTING_COLOR = IndexedColors.GREY_80_PERCENT;
+    public static final IndexedColors LOCKED_BY_USER_COLOR = IndexedColors.VIOLET;
 
     @Override
     public String getInputFileExtension() {
@@ -144,12 +146,13 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                 }
                 return spot;
             }, timeSlotList, (Pair<Spot, TimeSlot> pair, Cell cell) ->  {
-                if (cell.getCellStyle().getFillForegroundColor() == IndexedColors.GREY_80_PERCENT.getIndex()
-                        && cell.getCellStyle().getFillPattern() == CellStyle.SOLID_FOREGROUND) {
-                    // unexistingStyle
+                if (hasStyle(cell, NON_EXISTING_COLOR)) {
                     return null;
                 }
                 ShiftAssignment shiftAssignment = new ShiftAssignment(pair.getKey(), pair.getValue());
+                if (hasStyle(cell, LOCKED_BY_USER_COLOR)) {
+                    shiftAssignment.setLockedByUser(true);
+                }
                 String employeeName = cell.getStringCellValue();
                 if (employeeName.isEmpty()) {
                     throw new IllegalStateException("The sheet (Spot roster), has a cell ("
@@ -284,6 +287,11 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             return cellElementList;
         }
 
+        private boolean hasStyle(Cell cell, IndexedColors color) {
+            return cell.getCellStyle().getFillForegroundColor() == color.getIndex()
+                    && cell.getCellStyle().getFillPattern() == CellStyle.SOLID_FOREGROUND;
+        }
+
     }
 
     @Override
@@ -303,7 +311,9 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
 
         private final Workbook workbook;
         private final CellStyle headerStyle;
-        private final CellStyle unexistingStyle;
+
+        private final CellStyle nonExistingStyle;
+        private final CellStyle lockedByUserStyle;
 
         public RosterWriter(Roster roster) {
             this.roster = roster;
@@ -312,9 +322,8 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             Font font = workbook.createFont();
             font.setBold(true);
             headerStyle.setFont(font);
-            unexistingStyle = workbook.createCellStyle();
-            unexistingStyle.setFillForegroundColor(IndexedColors.GREY_80_PERCENT.getIndex());
-            unexistingStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+            nonExistingStyle = createStyle(NON_EXISTING_COLOR);
+            lockedByUserStyle = createStyle(LOCKED_BY_USER_COLOR);
         }
 
         public Workbook writeWorkbook() {
@@ -332,8 +341,11 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             }, (Cell cell, Pair<Spot, TimeSlot> pair) -> {
                 ShiftAssignment shiftAssignment = spotMap.get(pair);
                 if (shiftAssignment == null) {
-                    cell.setCellStyle(unexistingStyle);
+                    cell.setCellStyle(nonExistingStyle);
                     return;
+                }
+                if (shiftAssignment.isLockedByUser()) {
+                    cell.setCellStyle(lockedByUserStyle);
                 }
                 Employee employee = shiftAssignment.getEmployee();
                 if (employee == null) {
@@ -407,7 +419,6 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             for (TimeSlot timeSlot : roster.getTimeSlotList()) {
                 if (timeSlot.getStartDateTime().getHour() == 6) {
                     Cell cell = higherHeaderRow.createCell(columnNumber);
-                    // TODO use formatter
                     cell.setCellValue(timeSlot.getStartDateTime().toLocalDate().format(DAY_FORMATTER));
                     cell.setCellStyle(headerStyle);
                     sheet.addMergedRegion(new CellRangeAddress(0, 0, columnNumber, columnNumber + 2));
@@ -428,6 +439,13 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                 }
                 rowNumber++;
             }
+        }
+
+        private CellStyle createStyle(IndexedColors color) {
+            CellStyle style = workbook.createCellStyle();
+            style.setFillForegroundColor(color.getIndex());
+            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+            return style;
         }
 
     }

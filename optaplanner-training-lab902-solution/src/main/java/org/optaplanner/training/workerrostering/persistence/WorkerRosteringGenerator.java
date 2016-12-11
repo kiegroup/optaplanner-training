@@ -59,22 +59,27 @@ public class WorkerRosteringGenerator {
                     "analyst");
 
     public static void main(String[] args) {
-        new WorkerRosteringGenerator().generateAndWriteRoster(10, 28);
-        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28);
-        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28 * 4);
-        new WorkerRosteringGenerator().generateAndWriteRoster(100, 28 * 4);
+        new WorkerRosteringGenerator().generateAndWriteRoster(10, 28, false);
+        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28, false);
+        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28 * 4, false);
+        new WorkerRosteringGenerator().generateAndWriteRoster(100, 28 * 4, false);
+        new WorkerRosteringGenerator().generateAndWriteRoster(10, 28, true);
+        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28, true);
+        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28 * 4, true);
+        new WorkerRosteringGenerator().generateAndWriteRoster(100, 28 * 4, true);
     }
 
     protected Random random = new Random(37);
     protected WorkerRosteringSolutionFileIO solutionFileIO = new WorkerRosteringSolutionFileIO();
 
-    public void generateAndWriteRoster(int spotListSize, int timeSlotListSize) {
-        Roster roster = generateRoster(spotListSize, timeSlotListSize);
+    public void generateAndWriteRoster(int spotListSize, int timeSlotListSize, boolean continuousPlanning) {
+        Roster roster = generateRoster(spotListSize, timeSlotListSize, continuousPlanning);
         solutionFileIO.write(roster, new File("data/workerrostering/import/roster-"
-                + spotListSize + "spots-" + timeSlotListSize + "timeslots.xlsx"));
+                + spotListSize + "spots-" + timeSlotListSize + "timeslots"
+                + (continuousPlanning ? "-continuous" : "") +".xlsx"));
     }
 
-    public Roster generateRoster(int spotListSize, int timeSlotListSize) {
+    public Roster generateRoster(int spotListSize, int timeSlotListSize, boolean continuousPlanning) {
         int employeeListSize = spotListSize * 4;
         int skillListSize = (spotListSize + 4) / 5;
         RosterParametrization rosterParametrization = new RosterParametrization();
@@ -82,7 +87,7 @@ public class WorkerRosteringGenerator {
         List<Spot> spotList = createSpotList(spotListSize, skillList);
         List<TimeSlot> timeSlotList = createTimeSlotList(timeSlotListSize);
         List<Employee> employeeList = createEmployeeList(employeeListSize, skillList);
-        List<ShiftAssignment> shiftAssignmentList = createShiftAssignmentList(spotList, timeSlotList, employeeList);
+        List<ShiftAssignment> shiftAssignmentList = createShiftAssignmentList(spotList, timeSlotList, employeeList, continuousPlanning);
         return new Roster(rosterParametrization,
                 skillList, spotList, timeSlotList, employeeList,
                 shiftAssignmentList);
@@ -129,20 +134,31 @@ public class WorkerRosteringGenerator {
     }
 
     private List<ShiftAssignment> createShiftAssignmentList(List<Spot> spotList, List<TimeSlot> timeSlotList,
-            List<Employee> employeeList ) {
+            List<Employee> employeeList, boolean continuousPlanning) {
         List<ShiftAssignment> shiftAssignmentList = new ArrayList<>(spotList.size() * timeSlotList.size());
         for (Spot spot : spotList) {
             boolean weekendEnabled = random.nextInt(10) < 8;
             boolean nightEnabled = weekendEnabled && random.nextInt(10) < 8;
+            int timeSlotIndex = 0;
             for (TimeSlot timeSlot : timeSlotList) {
                 DayOfWeek dayOfWeek = timeSlot.getStartDateTime().getDayOfWeek();
                 if (!weekendEnabled && (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY)) {
+                    timeSlotIndex++;
                     continue;
                 }
                 if (!nightEnabled && timeSlot.getStartDateTime().getHour() >= 20) {
+                    timeSlotIndex++;
                     continue;
                 }
-                shiftAssignmentList.add(new ShiftAssignment(spot, timeSlot));
+                ShiftAssignment shiftAssignment = new ShiftAssignment(spot, timeSlot);
+                if (continuousPlanning) {
+                    if (timeSlotIndex < timeSlotList.size() / 2) {
+                        shiftAssignment.setEmployee(employeeList.get(random.nextInt(employeeList.size())));
+                        shiftAssignment.setLockedByUser(random.nextDouble() < 0.05);
+                    }
+                }
+                shiftAssignmentList.add(shiftAssignment);
+                timeSlotIndex++;
             }
 
         }
