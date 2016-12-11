@@ -51,3 +51,15 @@ end
 // ############################################################################
 // Soft constraints
 // ############################################################################
+
+rule "Fair load balancing"
+    when
+        $e : Employee()
+        accumulate(
+            $a : ShiftAssignment(employee == $e);
+            $total : count($a)
+        )
+    then
+        // Fairness and load balancing trick (see docs): squared to assure correctness in corner cases
+        scoreHolder.addSoftConstraintMatch(kcontext, - ($total.intValue() * $total.intValue()));
+end
