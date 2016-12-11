@@ -31,7 +31,7 @@ import org.optaplanner.training.workerrostering.persistence.WorkerRosteringSolut
 public class WorkerRosteringApp {
 
     public static void main(String[] args) {
-        String filename = "roster-10spots-28timeslots";
+        String filename = "roster-10spots-28days";
         WorkerRosteringSolutionFileIO solutionFileIO = new WorkerRosteringSolutionFileIO();
         Roster roster = solutionFileIO.read(new File("data/workerrostering/import/" + filename + ".xlsx"));
         // WorkerRosteringGenerator generator = new WorkerRosteringGenerator();

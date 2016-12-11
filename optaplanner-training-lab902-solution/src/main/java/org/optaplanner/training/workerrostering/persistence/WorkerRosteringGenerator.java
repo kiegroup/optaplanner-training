@@ -73,10 +73,10 @@ public class WorkerRosteringGenerator {
     protected Random random = new Random(37);
     protected WorkerRosteringSolutionFileIO solutionFileIO = new WorkerRosteringSolutionFileIO();
 
-    public void generateAndWriteRoster(int spotListSize, int timeSlotListSize, boolean continuousPlanning) {
-        Roster roster = generateRoster(spotListSize, timeSlotListSize, continuousPlanning);
+    public void generateAndWriteRoster(int spotListSize, int dayListSize, boolean continuousPlanning) {
+        Roster roster = generateRoster(spotListSize, dayListSize * 3, continuousPlanning);
         solutionFileIO.write(roster, new File("data/workerrostering/import/roster-"
-                + spotListSize + "spots-" + timeSlotListSize + "timeslots"
+                + spotListSize + "spots-" + dayListSize + "days"
                 + (continuousPlanning ? "-continuous" : "") +".xlsx"));
     }
 
