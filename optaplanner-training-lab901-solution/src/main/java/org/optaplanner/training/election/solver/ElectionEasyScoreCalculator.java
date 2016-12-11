@@ -26,16 +26,16 @@ public class ElectionEasyScoreCalculator implements EasyScoreCalculator<Election
 
     @Override
     public Score calculateScore(Election election, int initScore) {
-        int badCandidateWins = 0;
-        int bribeMinimumPopulation = 0;
+        int gamerCandidateWins = 0;
+        int gamerMinimumPopulation = 0;
         for (FederalState federalState : election.getFederalStateList()) {
-            if (Election.BAD_CANDIDATE.equals(federalState.getWinningCandidate())) {
-                badCandidateWins += federalState.getElectoralVotes();
-                bribeMinimumPopulation += federalState.getMinimumMajorityPopulation();
+            if (Election.GAMER_CANDIDATE.equals(federalState.getWinningCandidate())) {
+                gamerCandidateWins += federalState.getElectoralVotes();
+                gamerMinimumPopulation += federalState.getMinimumMajorityPopulation();
             }
         }
-        int hardScore = (badCandidateWins >= 270) ? 0 : (badCandidateWins - 270);
-        return HardSoftScore.valueOf(initScore, hardScore, -bribeMinimumPopulation);
+        int hardScore = (gamerCandidateWins >= 270) ? 0 : (gamerCandidateWins - 270);
+        return HardSoftScore.valueOf(initScore, hardScore, -gamerMinimumPopulation);
     }
 
 }

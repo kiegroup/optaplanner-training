@@ -68,7 +68,7 @@ public class ElectionApp {
 
         List<FederalState> federalStateList = election.getFederalStateList();
         federalStateList.stream()
-                .filter((federalState) -> Election.BAD_CANDIDATE.equals(federalState.getWinningCandidate()))
+                .filter((federalState) -> Election.GAMER_CANDIDATE.equals(federalState.getWinningCandidate()))
                 .sorted(Comparator.comparing(FederalState::getElectoralVotes)
                         .thenComparing(FederalState::getPopulation))
                 .forEach((federalState) -> System.out.printf(
@@ -81,10 +81,10 @@ public class ElectionApp {
 
         System.out.println("");
         int electoralVotes = federalStateList.stream()
-                .filter((federalState) -> Election.BAD_CANDIDATE.equals(federalState.getWinningCandidate()))
+                .filter((federalState) -> Election.GAMER_CANDIDATE.equals(federalState.getWinningCandidate()))
                 .mapToInt(FederalState::getElectoralVotes).sum();
         int minimumPopulation = federalStateList.stream()
-                .filter((federalState) -> Election.BAD_CANDIDATE.equals(federalState.getWinningCandidate()))
+                .filter((federalState) -> Election.GAMER_CANDIDATE.equals(federalState.getWinningCandidate()))
                 .mapToInt(FederalState::getMinimumMajorityPopulation).sum();
         int populationTotal = federalStateList.stream().mapToInt(FederalState::getPopulation).sum();
         System.out.printf(

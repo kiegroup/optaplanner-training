@@ -18,20 +18,19 @@ package org.optaplanner.training.election.optional.solver;
 
 import org.optaplanner.core.api.score.Score;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
-import org.optaplanner.core.impl.score.director.easy.EasyScoreCalculator;
 import org.optaplanner.core.impl.score.director.incremental.IncrementalScoreCalculator;
 import org.optaplanner.training.election.domain.Election;
 import org.optaplanner.training.election.domain.FederalState;
 
 public class ElectionIncrementalScoreCalculator implements IncrementalScoreCalculator<Election> {
 
-    private int badCandidateWins;
-    private int bribeMinimumPopulation;
+    private int gamerCandidateWins;
+    private int gamerMinimumPopulation;
 
     @Override
     public void resetWorkingSolution(Election election) {
-        badCandidateWins = 0;
-        bribeMinimumPopulation = 0;
+        gamerCandidateWins = 0;
+        gamerMinimumPopulation = 0;
         for (FederalState federalState : election.getFederalStateList()) {
             insert(federalState);
         }
@@ -68,23 +67,23 @@ public class ElectionIncrementalScoreCalculator implements IncrementalScoreCalcu
     }
 
     private void insert(FederalState federalState) {
-        if (Election.BAD_CANDIDATE.equals(federalState.getWinningCandidate())) {
-            badCandidateWins += federalState.getElectoralVotes();
-            bribeMinimumPopulation += federalState.getMinimumMajorityPopulation();
+        if (Election.GAMER_CANDIDATE.equals(federalState.getWinningCandidate())) {
+            gamerCandidateWins += federalState.getElectoralVotes();
+            gamerMinimumPopulation += federalState.getMinimumMajorityPopulation();
         }
     }
 
     private void retract(FederalState federalState) {
-        if (Election.BAD_CANDIDATE.equals(federalState.getWinningCandidate())) {
-            badCandidateWins -= federalState.getElectoralVotes();
-            bribeMinimumPopulation -= federalState.getMinimumMajorityPopulation();
+        if (Election.GAMER_CANDIDATE.equals(federalState.getWinningCandidate())) {
+            gamerCandidateWins -= federalState.getElectoralVotes();
+            gamerMinimumPopulation -= federalState.getMinimumMajorityPopulation();
         }
     }
 
     @Override
     public Score calculateScore(int initScore) {
-        int hardScore = (badCandidateWins >= 270) ? 0 : (badCandidateWins - 270);
-        return HardSoftScore.valueOf(initScore, hardScore, -bribeMinimumPopulation);
+        int hardScore = (gamerCandidateWins >= 270) ? 0 : (gamerCandidateWins - 270);
+        return HardSoftScore.valueOf(initScore, hardScore, -gamerMinimumPopulation);
     }
 
 }
