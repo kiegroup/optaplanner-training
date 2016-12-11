@@ -45,7 +45,7 @@ public class Roster {
     private List<ShiftAssignment> shiftAssignmentList;
 
     @PlanningScore
-    private HardSoftScore score;
+    private HardSoftScore score = null;
 
     private Roster() {
     }
@@ -59,7 +59,6 @@ public class Roster {
         this.timeSlotList = timeSlotList;
         this.employeeList = employeeList;
         this.shiftAssignmentList = shiftAssignmentList;
-        score = null;
     }
 
     public RosterParametrization getRosterParametrization() {

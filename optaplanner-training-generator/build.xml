@@ -31,7 +31,7 @@
   </patternset>
 
 
-  <target name="overwrite-all-labs" depends="overwrite-lab101, overwrite-lab102, overwrite-lab103, overwrite-lab901"/>
+  <target name="overwrite-all-labs" depends="overwrite-lab101, overwrite-lab102, overwrite-lab103, overwrite-lab901, overwrite-lab902"/>
 
 
   <target name="overwrite-lab101" depends="checks">
@@ -201,6 +201,14 @@ end
   <target name="overwrite-lab901" depends="checks">
     <antcall target="overwrite-from-solution">
       <param name="lab.artifactId" value="optaplanner-training-lab901"/>
+      <param name="lab.subpackageName" value="election"/>
+    </antcall>
+  </target>
+
+  <target name="overwrite-lab902" depends="checks">
+    <antcall target="overwrite-from-solution">
+      <param name="lab.artifactId" value="optaplanner-training-lab902"/>
+      <param name="lab.subpackageName" value="workerrostering"/>
     </antcall>
   </target>
 
@@ -216,36 +224,43 @@ end
         <patternset>
           <include name="pom.xml"/>
           <include name=".gitignore"/>
-          <include name="data/election/import/"/>
-          <include name="src/main/java/org/optaplanner/training/election/app/"/>
-          <include name="src/main/java/org/optaplanner/training/election/domain/"/>
+          <include name="data/${lab.subpackageName}/import/"/>
+          <include name="src/main/java/org/optaplanner/training/${lab.subpackageName}/app/"/>
+          <include name="src/main/java/org/optaplanner/training/${lab.subpackageName}/domain/"/>
+          <include name="src/main/java/org/optaplanner/training/${lab.subpackageName}/persistence/"/>
           <include name="src/main/resources/logback.xml"/>
         </patternset>
       </fileset>
     </copy>
+    <mkdir dir="${lab.directory}/data/${lab.subpackageName}/export/"/>
     <replaceregexp file="${lab.directory}/pom.xml"
                    encoding="UTF-8"
                    match="\-solution&lt;/artifactId&gt;"
                    replace="&lt;/artifactId&gt;"/>
-    <replaceregexp file="${lab.directory}/src/main/java/org/optaplanner/training/election/app/ElectionApp.java"
-                   encoding="UTF-8"
+    <replaceregexp encoding="UTF-8"
                    match="// LAB-SOLUTION-START[\s\S]*// LAB-SOLUTION-END"
-                   replace="// TODO Implement this lab"/>
+                   replace="// TODO Implement this lab" flags="g">
+      <fileset dir="${lab.directory}" defaultexcludes="true">
+        <patternset>
+          <include name="src/main/java/org/optaplanner/training/${lab.subpackageName}/**/*.java"/>
+        </patternset>
+      </fileset>
+    </replaceregexp>
     <replaceregexp encoding="UTF-8"
                    match="\nimport org\.optaplanner\.core\..*;"
                    replace="" flags="g">
       <fileset dir="${lab.directory}" defaultexcludes="true">
         <patternset>
-          <include name="src/main/java/org/optaplanner/training/election/**/*.java"/>
+          <include name="src/main/java/org/optaplanner/training/${lab.subpackageName}/**/*.java"/>
         </patternset>
       </fileset>
     </replaceregexp>
     <replaceregexp encoding="UTF-8"
-                   match="\nimport org\.optaplanner\.training\.election\.optional\..*;"
+                   match="\nimport org\.optaplanner\.training\.${lab.subpackageName}\.optional\..*;"
                    replace="" flags="g">
       <fileset dir="${lab.directory}" defaultexcludes="true">
         <patternset>
-          <include name="src/main/java/org/optaplanner/training/election/**/*.java"/>
+          <include name="src/main/java/org/optaplanner/training/${lab.subpackageName}/domain/**/*.java"/>
         </patternset>
       </fileset>
     </replaceregexp>
@@ -254,7 +269,16 @@ end
                    replace="" flags="g">
       <fileset dir="${lab.directory}" defaultexcludes="true">
         <patternset>
-          <include name="src/main/java/org/optaplanner/training/election/**/*.java"/>
+          <include name="src/main/java/org/optaplanner/training/${lab.subpackageName}/domain/**/*.java"/>
+        </patternset>
+      </fileset>
+    </replaceregexp>
+    <replaceregexp encoding="UTF-8"
+                   match="\n *\@ProblemFact.*"
+                   replace="" flags="g">
+      <fileset dir="${lab.directory}" defaultexcludes="true">
+        <patternset>
+          <include name="src/main/java/org/optaplanner/training/${lab.subpackageName}/domain/**/*.java"/>
         </patternset>
       </fileset>
     </replaceregexp>
@@ -263,16 +287,16 @@ end
                    replace="" flags="g">
       <fileset dir="${lab.directory}" defaultexcludes="true">
         <patternset>
-          <include name="src/main/java/org/optaplanner/training/election/**/*.java"/>
+          <include name="src/main/java/org/optaplanner/training/${lab.subpackageName}/domain/**/*.java"/>
         </patternset>
       </fileset>
     </replaceregexp>
     <replaceregexp encoding="UTF-8"
-                   match="\n *private \w+Score score;"
+                   match="\n *private \w+Score score( = null)?;"
                    replace="" flags="g">
       <fileset dir="${lab.directory}" defaultexcludes="true">
         <patternset>
-          <include name="src/main/java/org/optaplanner/training/election/**/*.java"/>
+          <include name="src/main/java/org/optaplanner/training/${lab.subpackageName}/domain/**/*.java"/>
         </patternset>
       </fileset>
     </replaceregexp>
@@ -281,7 +305,16 @@ end
                    replace="" flags="g">
       <fileset dir="${lab.directory}" defaultexcludes="true">
         <patternset>
-          <include name="src/main/java/org/optaplanner/training/election/**/*.java"/>
+          <include name="src/main/java/org/optaplanner/training/${lab.subpackageName}/domain/**/*.java"/>
+        </patternset>
+      </fileset>
+    </replaceregexp>
+    <replaceregexp encoding="UTF-8"
+                   match="\n *public void setScore\(\w+ \w+\) *\{\n.*\n *\}\n"
+                   replace="" flags="g">
+      <fileset dir="${lab.directory}" defaultexcludes="true">
+        <patternset>
+          <include name="src/main/java/org/optaplanner/training/${lab.subpackageName}/domain/**/*.java"/>
         </patternset>
       </fileset>
     </replaceregexp>
