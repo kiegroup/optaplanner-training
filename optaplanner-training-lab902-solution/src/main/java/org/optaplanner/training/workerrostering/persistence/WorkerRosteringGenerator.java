@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import org.optaplanner.training.workerrostering.domain.Employee;
 import org.optaplanner.training.workerrostering.domain.Roster;
@@ -86,7 +87,7 @@ public class WorkerRosteringGenerator {
         List<Skill> skillList = createSkillList(skillListSize);
         List<Spot> spotList = createSpotList(spotListSize, skillList);
         List<TimeSlot> timeSlotList = createTimeSlotList(timeSlotListSize);
-        List<Employee> employeeList = createEmployeeList(employeeListSize, skillList);
+        List<Employee> employeeList = createEmployeeList(employeeListSize, skillList, timeSlotList);
         List<ShiftAssignment> shiftAssignmentList = createShiftAssignmentList(spotList, timeSlotList, employeeList, continuousPlanning);
         return new Roster(rosterParametrization,
                 skillList, spotList, timeSlotList, employeeList,
@@ -123,12 +124,15 @@ public class WorkerRosteringGenerator {
         return timeSlotList;
     }
 
-    private List<Employee> createEmployeeList(int size, List<Skill> generalSkillList) {
+    private List<Employee> createEmployeeList(int size, List<Skill> generalSkillList, List<TimeSlot> timeSlotList) {
         List<Employee> employeeList = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             String name = employeeNameGenerator.generateNextValue();
-            LinkedHashSet<Skill> skillSet = new LinkedHashSet<>(extractRandomSubList(generalSkillList));
-            employeeList.add(new Employee(name, skillSet));
+            LinkedHashSet<Skill> skillSet = new LinkedHashSet<>(extractRandomSubList(generalSkillList, 1.0));
+            Employee employee = new Employee(name, skillSet);
+            Set<TimeSlot> unavailableTimeSlotSet = new LinkedHashSet<>(extractRandomSubList(timeSlotList, 0.2));
+            employee.setUnavailableTimeSlotSet(unavailableTimeSlotSet);
+            employeeList.add(employee);
         }
         return employeeList;
     }
@@ -166,11 +170,11 @@ public class WorkerRosteringGenerator {
 
     }
 
-    private <E> List<E> extractRandomSubList(List<E> list) {
+    private <E> List<E> extractRandomSubList(List<E> list, double maxRelativeSize) {
         List<E> subList = new ArrayList<>(list);
         Collections.shuffle(subList, random);
         // TODO List.subList() doesn't allow outer list to be garbage collected
-        return subList.subList(0, random.nextInt(list.size()) + 1);
+        return subList.subList(0, random.nextInt((int) (list.size() * maxRelativeSize)) + 1);
     }
 
 }

@@ -35,8 +35,15 @@ global HardSoftScoreHolder scoreHolder;
 
 rule "One shift assignment per day"
     when
-        $s : ShiftAssignment(employee != null, $e : employee, $d : timeSlot.startDateTime.toLocalDate())
+        $s : ShiftAssignment(employee != null, $e : employee, $d : getTimeSlot().getStartDateTime().toLocalDate())
         ShiftAssignment(employee == $e, timeSlot.startDateTime.toLocalDate() == $d, this != $s)
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, -1);
+end
+
+rule "Unavailable timeslots"
+    when
+        ShiftAssignment(employee != null, getEmployee().getUnavailableTimeSlotSet().contains(getTimeSlot()))
     then
         scoreHolder.addHardConstraintMatch(kcontext, -1);
 end

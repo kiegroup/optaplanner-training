@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -65,8 +66,9 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
     public static final DateTimeFormatter TIME_FORMATTER
             = DateTimeFormatter.ofPattern("HH:mm", Locale.ENGLISH);
 
-    public static final IndexedColors NON_EXISTING_COLOR = IndexedColors.GREY_80_PERCENT;
-    public static final IndexedColors LOCKED_BY_USER_COLOR = IndexedColors.VIOLET;
+    private static final IndexedColors NON_EXISTING_COLOR = IndexedColors.GREY_80_PERCENT;
+    private static final IndexedColors LOCKED_BY_USER_COLOR = IndexedColors.VIOLET;
+    private static final IndexedColors UNAVAILABLE_COLOR = IndexedColors.BLUE_GREY;
 
     @Override
     public String getInputFileExtension() {
@@ -133,7 +135,9 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                     }
                     return skill;
                 }).collect(Collectors.toSet());
-                return new Employee(name, skillSet);
+                Employee employee = new Employee(name, skillSet);
+                employee.setUnavailableTimeSlotSet(new LinkedHashSet<>());
+                return employee;
             });
             Map<String, Employee> employeeMap = employeeList.stream().collect(Collectors.toMap(
                     Employee::getName, employee -> employee));
@@ -171,6 +175,22 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                     shiftAssignment.setEmployee(employee);
                 }
                 return shiftAssignment;
+            });
+            readGridSheet("Employee roster", new String[]{"Name"}, (Row row) -> {
+                String employeeName = row.getCell(0).getStringCellValue();
+                Employee employee = employeeMap.get(employeeName);
+                if (employee == null) {
+                    throw new IllegalStateException("The employeeName (" + employeeName
+                            + ") does not exist in the employeeList (" + employeeList + ").");
+                }
+                return employee;
+            }, timeSlotList, (Pair<Employee, TimeSlot> pair, Cell cell) ->  {
+                if (hasStyle(cell, UNAVAILABLE_COLOR)) {
+                    Employee employee = pair.getKey();
+                    TimeSlot timeSlot = pair.getValue();
+                    employee.getUnavailableTimeSlotSet().add(timeSlot);
+                }
+                return null;
             });
             return new Roster(rosterParametrization,
                     skillList, spotList, timeSlotList, employeeList,
@@ -314,6 +334,7 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
 
         private final CellStyle nonExistingStyle;
         private final CellStyle lockedByUserStyle;
+        private final CellStyle unavailableStyle;
 
         public RosterWriter(Roster roster) {
             this.roster = roster;
@@ -324,6 +345,7 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             headerStyle.setFont(font);
             nonExistingStyle = createStyle(NON_EXISTING_COLOR);
             lockedByUserStyle = createStyle(LOCKED_BY_USER_COLOR);
+            unavailableStyle = createStyle(UNAVAILABLE_COLOR);
         }
 
         public Workbook writeWorkbook() {
@@ -357,6 +379,12 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             writeGridSheet("Employee roster", new String[]{"Name"}, roster.getEmployeeList(), (Row row, Employee employee) -> {
                 row.createCell(0).setCellValue(employee.getName());
             }, (Cell cell, Pair<Employee, TimeSlot> pair) -> {
+                Employee employee = pair.getKey();
+                TimeSlot timeSlot = pair.getValue();
+                if (employee.getUnavailableTimeSlotSet().contains(timeSlot)) {
+                    cell.setCellStyle(unavailableStyle);
+                    return;
+                }
                 List<ShiftAssignment> shiftAssignmentList = employeeMap.get(pair);
                 if (shiftAssignmentList == null) {
                     return;

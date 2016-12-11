@@ -23,6 +23,8 @@ public class Employee {
     private final String name;
     private final Set<Skill> skillSet;
 
+    private Set<TimeSlot> unavailableTimeSlotSet;
+
     public Employee(String name, Set<Skill> skillSet) {
         this.name = name;
         this.skillSet = skillSet;
@@ -34,6 +36,14 @@ public class Employee {
 
     public Set<Skill> getSkillSet() {
         return skillSet;
+    }
+
+    public Set<TimeSlot> getUnavailableTimeSlotSet() {
+        return unavailableTimeSlotSet;
+    }
+
+    public void setUnavailableTimeSlotSet(Set<TimeSlot> unavailableTimeSlotSet) {
+        this.unavailableTimeSlotSet = unavailableTimeSlotSet;
     }
 
     @Override
