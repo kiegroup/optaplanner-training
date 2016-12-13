@@ -39,14 +39,15 @@ import org.optaplanner.training.workerrostering.domain.TimeSlotState;
 public class WorkerRosteringGenerator {
 
     public static void main(String[] args) {
+        new WorkerRosteringGenerator().generateAndWriteRoster(10, 7, false);
         new WorkerRosteringGenerator().generateAndWriteRoster(10, 28, false);
         new WorkerRosteringGenerator().generateAndWriteRoster(20, 28, false);
-        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28 * 4, false);
-        new WorkerRosteringGenerator().generateAndWriteRoster(100, 28 * 4, false);
+        new WorkerRosteringGenerator().generateAndWriteRoster(40, 28 * 2, false);
+        new WorkerRosteringGenerator().generateAndWriteRoster(80, 28 * 4, false);
         new WorkerRosteringGenerator().generateAndWriteRoster(10, 28, true);
         new WorkerRosteringGenerator().generateAndWriteRoster(20, 28, true);
-        new WorkerRosteringGenerator().generateAndWriteRoster(20, 28 * 4, true);
-        new WorkerRosteringGenerator().generateAndWriteRoster(100, 28 * 4, true);
+        new WorkerRosteringGenerator().generateAndWriteRoster(40, 28 * 2, true);
+        new WorkerRosteringGenerator().generateAndWriteRoster(80, 28 * 4, true);
     }
 
     private final StringDataGenerator employeeNameGenerator = StringDataGenerator.build10kFullNames();
@@ -79,7 +80,7 @@ public class WorkerRosteringGenerator {
         Roster roster = generateRoster(spotListSize, dayListSize * 3, continuousPlanning);
         solutionFileIO.write(roster, new File("data/workerrostering/import/roster-"
                 + spotListSize + "spots-" + dayListSize + "days"
-                + (continuousPlanning ? "-continuous" : "") +".xlsx"));
+                + (continuousPlanning ? "-continuous" : "") + ".xlsx"));
     }
 
     public Roster generateRoster(int spotListSize, int timeSlotListSize, boolean continuousPlanning) {
@@ -88,7 +89,7 @@ public class WorkerRosteringGenerator {
         RosterParametrization rosterParametrization = new RosterParametrization();
         List<Skill> skillList = createSkillList(skillListSize);
         List<Spot> spotList = createSpotList(spotListSize, skillList);
-        List<TimeSlot> timeSlotList = createTimeSlotList(timeSlotListSize);
+        List<TimeSlot> timeSlotList = createTimeSlotList(timeSlotListSize, continuousPlanning);
         List<Employee> employeeList = createEmployeeList(employeeListSize, skillList, timeSlotList);
         List<ShiftAssignment> shiftAssignmentList = createShiftAssignmentList(spotList, timeSlotList, employeeList, continuousPlanning);
         return new Roster(rosterParametrization,
@@ -114,14 +115,22 @@ public class WorkerRosteringGenerator {
         return spotList;
     }
 
-    private List<TimeSlot> createTimeSlotList(int size) {
+    private List<TimeSlot> createTimeSlotList(int size, boolean continuousPlanning) {
         List<TimeSlot> timeSlotList = new ArrayList<>(size);
         LocalDateTime previousEndDateTime = LocalDateTime.of(2017, 2, 1, 6, 0);
         for (int i = 0; i < size; i++) {
             LocalDateTime startDateTime = previousEndDateTime;
             LocalDateTime endDateTime = startDateTime.plusHours(8);
             TimeSlot timeSlot = new TimeSlot(startDateTime, endDateTime);
-            timeSlot.setTimeSlotState(TimeSlotState.DRAFT);
+            if (continuousPlanning && i < size / 2) {
+                if (i < size / 4) {
+                    timeSlot.setTimeSlotState(TimeSlotState.HISTORY);
+                } else {
+                    timeSlot.setTimeSlotState(TimeSlotState.TENTATIVE);
+                }
+            } else {
+                timeSlot.setTimeSlotState(TimeSlotState.DRAFT);
+            }
             timeSlotList.add(timeSlot);
             previousEndDateTime = endDateTime;
         }
