@@ -34,7 +34,7 @@ import org.optaplanner.training.workerrostering.domain.ShiftAssignment;
 import org.optaplanner.training.workerrostering.domain.Skill;
 import org.optaplanner.training.workerrostering.domain.Spot;
 import org.optaplanner.training.workerrostering.domain.TimeSlot;
-import org.optaplanner.training.workerrostering.domain.TimeslotState;
+import org.optaplanner.training.workerrostering.domain.TimeSlotState;
 
 public class WorkerRosteringGenerator {
 
@@ -121,7 +121,7 @@ public class WorkerRosteringGenerator {
             LocalDateTime startDateTime = previousEndDateTime;
             LocalDateTime endDateTime = startDateTime.plusHours(8);
             TimeSlot timeSlot = new TimeSlot(startDateTime, endDateTime);
-            timeSlot.setTimeslotState(TimeslotState.DRAFT);
+            timeSlot.setTimeSlotState(TimeSlotState.DRAFT);
             timeSlotList.add(timeSlot);
             previousEndDateTime = endDateTime;
         }

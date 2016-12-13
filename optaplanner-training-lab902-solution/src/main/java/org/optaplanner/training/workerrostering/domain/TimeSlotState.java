@@ -16,7 +16,7 @@
 
 package org.optaplanner.training.workerrostering.domain;
 
-public enum TimeslotState {
+public enum TimeSlotState {
     HISTORY,
     TENTATIVE,
     DRAFT

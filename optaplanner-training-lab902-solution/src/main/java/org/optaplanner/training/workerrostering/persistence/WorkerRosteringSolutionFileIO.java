@@ -54,7 +54,7 @@ import org.optaplanner.training.workerrostering.domain.ShiftAssignment;
 import org.optaplanner.training.workerrostering.domain.Skill;
 import org.optaplanner.training.workerrostering.domain.Spot;
 import org.optaplanner.training.workerrostering.domain.TimeSlot;
-import org.optaplanner.training.workerrostering.domain.TimeslotState;
+import org.optaplanner.training.workerrostering.domain.TimeSlotState;
 
 public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
 
@@ -125,7 +125,7 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                 LocalDateTime startDateTime = LocalDateTime.parse(row.getCell(0).getStringCellValue(), DATE_TIME_FORMATTER);
                 LocalDateTime endDateTime = LocalDateTime.parse(row.getCell(1).getStringCellValue(), DATE_TIME_FORMATTER);
                 TimeSlot timeSlot = new TimeSlot(startDateTime, endDateTime);
-                timeSlot.setTimeslotState(TimeslotState.valueOf(row.getCell(2).getStringCellValue()));
+                timeSlot.setTimeSlotState(TimeSlotState.valueOf(row.getCell(2).getStringCellValue()));
                 return timeSlot;
             });
             List<Employee> employeeList = readListSheet("Employees", new String[]{"Name", "Skills"}, (Row row) -> {
@@ -405,7 +405,7 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             writeListSheet("Timeslots", new String[]{"Start", "End", "State"}, roster.getTimeSlotList(), (Row row, TimeSlot timeSlot) -> {
                 row.createCell(0).setCellValue(timeSlot.getStartDateTime().format(DATE_TIME_FORMATTER));
                 row.createCell(1).setCellValue(timeSlot.getEndDateTime().format(DATE_TIME_FORMATTER));
-                row.createCell(2).setCellValue(timeSlot.getTimeslotState().name());
+                row.createCell(2).setCellValue(timeSlot.getTimeSlotState().name());
             });
             writeListSheet("Spots", new String[]{"Name", "Required skill"}, roster.getSpotList(), (Row row, Spot spot) -> {
                 row.createCell(0).setCellValue(spot.getName());
