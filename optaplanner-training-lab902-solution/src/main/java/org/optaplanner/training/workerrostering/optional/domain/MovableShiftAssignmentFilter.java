@@ -20,12 +20,14 @@ import org.optaplanner.core.impl.heuristic.selector.common.decorator.SelectionFi
 import org.optaplanner.core.impl.score.director.ScoreDirector;
 import org.optaplanner.training.workerrostering.domain.Roster;
 import org.optaplanner.training.workerrostering.domain.ShiftAssignment;
+import org.optaplanner.training.workerrostering.domain.TimeslotState;
 
 public class MovableShiftAssignmentFilter implements SelectionFilter<Roster, ShiftAssignment> {
 
     @Override
     public boolean accept(ScoreDirector<Roster> scoreDirector, ShiftAssignment shiftAssignment) {
-        return !shiftAssignment.isLockedByUser();
+        return !shiftAssignment.isLockedByUser()
+                && shiftAssignment.getTimeSlot().getTimeslotState() != TimeslotState.FROZEN;
     }
 
 }
