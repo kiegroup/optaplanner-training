@@ -17,7 +17,7 @@
 package org.optaplanner.training.workerrostering.domain;
 
 public enum TimeslotState {
-    FROZEN,
+    HISTORY,
     TENTATIVE,
     DRAFT
 }
