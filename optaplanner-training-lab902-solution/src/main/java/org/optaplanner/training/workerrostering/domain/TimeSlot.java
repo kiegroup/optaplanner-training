@@ -23,6 +23,8 @@ public class TimeSlot {
     private final LocalDateTime startDateTime;
     private final LocalDateTime endDateTime;
 
+    private TimeslotState timeslotState;
+
     public TimeSlot(LocalDateTime startDateTime, LocalDateTime endDateTime) {
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
@@ -34,6 +36,14 @@ public class TimeSlot {
 
     public LocalDateTime getEndDateTime() {
         return endDateTime;
+    }
+
+    public TimeslotState getTimeslotState() {
+        return timeslotState;
+    }
+
+    public void setTimeslotState(TimeslotState timeslotState) {
+        this.timeslotState = timeslotState;
     }
 
     @Override

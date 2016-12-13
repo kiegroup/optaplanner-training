@@ -25,6 +25,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.optaplanner.training.workerrostering.domain.Employee;
 import org.optaplanner.training.workerrostering.domain.Roster;
@@ -33,6 +34,7 @@ import org.optaplanner.training.workerrostering.domain.ShiftAssignment;
 import org.optaplanner.training.workerrostering.domain.Skill;
 import org.optaplanner.training.workerrostering.domain.Spot;
 import org.optaplanner.training.workerrostering.domain.TimeSlot;
+import org.optaplanner.training.workerrostering.domain.TimeslotState;
 
 public class WorkerRosteringGenerator {
 
@@ -118,7 +120,9 @@ public class WorkerRosteringGenerator {
         for (int i = 0; i < size; i++) {
             LocalDateTime startDateTime = previousEndDateTime;
             LocalDateTime endDateTime = startDateTime.plusHours(8);
-            timeSlotList.add(new TimeSlot(startDateTime, endDateTime));
+            TimeSlot timeSlot = new TimeSlot(startDateTime, endDateTime);
+            timeSlot.setTimeslotState(TimeslotState.DRAFT);
+            timeSlotList.add(timeSlot);
             previousEndDateTime = endDateTime;
         }
         return timeSlotList;
@@ -157,7 +161,11 @@ public class WorkerRosteringGenerator {
                 ShiftAssignment shiftAssignment = new ShiftAssignment(spot, timeSlot);
                 if (continuousPlanning) {
                     if (timeSlotIndex < timeSlotList.size() / 2) {
-                        shiftAssignment.setEmployee(employeeList.get(random.nextInt(employeeList.size())));
+                        List<Employee> availableEmployeeList = employeeList.stream()
+                                .filter(employee -> !employee.getUnavailableTimeSlotSet().contains(timeSlot))
+                                .collect(Collectors.toList());
+                        Employee employee = availableEmployeeList.get(random.nextInt(availableEmployeeList.size()));
+                        shiftAssignment.setEmployee(employee);
                         shiftAssignment.setLockedByUser(random.nextDouble() < 0.05);
                     }
                 }

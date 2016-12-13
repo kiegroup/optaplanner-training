@@ -54,6 +54,7 @@ import org.optaplanner.training.workerrostering.domain.ShiftAssignment;
 import org.optaplanner.training.workerrostering.domain.Skill;
 import org.optaplanner.training.workerrostering.domain.Spot;
 import org.optaplanner.training.workerrostering.domain.TimeSlot;
+import org.optaplanner.training.workerrostering.domain.TimeslotState;
 
 public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
 
@@ -120,10 +121,12 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
             });
             Map<String, Spot> spotMap = spotList.stream().collect(Collectors.toMap(
                     Spot::getName, spot -> spot));
-            List<TimeSlot> timeSlotList = readListSheet("Timeslots", new String[]{"Start", "End"}, (Row row) -> {
+            List<TimeSlot> timeSlotList = readListSheet("Timeslots", new String[]{"Start", "End", "State"}, (Row row) -> {
                 LocalDateTime startDateTime = LocalDateTime.parse(row.getCell(0).getStringCellValue(), DATE_TIME_FORMATTER);
                 LocalDateTime endDateTime = LocalDateTime.parse(row.getCell(1).getStringCellValue(), DATE_TIME_FORMATTER);
-                return new TimeSlot(startDateTime, endDateTime);
+                TimeSlot timeSlot = new TimeSlot(startDateTime, endDateTime);
+                timeSlot.setTimeslotState(TimeslotState.valueOf(row.getCell(2).getStringCellValue()));
+                return timeSlot;
             });
             List<Employee> employeeList = readListSheet("Employees", new String[]{"Name", "Skills"}, (Row row) -> {
                 String name = row.getCell(0).getStringCellValue();
@@ -399,9 +402,10 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
                 row.createCell(1).setCellValue(employee.getSkillSet().stream()
                         .map(Skill::getName).collect(Collectors.joining(",")));
             });
-            writeListSheet("Timeslots", new String[]{"Start", "End"}, roster.getTimeSlotList(), (Row row, TimeSlot timeSlot) -> {
+            writeListSheet("Timeslots", new String[]{"Start", "End", "State"}, roster.getTimeSlotList(), (Row row, TimeSlot timeSlot) -> {
                 row.createCell(0).setCellValue(timeSlot.getStartDateTime().format(DATE_TIME_FORMATTER));
                 row.createCell(1).setCellValue(timeSlot.getEndDateTime().format(DATE_TIME_FORMATTER));
+                row.createCell(2).setCellValue(timeSlot.getTimeslotState().name());
             });
             writeListSheet("Spots", new String[]{"Name", "Required skill"}, roster.getSpotList(), (Row row, Spot spot) -> {
                 row.createCell(0).setCellValue(spot.getName());
