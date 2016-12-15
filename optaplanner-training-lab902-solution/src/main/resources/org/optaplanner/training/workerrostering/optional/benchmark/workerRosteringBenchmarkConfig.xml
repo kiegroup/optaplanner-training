@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plannerBenchmark>
+  <benchmarkDirectory>local/data/workerrostering</benchmarkDirectory>
+  <warmUpSecondsSpentLimit>30</warmUpSecondsSpentLimit>
+
+  <inheritedSolverBenchmark>
+    <problemBenchmarks>
+      <solutionFileIOClass>org.optaplanner.training.workerrostering.persistence.WorkerRosteringSolutionFileIO</solutionFileIOClass>
+      <inputSolutionFile>data/workerrostering/import/roster-10spots-7days.xlsx</inputSolutionFile>
+      <inputSolutionFile>data/workerrostering/import/roster-10spots-28days.xlsx</inputSolutionFile>
+      <inputSolutionFile>data/workerrostering/import/roster-10spots-28days-continuous.xlsx</inputSolutionFile>
+      <inputSolutionFile>data/workerrostering/import/roster-20spots-28days.xlsx</inputSolutionFile>
+      <inputSolutionFile>data/workerrostering/import/roster-20spots-28days-continuous.xlsx</inputSolutionFile>
+      <inputSolutionFile>data/workerrostering/import/roster-40spots-56days.xlsx</inputSolutionFile>
+      <inputSolutionFile>data/workerrostering/import/roster-40spots-56days-continuous.xlsx</inputSolutionFile>
+      <inputSolutionFile>data/workerrostering/import/roster-80spots-112days.xlsx</inputSolutionFile>
+      <inputSolutionFile>data/workerrostering/import/roster-80spots-112days-continuous.xlsx</inputSolutionFile>
+
+
+      <problemStatisticType>BEST_SCORE</problemStatisticType>
+      <singleStatisticType>CONSTRAINT_MATCH_TOTAL_BEST_SCORE</singleStatisticType>
+    </problemBenchmarks>
+    <solver>
+      <scanAnnotatedClasses/>
+
+      <scoreDirectorFactory>
+        <scoreDrl>org/optaplanner/training/workerrostering/solver/workerRosteringScoreRules.drl</scoreDrl>
+      </scoreDirectorFactory>
+
+      <termination>
+        <secondsSpentLimit>60</secondsSpentLimit>
+      </termination>
+    </solver>
+  </inheritedSolverBenchmark>
+
+  <solverBenchmark>
+    <name>Only Construction Heuristic</name>
+    <solver>
+      <constructionHeuristic/>
+    </solver>
+  </solverBenchmark>
+  <solverBenchmark>
+    <name>Local Search too</name>
+    <solver/>
+  </solverBenchmark>
+</plannerBenchmark>
