@@ -1,4 +1,4 @@
-=== Lab 101: No more than 4 processes per computer
+=== Lab 902: Worker rostering
 
 Schedule steel mill workers into shifts on different spots at different timeslots.
 
