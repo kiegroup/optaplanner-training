@@ -41,7 +41,7 @@ rule "Required skill for shift"
                 employee != null,
                 !getEmployee().getSkillSet().contains(getSpot().getRequiredSkill()))
     then
-        scoreHolder.addHardConstraintMatch(kcontext, -1);
+        scoreHolder.addHardConstraintMatch(kcontext, -100);
 end
 
 rule "Unavailable timeslots per employee"
@@ -50,7 +50,7 @@ rule "Unavailable timeslots per employee"
                 employee != null,
                 getEmployee().getUnavailableTimeSlotSet().contains(getTimeSlot()))
     then
-        scoreHolder.addHardConstraintMatch(kcontext, -1);
+        scoreHolder.addHardConstraintMatch(kcontext, -50);
 end
 
 rule "One shift assignment per day per employee"
@@ -64,12 +64,8 @@ rule "One shift assignment per day per employee"
                 getTimeSlot().getStartDateTime().toLocalDate() == $leftDay,
                 this != $s)
     then
-        scoreHolder.addHardConstraintMatch(kcontext, -1);
+        scoreHolder.addHardConstraintMatch(kcontext, -10);
 end
-
-// ############################################################################
-// Soft constraints
-// ############################################################################
 
 rule "No 2 shifts within 10 hours from each other"
     when
@@ -83,10 +79,14 @@ rule "No 2 shifts within 10 hours from each other"
                 $leftEndDateTime.until(getTimeSlot().getStartDateTime(), ChronoUnit.HOURS) <10,
                 this != $s)
     then
-        scoreHolder.addSoftConstraintMatch(kcontext, -1000);
+        scoreHolder.addHardConstraintMatch(kcontext, -1);
 end
 
 // TODO Pseudo weekends: Get a 48 hours rest every 9 days (so work at most 7 days before each 2-day weekend)
+
+// ############################################################################
+// Soft constraints
+// ############################################################################
 
 rule "Fairness: all employees should work about the same number of shifts"
     when
@@ -97,5 +97,22 @@ rule "Fairness: all employees should work about the same number of shifts"
         )
     then
         // Fairness and load balancing trick (see docs): squared to assure correctness in corner cases
+        // Negative to balance it across employees
         scoreHolder.addSoftConstraintMatch(kcontext, - ($total.intValue() * $total.intValue()));
+end
+
+rule "Affinity: all employees should work about the same number of shifts"
+    when
+        $s : Spot()
+        $e : Employee()
+        accumulate(
+            $a : ShiftAssignment(spot == $s, employee == $e);
+            $total : count($a)
+        )
+        // Optionally add something like this for historic ShiftAssignments not in the working memory:
+        // EmployeeSpotHistorySummary(spot == $s, employee == $e)
+    then
+        // Fairness and load balancing trick (see docs): squared to assure correctness in corner cases
+        // Positive to anti-balance it across spot-employee pairs
+        scoreHolder.addSoftConstraintMatch(kcontext, ($total.intValue() * $total.intValue()));
 end
