@@ -71,3 +71,11 @@ TODO
 == Part 4: Continuous and real-time planning
 
 TODO
+
+== Part 9: Putting it all together
+
+Implement these use cases, given a domain model and data.
+
+include::lab9/lab901.adoc[]
+
+include::lab9/lab902.adoc[]

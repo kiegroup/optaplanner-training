@@ -1,0 +1,17 @@
+=== Lab 101: No more than 4 processes per computer
+
+Schedule steel mill workers into shifts on different spots at different timeslots.
+
+==== Constraints
+
+Hard constraints:
+
+* Required skill for a shift
+* Unavailable time slots for an employee
+* At most one shift assignment per day per employee
+* No 2 shifts within 10 hours from each other
+
+Soft constraints:
+
+* Fairness: all employees should work about the same number of shifts
+* Affinity: assign an employee to the same spot as much as possible
