@@ -15,3 +15,9 @@ Soft constraints:
 
 * Fairness: all employees should work about the same number of shifts
 * Affinity: assign an employee to the same spot as much as possible
+
+Other requirements:
+
+* Don't change shift assignments locked by the user.
+
+* Don't change historic shift assignments.
