@@ -68,7 +68,7 @@ image::lab201_tennisClassDiagram.png[]
 * Why not make both `TeamAssignment.getDay()` and `TeamAssignment.getTeam()` each a planning variable?
 ** Then what defines a `TeamAssignment`?
 ** This would blow up the search space a lot more. This impacts Solver speed a lot.
-** The build-in fine grained moves might no longer suffice to get efficiently from feasible solution to feasible solution. This impacts Solver speed.
+** The built-in fine grained moves might no longer suffice to get efficiently from feasible solution to feasible solution. This impacts Solver speed.
 
 ===== Search space size
 
