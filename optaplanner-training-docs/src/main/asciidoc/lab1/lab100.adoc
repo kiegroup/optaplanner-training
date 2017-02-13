@@ -49,7 +49,7 @@ In a manufacturing job shop scheduling use case, we have have these constraints:
 ** The planning window is `24` hours: a job can start at any time on any machine during that window.
 * *Machine cost*: Each machine has a specific power cost per second in dollars.
 ** Older machines have a higher power cost, newer machines have a smaller power cost.
-** The power cost per second is between `1` dollar cent and `10` dollars.
+** The power cost per second is between `1` cent and `10` dollars.
 * *Nighttime cost*: Any job starting outside normal working hours (before 8:00 or after 18:00) costs an extra `1` dollar per second.
 * *Employee happiness*: Some of the machines are labor intensive or clumsy to work with. Minimize the time they have to work with those.
 ** The company values profit exclusively over employee happiness. It doesn't believe that employee retention has an impact on profit.
@@ -64,13 +64,13 @@ The weight and level for each constraint:
 
 * *Machine conflict*: `-1hard` per second that the jobs conflict
 ** `scoreHolder.addHardConstraintMatch(kcontext, - job1.conflictingDurationWith(job2));`
-* *Machine cost*: `-1medium` per dollar cent of machine power cost and per second of job duration
+* *Machine cost*: `-1medium` per cent of machine power cost and per second of job duration
 ** `scoreHolder.addMediumConstraintMatch(kcontext, - machine.getPowerCostInDollarCent() * job.getDurationInSeconds());`
 * *Nighttime cost*: `-100medium` per second of job duration
-** Because the medium score level represents dollar cents, not dollars.
+** Because the medium score level represents cents, not dollars.
 ** `scoreHolder.addMediumConstraintMatch(kcontext, -100 * job.getDurationInSeconds());`
 * *Employee happiness*: `-1soft` per second of job duration
-** Soft because the company prioritizes an extra profit of 1 dollar cent, even if that makes all its employees unhappy.
+** Soft because the company prioritizes an extra profit of 1 cent, even if that makes all its employees unhappy.
 *** Note: Most companies do realize that employee retention impact profit: they factor in employee unhappiness by putting a price tag on it.
 ** `scoreHolder.addSoftConstraintMatch(kcontext, - job.getDurationInSeconds());`
 
@@ -85,6 +85,6 @@ It requires to the use of `long` numbers instead of `int` (at least for the medi
 . There are `50 000` jobs.
 . Each job has a maximum duration of `5` minutes (or `300` seconds).
 ** This totals up to a maximum of `15 000 000` seconds to pay for.
-. Each machine cost up `10` dollars (or `1000` dollar cents) per used second.
-** This totals up to a maximum cost of `15 000 000 000` dollar cents (without even taking the nighttime cost in account), which needs to fit in the medium score level.
+. Each machine cost up `10` dollars (or `1000` cents) per used second.
+** This totals up to a maximum cost of `15 000 000 000` cents (without even taking the nighttime cost in account), which needs to fit in the medium score level.
 ** The maximum `int` value is only `2 147 483 647`: the medium score level would overflow, so it needs to use a `long` instead.
