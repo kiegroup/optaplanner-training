@@ -76,7 +76,7 @@ rule "No 2 shifts within 10 hours from each other"
         ShiftAssignment(
                 employee == $e,
                 $leftEndDateTime <= getTimeSlot().getEndDateTime(),
-                $leftEndDateTime.until(getTimeSlot().getStartDateTime(), ChronoUnit.HOURS) <10,
+                $leftEndDateTime.until(getTimeSlot().getStartDateTime(), ChronoUnit.HOURS) < 10,
                 this != $s)
     then
         scoreHolder.addHardConstraintMatch(kcontext, -1);
