@@ -93,7 +93,7 @@ public class WorkerRosteringSolutionFileIO implements SolutionFileIO<Roster> {
         }
     }
 
-    private static  class RosterReader {
+    private static class RosterReader {
 
         private final Workbook workbook;
 
